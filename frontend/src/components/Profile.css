@@ -1,0 +1,36 @@
+#root {
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+  }
+
+  button{
+    margin: 5px;
+  }
+  img {
+    height: 15vw;
+    width: 15vw;
+    margin: 2.5vw;
+  }
+
+  #left {
+    width: 20%;
+    height: 100vh;
+    margin: 0;
+    border: 1px black solid;
+
+  }
+
+  #right {
+    width: 80%;
+    height: 100vh;
+    margin: 0;
+    border: 1px black solid;
+  }
+
+body {
+    height: 90%;
+    width: 100%;
+    background-color: rgb(142, 201, 203);
+
+}
