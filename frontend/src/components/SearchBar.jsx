@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import {  signOut } from "firebase/auth";
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
-function Profile() {
+function Profile(props) {
   const [count, setCount] = useState(0);
 
   const navigate = useNavigate();
@@ -22,7 +22,10 @@ function Profile() {
   return (
     <>
       <header id="header-bar">
-        <Link to={"/"}>
+        <p>
+            {props.uid}
+        </p>
+        <Link to={"/home"}>
           <button>Home</button>
         </Link>
         <Link to={"/profile"}>
