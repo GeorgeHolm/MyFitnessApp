@@ -12,3 +12,21 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Profile {
+  id        Int @id @default(autoincrement())
+  email     String
+  workouts  Workout[]
+  meals     Meal[]
+}
+
+model Workout {
+  id            Int @id @default(autoincrement())
+  profile       Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId     Int
+}
+model Meal {
+  id            Int @id @default(autoincrement())
+  profile       Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId     Int
+}
