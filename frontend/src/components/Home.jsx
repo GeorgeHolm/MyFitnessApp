@@ -6,15 +6,15 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '../firebase';
 
 function Home() {
-  const [uid, setUid] = useState("");
+  const [user, setUser] = useState();
 
   useEffect(()=>{
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
+    onAuthStateChanged(auth, (prof) => {
+        if (prof) {
           // User is signed in, see docs for a list of available properties
           // https://firebase.google.com/docs/reference/js/firebase.User
         //   const uid = user.uid;
-          setUid(user.uid);
+          setUser(prof);
         } else {
           // User is signed out
           // ...
@@ -26,7 +26,7 @@ function Home() {
 
   return (
     <>
-      <SearchBar uid={uid}/>
+      <SearchBar user={user}/>
       <div className="flexbox">
         <section id="workouts">
           <Workout/>
