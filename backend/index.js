@@ -21,6 +21,18 @@ app.get('/', (req, res) => {
   })
 
 
+  app.get('/profiles/:uid/workouts', async (req, res) => {
+    const { uid } = req.params;
+
+    const profile = await prisma.profile.findMany({ where: { uid: uid } });
+    if (!profile[0]) {
+      return res.status(404).send({ error: 'Profile not found' });
+    }
+    const workouts = await prisma.workout.findMany({ where: { profileId: profile[0].id } });
+    return res.json(workouts);
+  });
+
+
   app.get('/profiles', async (req, res) => {
     const profiles = await prisma.profile.findMany()
     res.json(profiles)
