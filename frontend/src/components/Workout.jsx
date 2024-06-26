@@ -14,6 +14,7 @@ const Workout = (props) => {
       <h2>
         Workout placeholder
       </h2>
+      <p>{props.content.notes}</p>
     </div>
   );
 };
