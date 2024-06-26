@@ -23,7 +23,7 @@ function Profile(props) {
     <>
       <header id="header-bar">
         <p>
-            {props.uid}
+            User ID: {props.uid}
         </p>
         <Link to={"/home"}>
           <button>Home</button>
