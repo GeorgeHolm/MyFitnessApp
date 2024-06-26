@@ -9,6 +9,8 @@ const app = express()
 const PORT = process.env.PORT || 3000
 
 app.use(express.json());
+const cors = require('cors')
+app.use(cors())
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`)
@@ -60,10 +62,11 @@ app.get('/', (req, res) => {
   })
 
   app.post('/profiles', async (req, res) => {
-    const { email } = req.body
+    const { email, uid } = req.body
     const profile = await prisma.profile.create({
       data: {
-        email
+        email,
+        uid
       }
     })
     res.json(profile)

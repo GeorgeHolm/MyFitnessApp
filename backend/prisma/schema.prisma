@@ -15,6 +15,7 @@ datasource db {
 
 model Profile {
   id        Int @id @default(autoincrement())
+  uid       String
   email     String
   workouts  Workout[]
   meals     Meal[]
