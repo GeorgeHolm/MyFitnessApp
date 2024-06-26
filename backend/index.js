@@ -33,3 +33,39 @@ app.get('/', (req, res) => {
     const meals = await prisma.meal.findMany()
     res.json(meals)
   })
+
+
+  app.post('/profiles/:id/workouts', async (req, res) => {
+    const { id } = req.params;
+    const { notes } = req.body
+    const newWorkout = await prisma.workout.create({
+      data: {
+        notes,
+        profileId: parseInt(id)
+      }
+    })
+    res.json(newWorkout)
+  })
+
+  app.post('/profiles/:id/meals', async (req, res) => {
+    const { id } = req.params;
+    const { notes } = req.body
+    const newMeal = await prisma.meal.create({
+      data: {
+        notes,
+        profileId: parseInt(id)
+      }
+    })
+    res.json(newMeal)
+  })
+
+  app.post('/profiles', async (req, res) => {
+    const { email } = req.body
+    const profile = await prisma.profile.create({
+      data: {
+        email
+      }
+    })
+    res.json(profile)
+  })
+
