@@ -54,6 +54,7 @@ function Home() {
         <section id="chat">
           <p>Chat</p>
         </section>
+        <button className="round">+</button>
       </div>
     </>
   );
