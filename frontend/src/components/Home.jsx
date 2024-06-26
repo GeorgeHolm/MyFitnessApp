@@ -2,20 +2,21 @@ import { useState, useEffect } from "react";
 import "./Home.css";
 import SearchBar from "./SearchBar";
 import Workout from "./Workout";
+import Modal from "./Modal";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from '../firebase';
+import { auth } from "../firebase";
 
 function Home() {
   const [user, setUser] = useState();
   const [workouts, setWorkouts] = useState([]);
-  useEffect(()=>{
+  const [modal, setModal] = useState(false);
+  useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
-        if (prof) {
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/firebase.User
+      if (prof) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
 
-
-          fetch(`http://localhost:3000/profiles/${prof.uid}/workouts`)
+        fetch(`http://localhost:3000/profiles/${prof.uid}/workouts`)
           .then((response) => {
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
@@ -31,30 +32,37 @@ function Home() {
             console.error("Error fetching boards:", error);
           });
 
+        setUser(prof);
+      } else {
+        // User is signed out
+        // ...
+        console.log("user is logged out");
+      }
+    });
+  }, []);
 
-          setUser(prof);
-        } else {
-          // User is signed out
-          // ...
-          console.log("user is logged out")
-        }
-      });
-     
-}, [])
+  const addWorkout = () => {
+    setModal(!modal);
+
+    console.log(modal);
+  };
 
   return (
     <>
-      <SearchBar user={user}/>
+      {modal && <Modal/>}
+      <SearchBar user={user} />
       <div className="flexbox">
         <section id="workouts">
           {workouts.map((res) => (
-            <Workout key={res.id} content={res}/>
+            <Workout key={res.id} content={res} />
           ))}
         </section>
         <section id="chat">
           <p>Chat</p>
         </section>
-        <button className="round">+</button>
+        <button onClick={addWorkout} className="round">
+          {modal ? ("-") : ("+")}
+        </button>
       </div>
     </>
   );
