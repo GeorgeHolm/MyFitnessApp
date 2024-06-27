@@ -18,6 +18,8 @@
   text-shadow: 0.1px 0 #000000;
   color: white;
   font-family: Georgia, "Times New Roman", Times, serif;
+  overflow-y: scroll;
+  scrollbar-width: none;
 
   display: flex;
   flex-direction: column;
