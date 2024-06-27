@@ -26,7 +26,6 @@ function Home() {
           .then((data) => {
             // Handle successful response
             setWorkouts(data);
-            console.log("Boards:", data);
           })
           .catch((error) => {
             console.error("Error fetching boards:", error);
@@ -43,7 +42,6 @@ function Home() {
           .then((data) => {
             // Handle successful response
             setUser(data[0]);
-            console.log("Boards:", data);
           })
           .catch((error) => {
             console.error("Error fetching boards:", error);
