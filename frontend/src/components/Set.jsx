@@ -8,9 +8,9 @@ import { Link } from "react-router-dom";
 
 const Set = (props) => {
   return (
-    <div>
-      <h3>Set Placeholder</h3>
-    </div>
+    <span>
+      <h3>weight: {props.data.weight}, reps: {props.data.reps}</h3>
+    </span>
   );
 };
 
