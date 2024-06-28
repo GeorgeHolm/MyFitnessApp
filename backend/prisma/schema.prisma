@@ -41,8 +41,8 @@ model Set {
 id              Int @id @default(autoincrement())
 exercise        Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
 exerciseId      Int
-weight          Int
-reps            Float
+weight          Float
+reps            Int
 }
 
 model Meal {

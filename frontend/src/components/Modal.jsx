@@ -44,12 +44,12 @@ export function Modal(props) {
 
       workout.map((exercise) => {
         console.log(wid);
-        const inner = async () => {
+        const asyncExercises = async () => {
           //may need loading here
 
           let eid = 0;
 
-          const workoutCreation = await fetch(
+          const exerciseCreation = await fetch(
             `${import.meta.env.VITE_BACKEND_LINK}/workouts/${wid}/exercises`,
             {
               method: "POST",
@@ -69,7 +69,7 @@ export function Modal(props) {
             .catch((error) => console.error(error));
 
           exercise.sets.map((set) => {
-            const setAsync = async () => {
+            const asyncSets = async () => {
               //may need loading here
               const setCreation = await fetch(
                 `${import.meta.env.VITE_BACKEND_LINK}/exercises/${eid}/sets`,
@@ -88,11 +88,11 @@ export function Modal(props) {
                 .then((data) => console.log(data))
                 .catch((error) => console.error(error));
             };
-            setAsync();
+            asyncSets();
           });
         };
 
-        inner();
+        asyncExercises();
       });
 
       props.setModal(false);

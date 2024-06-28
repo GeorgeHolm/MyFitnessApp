@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import "./Exercise.css";
-import propTypes from "prop-types";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Set from "./Set";
