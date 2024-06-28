@@ -3,13 +3,15 @@ import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import "./Modal.css";
 import { useState, useEffect } from "react";
-
+import Exercise from "./Exercise";
 export function Modal(props) {
 
 
   const [workout, setWorkout] = useState([]);
 
-
+  const addExercise = () => {
+    setWorkout((prevState) => [...prevState, {name: "", sets : []}])
+  }
 
   return (
     <div className="overlay">
@@ -24,7 +26,11 @@ export function Modal(props) {
         </section>
         <section>
 
-          <button>
+          {workout.map((exercise, idx) => (
+            <Exercise key={idx} data={exercise}/>
+          ))}
+
+          <button onClick={addExercise}>
             Add Exercise
           </button>
 
