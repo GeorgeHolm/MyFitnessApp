@@ -5,38 +5,123 @@ import "./Modal.css";
 import { useState, useEffect } from "react";
 import Exercise from "./Exercise";
 export function Modal(props) {
-
-
   const [workout, setWorkout] = useState([]);
 
   const addExercise = () => {
-    setWorkout((prevState) => [...prevState, {name: "", sets : []}])
-  }
+    setWorkout((prevState) => [...prevState, { name: "", sets: [] }]);
+  };
+
+  useEffect(() => {
+    console.log(workout);
+  }, [workout]);
+
+  const confirmWorkout = () => {
+    //post the workout to the users workouts array
+
+    const makeAsync = async () => {
+      //may need loading here, this is the wildest async function of all time O(n^2) complexity
+      let wid = 0;
+      const workoutCreation = await fetch(
+        `${import.meta.env.VITE_BACKEND_LINK}/profiles/${
+          props.user.id
+        }/workouts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            notes: "Generic Notes",
+          }),
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          wid = data.id;
+          console.log(data);
+        })
+        .catch((error) => console.error(error));
+
+      workout.map((exercise) => {
+        console.log(wid);
+        const inner = async () => {
+          //may need loading here
+
+          let eid = 0;
+
+          const workoutCreation = await fetch(
+            `${import.meta.env.VITE_BACKEND_LINK}/workouts/${wid}/exercises`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                name: "General Exercise",
+              }),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              eid = data.id;
+              console.log(data);
+            })
+            .catch((error) => console.error(error));
+
+          exercise.sets.map((set) => {
+            const setAsync = async () => {
+              //may need loading here
+              const setCreation = await fetch(
+                `${import.meta.env.VITE_BACKEND_LINK}/exercises/${eid}/sets`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    weight: set.weight,
+                    reps: set.reps,
+                  }),
+                }
+              )
+                .then((response) => response.json())
+                .then((data) => console.log(data))
+                .catch((error) => console.error(error));
+            };
+            setAsync();
+          });
+        };
+
+        inner();
+      });
+
+      props.setModal(false);
+    };
+    makeAsync();
+  };
 
   return (
     <div className="overlay">
       <div className="modal">
         <section id="top">
-          <h1>
-            New Workout
-          </h1>
-          <button className="finish">
+          <h1>New Workout</h1>
+          <button onClick={confirmWorkout} className="finish">
             Finish
           </button>
         </section>
         <section>
-
           {workout.map((exercise, idx) => (
-            <Exercise key={idx} data={exercise}/>
+            <Exercise
+              workout={workout}
+              setWorkout={setWorkout}
+              index={idx}
+              key={idx}
+              data={exercise}
+            />
           ))}
 
-          <button onClick={addExercise}>
-            Add Exercise
-          </button>
-
+          <button onClick={addExercise}>Add Exercise</button>
         </section>
-
-
       </div>
     </div>
   );

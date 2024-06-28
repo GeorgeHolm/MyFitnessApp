@@ -9,17 +9,27 @@ import Set from "./Set";
 
 const Exercise = (props) => {
 
-    const [sets, setSets] = useState([]);
-
     const addSet = () => {
-      setSets((prevState) => [...prevState, {weight: 0, reps: 0}])
+
+      const updatedWorkout = props.workout.map((c, i) => {
+        if (i === props.index) {
+
+            let temp = c;
+            temp.sets.push({weight: 0, reps: 0});
+            return temp;
+        }
+        else {
+            return c;
+        }
+      })
+      props.setWorkout(updatedWorkout);
     }
 
   return (
     <div>
       <h2>Exercise placeholder</h2>
 
-      {sets.map((set, idx) => (
+      {props.workout[props.index].sets.map((set, idx) => (
         <Set key={idx} data={set} />
       ))}
 

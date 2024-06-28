@@ -32,14 +32,30 @@ function Home() {
             console.error("Error fetching boards:", error);
           });
 
-        setUser(prof);
+
+          fetch(`http://localhost:3000/profiles/${prof.uid}`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json(); // Parse JSON data from the response
+          })
+          .then((data) => {
+            // Handle successful response
+            setUser(data[0]);
+            console.log("Boards:", data);
+          })
+          .catch((error) => {
+            console.error("Error fetching boards:", error);
+          });
+
       } else {
         // User is signed out
         // ...
         console.log("user is logged out");
       }
     });
-  }, []);
+  }, [modal]);
 
   const addWorkout = () => {
     setModal(!modal);
@@ -49,7 +65,7 @@ function Home() {
 
   return (
     <>
-      {modal && <Modal/>}
+      {modal && <Modal setModal={setModal} user={user}/>}
       <SearchBar user={user} />
       <div className="flexbox">
         <section id="workouts">
