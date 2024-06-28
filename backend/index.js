@@ -49,6 +49,33 @@ app.get('/', (req, res) => {
   })
 
 
+  app.post('/exercises/:id/sets', async (req, res) => {
+    const { id } = req.params;
+    const { weight, reps } = req.body
+    const newSet = await prisma.set.create({
+      data: {
+        weight,
+        reps,
+        exerciseId: parseInt(id)
+      }
+    })
+    res.json(newSet)
+  })
+
+
+  app.post('/workouts/:id/exercises', async (req, res) => {
+    const { id } = req.params;
+    const { name } = req.body
+    const newExercise = await prisma.exercise.create({
+      data: {
+        name,
+        workoutId: parseInt(id)
+      }
+    })
+    res.json(newExercise)
+  })
+
+
   app.post('/profiles/:id/workouts', async (req, res) => {
     const { id } = req.params;
     const { notes } = req.body

@@ -7,10 +7,29 @@ import { useState, useEffect } from "react";
 export function Modal(props) {
 
 
+  const [workout, setWorkout] = useState([]);
+
+
 
   return (
     <div className="overlay">
-      <div className="modal" >
+      <div className="modal">
+        <section id="top">
+          <h1>
+            New Workout
+          </h1>
+          <button className="finish">
+            Finish
+          </button>
+        </section>
+        <section>
+
+          <button>
+            Add Exercise
+          </button>
+
+        </section>
+
 
       </div>
     </div>
