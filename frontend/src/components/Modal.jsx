@@ -96,8 +96,8 @@ export function Modal(props) {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                    weight: set.weight,
-                    reps: set.reps,
+                    weight: Number(set.weight),
+                    reps: Number(set.reps),
                   }),
                 }
               )
