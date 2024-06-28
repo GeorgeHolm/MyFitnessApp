@@ -11,3 +11,55 @@
     border-radius: 2px;
     transition: 0.5s;
   }
+
+  
+.modal {
+  text-shadow: 0.1px 0 #000000;
+  color: white;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  overflow-y: scroll;
+  scrollbar-width: none;
+
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  height: 80%;
+  margin: 5% 10% 5% 10%;
+  background: linear-gradient(45deg, #98d6f5, #4979f4);
+  box-shadow: 0px 20px 24px -4px rgba(16, 24, 40, 0.1),
+    0px 8px 8px -4px rgba(16, 24, 40, 0.04);
+  transition: all 0.5s ease;
+  z-index: 1;
+  border: 5px solid;
+  border-image: linear-gradient(45deg, #02062e, #86069f) 3;
+
+  flex-direction: column;
+  text-align: center;
+
+}
+
+button.delete {
+    font-size: 20px;
+    z-index:10000;
+    background-color: rgb(50, 119, 121);
+    color: white;
+    border: none;
+    padding: 0px;
+    font-size: 31px;
+    height: 40px;
+    width: 40px;
+    box-shadow: 0 2px 4px darkslategray;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+}
+
+button.delete:hover {
+    background-color: rgb(105, 148, 150);
+   }
+   
+   button.finish:active {
+    box-shadow: 0 0 2px darkslategray;
+    transform: translateY(2px);
+   }
