@@ -10,6 +10,8 @@ function Home() {
   const [user, setUser] = useState();
   const [workouts, setWorkouts] = useState([]);
   const [modal, setModal] = useState(false);
+  const [refresh, setRefresh] = useState(0);
+
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
@@ -70,13 +72,15 @@ function Home() {
           console.error("Error fetching boards:", error);
         });
     }
-  }, [modal]);
+  }, [modal, refresh]);
 
   const addWorkout = () => {
     setModal(!modal);
 
     console.log(modal);
   };
+
+
 
   return (
     <>
@@ -85,7 +89,7 @@ function Home() {
       <div className="flexbox">
         <section id="workouts">
           {workouts.map((res) => (
-            <Workout key={res.id} content={res} />
+            <Workout refresh={refresh} setRefresh={setRefresh} key={res.id} content={res} />
           ))}
         </section>
         <section id="chat">

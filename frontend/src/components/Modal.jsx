@@ -66,7 +66,7 @@ export function Modal(props) {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                name: "General Exercise",
+                name: exercise.name,
               }),
             }
           )
