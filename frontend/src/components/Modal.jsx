@@ -18,6 +18,8 @@ export function Modal(props) {
   const confirmWorkout = () => {
     //post the workout to the users workouts array
 
+    //I would rather make an API call that takes in the input
+
     const makeAsync = async () => {
       //may need loading here, this is the wildest async function of all time O(n^2) complexity
       let wid = 0;
@@ -42,14 +44,21 @@ export function Modal(props) {
         })
         .catch((error) => console.error(error));
 
+      Promise.all([workoutCreation])
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       workout.map((exercise) => {
         console.log(wid);
-        const inner = async () => {
+        const asyncExercises = async () => {
           //may need loading here
 
           let eid = 0;
 
-          const workoutCreation = await fetch(
+          const exerciseCreation = await fetch(
             `${import.meta.env.VITE_BACKEND_LINK}/workouts/${wid}/exercises`,
             {
               method: "POST",
@@ -68,8 +77,16 @@ export function Modal(props) {
             })
             .catch((error) => console.error(error));
 
+          Promise.all([exerciseCreation])
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
           exercise.sets.map((set) => {
-            const setAsync = async () => {
+            const asyncSets = async () => {
               //may need loading here
               const setCreation = await fetch(
                 `${import.meta.env.VITE_BACKEND_LINK}/exercises/${eid}/sets`,
@@ -79,26 +96,35 @@ export function Modal(props) {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                    weight: set.weight,
-                    reps: set.reps,
+                    weight: Number(set.weight),
+                    reps: Number(set.reps),
                   }),
                 }
               )
                 .then((response) => response.json())
                 .then((data) => console.log(data))
                 .catch((error) => console.error(error));
+
+              Promise.all([setCreation])
+                .then((res) => {
+                  console.log(res);
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
             };
-            setAsync();
+            asyncSets();
           });
         };
 
-        inner();
+        asyncExercises();
       });
-
-      props.setModal(false);
     };
     makeAsync();
+    setWorkout([]);
   };
+
+
 
   return (
     <div className="overlay">

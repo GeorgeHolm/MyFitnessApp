@@ -31,8 +31,7 @@ function Home() {
             console.error("Error fetching boards:", error);
           });
 
-
-          fetch(`http://localhost:3000/profiles/${prof.uid}`)
+        fetch(`http://localhost:3000/profiles/${prof.uid}`)
           .then((response) => {
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
@@ -46,13 +45,31 @@ function Home() {
           .catch((error) => {
             console.error("Error fetching boards:", error);
           });
-
       } else {
         // User is signed out
         // ...
         console.log("user is logged out");
       }
     });
+  }, [modal]);
+
+  useEffect(() => {
+    if (user) {
+      fetch(`http://localhost:3000/profiles/${user.uid}/workouts`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json(); // Parse JSON data from the response
+        })
+        .then((data) => {
+          // Handle successful response
+          setWorkouts(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching boards:", error);
+        });
+    }
   }, [modal]);
 
   const addWorkout = () => {
@@ -63,7 +80,7 @@ function Home() {
 
   return (
     <>
-      {modal && <Modal setModal={setModal} user={user}/>}
+      {modal && <Modal setModal={setModal} user={user} />}
       <SearchBar user={user} />
       <div className="flexbox">
         <section id="workouts">
@@ -75,7 +92,7 @@ function Home() {
           <p>Chat</p>
         </section>
         <button onClick={addWorkout} className="round">
-          {modal ? ("-") : ("+")}
+          {modal ? "-" : "+"}
         </button>
       </div>
     </>
