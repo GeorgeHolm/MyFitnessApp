@@ -162,6 +162,65 @@ export function Modal(props) {
   const confirmMeal = () => {
     console.log("Meal created");
     console.log(meal);
+
+
+
+
+
+    const makeAsyncMeal = async () => {
+      
+    let carbs = 0;
+    let fats = 0;
+    let proteins = 0;
+    let weight = 0;
+
+    meal.map((foodItem) => {
+      let tempTotal = 100;
+      let carbRatio = Number(foodItem.foodData.foodNutrients[2].value) / tempTotal;
+      let fatRatio = Number(foodItem.foodData.foodNutrients[1].value) / tempTotal;
+      let proteinRatio = Number(foodItem.foodData.foodNutrients[0].value)/ tempTotal;
+      carbs = carbs + Number(carbRatio) * foodItem.weight;
+      fats = fats + Number(fatRatio) * foodItem.weight;
+      proteins = Number(proteins) + proteinRatio * foodItem.weight;
+      weight = weight + Number(foodItem.weight);
+    });
+
+      //may need loading here, this is the wildest async function of all time O(n^2) complexity
+      const mealCreation = await fetch(
+        `${import.meta.env.VITE_BACKEND_LINK}/profiles/${
+          props.user.id
+        }/meals`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            notes: "Generic Meal Notes",
+            totalCalories: 4 * carbs + 4 * proteins + 9 * fats,
+            totalCarbs: carbs,
+            totalFats: fats,
+            totalProteins: proteins,
+            totalGrams: weight
+
+          }),
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+
+          console.log(data);
+        })
+        .catch((error) => console.error(error));
+      
+      }
+
+      makeAsyncMeal();
+
+      setMeal([]);
+
+
+
   };
 
   const foodSelected = (f) => {

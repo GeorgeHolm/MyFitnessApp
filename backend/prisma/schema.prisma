@@ -50,4 +50,22 @@ model Meal {
   profile       Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId     Int
   notes         String
+  foods         Food[]
+  totalCalories Float
+  totalCarbs    Float
+  totalFats     Float
+  totalProteins Float
+  totalGrams    Float
+}
+
+model Food {
+  id            Int @id @default(autoincrement())
+  meal          Meal @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  mealId        Int
+  name          String
+  calories      Float
+  carbs         Float
+  fats          Float
+  proteins      Float
+  grams         Float
 }

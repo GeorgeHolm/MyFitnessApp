@@ -126,15 +126,22 @@ app.post("/profiles/:id/workouts", async (req, res) => {
 
 app.post("/profiles/:id/meals", async (req, res) => {
   const { id } = req.params;
-  const { notes } = req.body;
+  const { notes, totalCalories, totalCarbs, totalFats, totalProteins, totalGrams } = req.body;
   const newMeal = await prisma.meal.create({
     data: {
       notes,
+      totalCalories,
+      totalCarbs,
+      totalFats,
+      totalProteins,
+      totalGrams,
       profileId: Number(id),
     },
   });
   res.json(newMeal);
 });
+
+//post for adding a food item to a meal (not necessary atm)
 
 app.post("/profiles", async (req, res) => {
   const { email, uid } = req.body;
