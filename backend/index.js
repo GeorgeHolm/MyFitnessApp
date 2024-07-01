@@ -40,6 +40,19 @@ app.get("/profiles/:uid/workouts", async (req, res) => {
   return res.json(workouts);
 });
 
+app.get("/profiles/:uid/meals", async (req, res) => {
+  const { uid } = req.params;
+
+  const profile = await prisma.profile.findMany({ where: { uid: uid } });
+  if (!profile[0]) {
+    return res.status(404).send({ error: "Profile not found" });
+  }
+  const meals = await prisma.meal.findMany({
+    where: { profileId: profile[0].id }
+  });
+  return res.json(meals);
+});
+
 app.get("/profiles/:uid", async (req, res) => {
   const { uid } = req.params;
 
@@ -139,4 +152,11 @@ app.delete('/workouts/:id', async (req, res) => {
   const deletedWorkout = await prisma.workout.deleteMany({
       where: { id: parseInt(id) }      })
   res.json(deletedWorkout)
+})
+
+app.delete('/meals/:id', async (req, res) => {
+  const { id } = req.params
+  const deletedMeal = await prisma.meal.deleteMany({
+      where: { id: parseInt(id) }      })
+  res.json(deletedMeal)
 })

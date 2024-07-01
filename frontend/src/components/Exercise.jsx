@@ -29,8 +29,8 @@ const Exercise = (props) => {
   };
 
   return (
-    <div>
-      <div>
+    <div className="exercise">
+      <div className="exercise">
         <span>Exercise:</span>
 
         <span>

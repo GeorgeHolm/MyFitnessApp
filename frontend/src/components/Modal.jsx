@@ -124,31 +124,47 @@ export function Modal(props) {
     setWorkout([]);
   };
 
-
-
+  //Code for creating meal
+  
+  const confirmMeal = () => {
+    console.log("Meal created");
+  }
   return (
     <div className="overlay">
-      <div className="modal">
-        <section id="top">
-          <h1>New Workout</h1>
-          <button onClick={confirmWorkout} className="finish">
-            Finish
-          </button>
-        </section>
-        <section>
-          {workout.map((exercise, idx) => (
-            <Exercise
-              workout={workout}
-              setWorkout={setWorkout}
-              index={idx}
-              key={idx}
-              data={exercise}
-            />
-          ))}
+      {props.type ? (
+        <div className="modal">
+          <section id="top">
+            <h1>New Workout</h1>
+            <button onClick={confirmWorkout} className="finish">
+              Finish
+            </button>
+          </section>
+          <section>
+            {workout.map((exercise, idx) => (
+              <Exercise
+                workout={workout}
+                setWorkout={setWorkout}
+                index={idx}
+                key={idx}
+                data={exercise}
+              />
+            ))}
+            <button onClick={addExercise}>Add Exercise</button>
+          </section>
+        </div>
+      ) : (
+        <div className="modal">
+          <section id="top">
+            <h1>New Meal</h1>
+            <button onClick={confirmMeal} className="finish">
+              Finish
+            </button>
+          </section>
+          <section>
 
-          <button onClick={addExercise}>Add Exercise</button>
-        </section>
-      </div>
+          </section>
+        </div>
+      )}
     </div>
   );
 }

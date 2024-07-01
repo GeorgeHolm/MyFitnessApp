@@ -48,9 +48,9 @@ const Set = (props) => {
     console.log(updatedWorkout);
     props.setWorkout(updatedWorkout);
   }, [weight, reps]);
-  
+
   return (
-    <div>
+    <div className="exercise">
       <span>weight:</span>
       <span>
         <input
