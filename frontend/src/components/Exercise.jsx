@@ -2,35 +2,56 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import "./Exercise.css";
-import propTypes from "prop-types";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Set from "./Set";
 
 const Exercise = (props) => {
+  const [eName, setEName] = useState("");
 
-    const addSet = () => {
+  const addSet = () => {
+    const updatedWorkout = props.workout.map((c, i) => {
+      if (i === props.index) {
+        let temp = c;
+        temp.name = eName;
+        temp.sets.push({ weight: 0, reps: 0 });
+        return temp;
+      } else {
+        return c;
+      }
+    });
+    props.setWorkout(updatedWorkout);
+  };
 
-      const updatedWorkout = props.workout.map((c, i) => {
-        if (i === props.index) {
-
-            let temp = c;
-            temp.sets.push({weight: 0, reps: 0});
-            return temp;
-        }
-        else {
-            return c;
-        }
-      })
-      props.setWorkout(updatedWorkout);
-    }
+  const handleName = (e) => {
+    setEName(e.target.value);
+    console.log(eName);
+  };
 
   return (
-    <div>
-      <h2>Exercise placeholder</h2>
+    <div className="exercise">
+      <div className="exercise">
+        <span>Exercise:</span>
+
+        <span>
+          <input
+            type="text"
+            placeholder=""
+            onChange={handleName}
+            value={eName}
+          />
+        </span>
+      </div>
 
       {props.workout[props.index].sets.map((set, idx) => (
-        <Set key={idx} data={set} />
+        <Set
+          setWorkout={props.setWorkout}
+          workout={props.workout}
+          exerciseIndex={props.index}
+          setIndex={idx}
+          key={idx}
+          data={set}
+        />
       ))}
 
       <button onClick={addSet}>Add Set</button>
