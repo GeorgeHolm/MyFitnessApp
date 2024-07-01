@@ -10,7 +10,7 @@ import { getAuth } from "firebase/auth";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyAPrMIQkkr0bUUzgQKIzAlQbbEjfW1YEVA",
+  apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
   authDomain: "myfitnessapp-8dd2d.firebaseapp.com",
   projectId: "myfitnessapp-8dd2d",
   storageBucket: "myfitnessapp-8dd2d.appspot.com",
