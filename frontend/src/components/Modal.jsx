@@ -161,6 +161,7 @@ export function Modal(props) {
 
   const confirmMeal = () => {
     console.log("Meal created");
+    console.log(meal);
   };
 
   const foodSelected = (f) => {
@@ -172,9 +173,13 @@ export function Modal(props) {
     console.log(foodChoice);
     console.log(meal);
     if (foodChoice.description) {
-      setMeal((prevState) => [...prevState, foodChoice]);
+      setMeal((prevState) => [...prevState, {foodData: foodChoice, weight: 0}]);
     }
   }, [foodChoice]);
+
+  useEffect(() => {
+    console.log(meal);
+  }, [meal]);
 
   return (
     <div className="overlay">
@@ -233,9 +238,62 @@ export function Modal(props) {
 
             <section id="mealContainer">
               {meal.map((foodItem, idx) => (
-                <p onClick={() => {
-                  setMeal([...meal.slice(0, idx), ...meal.slice(idx + 1)]);
-                }} key={idx}>{foodItem.description}</p>
+                <div key={idx}>
+                  <span>{foodItem.foodData.description}</span>
+                  <span>
+                    <button
+                      onClick={() => {
+                        setMeal([
+                          ...meal.slice(0, idx),
+                          ...meal.slice(idx + 1),
+                        ]);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </span>
+                  <span>
+                    {foodItem.foodData.foodMeasures.length > 0 ? (
+                      <select onChange={
+                        (e) => {
+                          console.log(foodItem.weight);
+                          let tempMeal = [...meal];
+                          console.log(e.target.value);
+                     
+                          tempMeal[idx].weight = e.target.value;                          
+                           //may need if statement
+                          setMeal(tempMeal);
+
+                        }
+
+                      }>
+                        <option key ={-1} value={0}>none: 0g</option>
+                        {foodItem.foodData.foodMeasures.map((measure, mIdx) => (
+                          <option key={mIdx} value={measure.gramWeight}>
+                            {measure.disseminationText}: {measure.gramWeight} g
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        type="text"
+                        placeholder="enter weight (g)"
+                        className="chooseWeight"
+                        onChange={(e) => {
+                          console.log(foodItem.weight);
+                          let tempMeal = [...meal];
+                          if(Number(e.target.value)){
+                            tempMeal[idx].weight = e.target.value;
+                          }
+                           //may need if statement
+                          setMeal(tempMeal);
+
+                        }}
+                        value={foodItem.weight}
+                      />
+                    )}
+                  </span>
+                </div>
               ))}
             </section>
           </section>

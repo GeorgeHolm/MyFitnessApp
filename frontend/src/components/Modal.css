@@ -78,3 +78,7 @@ button.finish:hover {
     border: solid 4px #86069f;
     border-radius: 20px;
    }
+
+   .chooseWeight {
+    width: 40px;
+   }
