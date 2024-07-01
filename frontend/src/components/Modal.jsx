@@ -173,6 +173,7 @@ export function Modal(props) {
     let fats = 0;
     let proteins = 0;
     let weight = 0;
+    let mid = 0;
 
     meal.map((foodItem) => {
       let tempTotal = 100;
@@ -208,10 +209,54 @@ export function Modal(props) {
       )
         .then((response) => response.json())
         .then((data) => {
-
+          mid = data.id
           console.log(data);
         })
         .catch((error) => console.error(error));
+
+
+        {meal.map((foodItem) => {
+
+          async function addFoodAsync() {
+
+            let tempTotal = 100;
+            let carbRatio = Number(foodItem.foodData.foodNutrients[2].value) / tempTotal;
+            let fatRatio = Number(foodItem.foodData.foodNutrients[1].value) / tempTotal;
+            let proteinRatio = Number(foodItem.foodData.foodNutrients[0].value)/ tempTotal;
+
+
+          const foodAddition = await fetch(
+            `${import.meta.env.VITE_BACKEND_LINK}/meals/${
+              mid
+            }/foods`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                name: foodItem.foodData.description,
+                calories: 4 * carbs + 4 * proteins + 9 * fats,
+                carbs: carbRatio *  Number(foodItem.weight),
+                fats: fatRatio *  Number(foodItem.weight),
+                proteins: proteinRatio *  Number(foodItem.weight),
+                grams: Number(foodItem.weight),
+
+    
+              }),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+    
+              console.log(data);
+            })
+            .catch((error) => console.error(error));
+        }
+      addFoodAsync();
+      }
+        
+      )}
       
       }
 

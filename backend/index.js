@@ -124,6 +124,23 @@ app.post("/profiles/:id/workouts", async (req, res) => {
   res.json(newWorkout);
 });
 
+app.post("/meals/:id/foods", async (req, res) => {
+  const { id } = req.params;
+  const { name, calories, carbs, fats, proteins, grams } = req.body;
+  const newFood = await prisma.food.create({
+    data: {
+      name,
+      calories,
+      carbs, 
+      fats,
+      proteins,
+      grams,
+      mealId: Number(id),
+    },
+  });
+  res.json(newFood);
+});
+
 app.post("/profiles/:id/meals", async (req, res) => {
   const { id } = req.params;
   const { notes, totalCalories, totalCarbs, totalFats, totalProteins, totalGrams } = req.body;
