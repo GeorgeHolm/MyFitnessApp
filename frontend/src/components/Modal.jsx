@@ -236,7 +236,7 @@ export function Modal(props) {
               },
               body: JSON.stringify({
                 name: foodItem.foodData.description,
-                calories: 4 * carbs + 4 * proteins + 9 * fats,
+                calories: 4 * carbRatio *  Number(foodItem.weight) + 4 * proteinRatio *  Number(foodItem.weight) + 9 * fatRatio *  Number(foodItem.weight),
                 carbs: carbRatio *  Number(foodItem.weight),
                 fats: fatRatio *  Number(foodItem.weight),
                 proteins: proteinRatio *  Number(foodItem.weight),
