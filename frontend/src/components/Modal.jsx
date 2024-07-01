@@ -125,10 +125,41 @@ export function Modal(props) {
   };
 
   //Code for creating meal
-  
+
+  const [mealSearch, setMealSearch] = useState("");
+  const [mealSearchResults, setMealSearchResults] = useState([]);
+
+  const handleMealSearch = (e) => {
+    setMealSearch(e.target.value);
+  };
+
+  const searchForFood = () => {
+    console.log(mealSearch);
+
+    fetch(
+      `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${
+        import.meta.env.VITE_FOOD_API_KEY
+      }&query=${mealSearch}`
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json(); // Parse JSON data from the response
+      })
+      .then((data) => {
+        // Handle successful response
+        setMealSearchResults(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching boards:", error);
+      });
+  };
+
   const confirmMeal = () => {
     console.log("Meal created");
-  }
+  };
   return (
     <div className="overlay">
       {props.type ? (
@@ -161,7 +192,23 @@ export function Modal(props) {
             </button>
           </section>
           <section>
+            <input
+              type="text"
+              placeholder="find food item"
+              onChange={handleMealSearch}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  searchForFood();
+                }
+              }}
+              value={mealSearch}
+            />
 
+            {mealSearchResults.foods?.map((food, idx) => (
+              <p key={idx}>
+                {food.description}
+              </p>
+            ))}
           </section>
         </div>
       )}
