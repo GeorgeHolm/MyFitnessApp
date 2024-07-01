@@ -128,6 +128,8 @@ export function Modal(props) {
 
   const [mealSearch, setMealSearch] = useState("");
   const [mealSearchResults, setMealSearchResults] = useState([]);
+  const [foodChoice, setFoodChoice] = useState({});
+  const [meal, setMeal] = useState([]);
 
   const handleMealSearch = (e) => {
     setMealSearch(e.target.value);
@@ -160,6 +162,20 @@ export function Modal(props) {
   const confirmMeal = () => {
     console.log("Meal created");
   };
+
+  const foodSelected = (f) => {
+    setFoodChoice(f.food);
+    setMealSearchResults([]);
+  };
+
+  useEffect(() => {
+    console.log(foodChoice);
+    console.log(meal);
+    if (foodChoice.description) {
+      setMeal((prevState) => [...prevState, foodChoice]);
+    }
+  }, [foodChoice]);
+
   return (
     <div className="overlay">
       {props.type ? (
@@ -205,10 +221,23 @@ export function Modal(props) {
             />
 
             {mealSearchResults.foods?.map((food, idx) => (
-              <p key={idx}>
+              <p
+                key={idx}
+                onClick={() => {
+                  foodSelected({ food });
+                }}
+              >
                 {food.description}
               </p>
             ))}
+
+            <section id="mealContainer">
+              {meal.map((foodItem, idx) => (
+                <p onClick={() => {
+                  setMeal([...meal.slice(0, idx), ...meal.slice(idx + 1)]);
+                }} key={idx}>{foodItem.description}</p>
+              ))}
+            </section>
           </section>
         </div>
       )}
