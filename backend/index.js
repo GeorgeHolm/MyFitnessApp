@@ -66,16 +66,23 @@ app.get("/meals", async (req, res) => {
 });
 
 app.post("/exercises/:id/sets", async (req, res) => {
-  const { id } = req.params;
-  const { weight, reps } = req.body;
-  const newSet = await prisma.set.create({
-    data: {
-      weight,
-      reps,
-      exerciseId: parseInt(id),
-    },
-  });
-  res.json(newSet);
+
+  try {
+
+    const { id } = req.params;
+    const { weight, reps } = req.body;
+    const newSet = await prisma.set.create({
+      data: {
+        weight,
+        reps,
+        exerciseId: Number(id),
+      },
+    });
+    res.json(newSet);
+  } catch (error) {
+    console.log('Error:', error.message);
+  }
+
 });
 
 app.post("/workouts/:id/exercises", async (req, res) => {
@@ -84,7 +91,7 @@ app.post("/workouts/:id/exercises", async (req, res) => {
   const newExercise = await prisma.exercise.create({
     data: {
       name,
-      workoutId: parseInt(id),
+      workoutId: Number(id),
     },
   });
   res.json(newExercise);
@@ -96,7 +103,7 @@ app.post("/profiles/:id/workouts", async (req, res) => {
   const newWorkout = await prisma.workout.create({
     data: {
       notes,
-      profileId: parseInt(id),
+      profileId: Number(id),
     },
   });
   res.json(newWorkout);
@@ -108,7 +115,7 @@ app.post("/profiles/:id/meals", async (req, res) => {
   const newMeal = await prisma.meal.create({
     data: {
       notes,
-      profileId: parseInt(id),
+      profileId: Number(id),
     },
   });
   res.json(newMeal);
