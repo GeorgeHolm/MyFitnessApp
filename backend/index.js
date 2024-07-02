@@ -133,3 +133,10 @@ app.post("/profiles", async (req, res) => {
   });
   res.json(profile);
 });
+
+app.delete('/workouts/:id', async (req, res) => {
+  const { id } = req.params
+  const deletedWorkout = await prisma.workout.deleteMany({
+      where: { id: parseInt(id) }      })
+  res.json(deletedWorkout)
+})

@@ -48,6 +48,7 @@ const Set = (props) => {
     console.log(updatedWorkout);
     props.setWorkout(updatedWorkout);
   }, [weight, reps]);
+  
   return (
     <div>
       <span>weight:</span>

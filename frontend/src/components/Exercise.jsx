@@ -7,10 +7,13 @@ import { Link } from "react-router-dom";
 import Set from "./Set";
 
 const Exercise = (props) => {
+  const [eName, setEName] = useState("");
+
   const addSet = () => {
     const updatedWorkout = props.workout.map((c, i) => {
       if (i === props.index) {
         let temp = c;
+        temp.name = eName;
         temp.sets.push({ weight: 0, reps: 0 });
         return temp;
       } else {
@@ -20,9 +23,25 @@ const Exercise = (props) => {
     props.setWorkout(updatedWorkout);
   };
 
+  const handleName = (e) => {
+    setEName(e.target.value);
+    console.log(eName);
+  };
+
   return (
     <div>
-      <h2>Exercise placeholder</h2>
+      <div>
+        <span>Exercise:</span>
+
+        <span>
+          <input
+            type="text"
+            placeholder=""
+            onChange={handleName}
+            value={eName}
+          />
+        </span>
+      </div>
 
       {props.workout[props.index].sets.map((set, idx) => (
         <Set
