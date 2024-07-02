@@ -15,24 +15,17 @@
     width: 15vw;
     margin: 2.5vw;
   }
-
   .flexbox {
     display: flex;
   }
-  #left {
-    width: 20%;
+
+  #half {
+    width: 50%;
     height: 100vh;
     margin: 0;
     border: 1px black solid;
-
-  }
-
-  #right {
-    
     flex:1;
-    height: 100vh;
-    margin: 0;
-    border: 1px black solid;
+
   }
 
 body {

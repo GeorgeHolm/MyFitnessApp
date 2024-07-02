@@ -51,11 +51,11 @@ const editProf = () => {
   return (
     <>
       <SearchBar user={user} />
-      <div>
+      <div className="flexbox">
 
         {currentEdit && <ProfileEdit user={user} setUser={setUser} close={setCurrentEdit}/>}
 
-        <section id="left">
+        <div id="left">
           <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" />
           <button onClick={editProf} className="edit">
             Edit Profile
@@ -72,8 +72,8 @@ const editProf = () => {
           <p>
             Bio: {user?.bio}
           </p>
-        </section>
-        <section id="right"></section>
+        </div>
+        <div id="right"></div>
       </div>
     </>
   );

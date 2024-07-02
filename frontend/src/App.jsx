@@ -5,6 +5,7 @@ import Profile from "./components/Profile";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import "./App.css";
+import Statistics from "./components/Statistics";
 
 
 function App() {
@@ -13,6 +14,8 @@ function App() {
       <Routes>
         <Route key="-1" path="/home" element={<Home />} />
         <Route key="-1" path="/profile" element={<Profile />} />
+        <Route key="-1" path="/statistics" element={<Statistics />} />
+
 
         <Route path="/" element={<Signup />} />
         <Route path="/login" element={<Login />} />

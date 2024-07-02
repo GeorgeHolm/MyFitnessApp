@@ -1,0 +1,11 @@
+.graphDiv {
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+.graphCanvas {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    color: white;
+}
