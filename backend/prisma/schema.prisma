@@ -19,6 +19,10 @@ model Profile {
   email     String
   workouts  Workout[]
   meals     Meal[]
+  name      String @default("")
+  sex       String @default("")
+  age       Int @default(0)
+  bio       String @default("")
 }
 
 model Workout {

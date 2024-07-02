@@ -6,6 +6,7 @@ import propTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+
 const Meal = (props) => {
 
   const deleteMeal = () => {
