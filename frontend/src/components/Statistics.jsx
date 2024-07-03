@@ -131,7 +131,7 @@ function Statistics() {
               user={user}
               width={600}
               height={500}
-              linearRegression={true}
+              linearRegression={[true]}
             />
           )}
           {totalVolumes.length > 0 && (
@@ -142,7 +142,7 @@ function Statistics() {
               user={user}
               width={600}
               height={500}
-              linearRegression={false}
+              linearRegression={[false]}
             />
           )}
         </section>
@@ -155,7 +155,7 @@ function Statistics() {
               user={user}
               width={600}
               height={500}
-              linearRegression={true}
+              linearRegression={[true]}
             />
           )}
           {totalCalories.length > 0 && (
@@ -166,7 +166,7 @@ function Statistics() {
               user={user}
               width={600}
               height={500}
-              linearRegression={false}
+              linearRegression={[false]}
             />
           )}
           {totalGrams.length > 0 && (
@@ -177,7 +177,7 @@ function Statistics() {
               user={user}
               width={600}
               height={500}
-              linearRegression={true}
+              linearRegression={[true, false, false, false]}
             />
           )}
           {totalGrams.length > 0 && (
@@ -188,7 +188,7 @@ function Statistics() {
               user={user}
               width={600}
               height={500}
-              linearRegression={false}
+              linearRegression={[false, false, false]}
             />
           )}
         </section>

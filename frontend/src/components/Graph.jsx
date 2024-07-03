@@ -153,7 +153,7 @@ const Set = (props) => {
           );
         });
 
-        if (props.linearRegression) {
+        if (props.linearRegression[colorIdx]) {
           let xSum = 0,
             ySum = 0,
             xxSum = 0,
