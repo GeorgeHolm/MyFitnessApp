@@ -11,6 +11,11 @@ function Statistics() {
   const [meals, setMeals] = useState([]);
   const [totalVolumes, setTotalVolumes] = useState([]);
   const [totalCalories, setTotalCalories] = useState([]);
+  const [totalGrams, setTotalGrams] = useState([]);
+  const [totalCarbs, setTotalCarbs] = useState([]);
+  const [totalProteins, setTotalProteins] = useState([]);
+  const [totalFats, setTotalFats] = useState([]);
+
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
@@ -93,11 +98,24 @@ function Statistics() {
     }
     if (meals.length > 0) {
       let calTemp = [];
+      let gramTemp = [];
+      let protTemp = [];
+      let fatTemp = [];
+      let carbTemp = [];
+
       meals.map((meal) => {
         calTemp.push(meal.totalCalories);
+        gramTemp.push(meal.totalGrams);
+        protTemp.push(meal.totalProteins);
+        fatTemp.push(meal.totalFats);
+        carbTemp.push(meal.totalCarbs);
       });
 
       setTotalCalories(calTemp);
+      setTotalGrams(gramTemp);
+      setTotalProteins(protTemp);
+      setTotalCarbs(carbTemp);
+      setTotalFats(fatTemp);
     }
   }, [workouts, meals]);
   return (
@@ -107,7 +125,7 @@ function Statistics() {
         <section id="half">
           {totalVolumes.length > 0 && (
             <Graph
-              dataPoints={totalVolumes}
+              dataPoints={[totalVolumes]}
               xAxis={"workout #"}
               yAxis={"volume (lbs)"}
               user={user}
@@ -118,7 +136,7 @@ function Statistics() {
           )}
           {totalVolumes.length > 0 && (
             <Graph
-              dataPoints={totalVolumes}
+              dataPoints={[totalVolumes]}
               xAxis={"workout #"}
               yAxis={"volume (lbs)"}
               user={user}
@@ -131,7 +149,7 @@ function Statistics() {
         <section id="half">
           {totalCalories.length > 0 && (
             <Graph
-              dataPoints={totalCalories}
+              dataPoints={[totalCalories]}
               xAxis={"meal #"}
               yAxis={"calories"}
               user={user}
@@ -142,9 +160,31 @@ function Statistics() {
           )}
           {totalCalories.length > 0 && (
             <Graph
-              dataPoints={totalCalories}
+              dataPoints={[totalCalories]}
               xAxis={"meal #"}
               yAxis={"calories"}
+              user={user}
+              width={600}
+              height={500}
+              linearRegression={false}
+            />
+          )}
+          {totalGrams.length > 0 && (
+            <Graph
+              dataPoints={[totalGrams, totalCarbs, totalFats, totalProteins]}
+              xAxis={"meal #"}
+              yAxis={"grams"}
+              user={user}
+              width={600}
+              height={500}
+              linearRegression={true}
+            />
+          )}
+          {totalGrams.length > 0 && (
+            <Graph
+              dataPoints={[totalCarbs, totalFats, totalProteins]}
+              xAxis={"meal #"}
+              yAxis={"grams"}
               user={user}
               width={600}
               height={500}
