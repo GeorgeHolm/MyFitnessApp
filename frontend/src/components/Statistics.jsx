@@ -45,11 +45,13 @@ function Statistics() {
       <SearchBar user={user} />
       <div className="flexbox">
         <section id="half">
-            <Graph width={400} height={300}/>
+            <Graph user={user} width={600} height={500}/>
+    
 
-            <Graph width={400} height={300}/>
 
 
+
+ 
         </section>
         <section id="half"></section>
       </div>

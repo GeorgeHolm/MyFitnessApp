@@ -20,6 +20,8 @@
   }
 
   #half {
+    overflow-y: scroll;
+
     width: 50%;
     height: 100vh;
     margin: 0;
