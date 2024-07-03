@@ -188,7 +188,7 @@ function Statistics() {
               user={user}
               width={600}
               height={500}
-              linearRegression={[false, false, false]}
+              linearRegression={[false, false, true, false]}
             />
           )}
         </section>

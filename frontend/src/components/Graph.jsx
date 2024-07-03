@@ -191,6 +191,8 @@ const Set = (props) => {
               ((findPoint(count + 1) / maxData) * graphRatio * props.height +
                 ((1 - graphRatio) / 2) * props.height)
           );
+          linearRegression.strokeStyle = color;
+
           linearRegression.stroke();
         }
       }
