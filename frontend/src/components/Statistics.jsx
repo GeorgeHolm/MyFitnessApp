@@ -10,7 +10,7 @@ function Statistics() {
   const [workouts, setWorkouts] = useState([]);
   const [meals, setMeals] = useState([]);
   const [totalVolumes, setTotalVolumes] = useState([]);
-    const [totalCalories, setTotalCalories] = useState([]);
+  const [totalCalories, setTotalCalories] = useState([]);
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
@@ -58,7 +58,7 @@ function Statistics() {
           console.error("Error fetching boards:", error);
         });
 
-        fetch(`http://localhost:3000/profiles/${user.uid}/meals`)
+      fetch(`http://localhost:3000/profiles/${user.uid}/meals`)
         .then((response) => {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -85,7 +85,6 @@ function Statistics() {
           exercise.sets.map((set) => {
             volume = volume + set.weight * set.reps;
           });
-
         });
         volumes.push(volume);
       });
@@ -93,13 +92,12 @@ function Statistics() {
       setTotalVolumes(volumes);
     }
     if (meals.length > 0) {
-            let calTemp = [];
-            meals.map((meal) => {
-              calTemp.push(meal.totalCalories)
-      
-              });
-      
-            setTotalCalories(calTemp);
+      let calTemp = [];
+      meals.map((meal) => {
+        calTemp.push(meal.totalCalories);
+      });
+
+      setTotalCalories(calTemp);
     }
   }, [workouts, meals]);
   return (
@@ -107,24 +105,52 @@ function Statistics() {
       <SearchBar user={user} />
       <div className="flexbox">
         <section id="half">
-          {(totalVolumes.length > 0) && <Graph
-            dataPoints={totalVolumes}
-            xAxis={"workout #"}
-            yAxis={"volume (lbs)"}
-            user={user}
-            width={600}
-            height={500}
-          />}
+          {totalVolumes.length > 0 && (
+            <Graph
+              dataPoints={totalVolumes}
+              xAxis={"workout #"}
+              yAxis={"volume (lbs)"}
+              user={user}
+              width={600}
+              height={500}
+              linearRegression={true}
+            />
+          )}
+          {totalVolumes.length > 0 && (
+            <Graph
+              dataPoints={totalVolumes}
+              xAxis={"workout #"}
+              yAxis={"volume (lbs)"}
+              user={user}
+              width={600}
+              height={500}
+              linearRegression={false}
+            />
+          )}
         </section>
         <section id="half">
-        {(totalCalories.length > 0) && <Graph
-            dataPoints={totalCalories}
-            xAxis={"meal #"}
-            yAxis={"calories"}
-            user={user}
-            width={600}
-            height={500}
-          />}
+          {totalCalories.length > 0 && (
+            <Graph
+              dataPoints={totalCalories}
+              xAxis={"meal #"}
+              yAxis={"calories"}
+              user={user}
+              width={600}
+              height={500}
+              linearRegression={true}
+            />
+          )}
+          {totalCalories.length > 0 && (
+            <Graph
+              dataPoints={totalCalories}
+              xAxis={"meal #"}
+              yAxis={"calories"}
+              user={user}
+              width={600}
+              height={500}
+              linearRegression={false}
+            />
+          )}
         </section>
       </div>
     </>

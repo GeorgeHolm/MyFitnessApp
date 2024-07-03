@@ -70,9 +70,9 @@ const Set = (props) => {
       const interval = (graphRatio * props.width) / props.dataPoints.length;
       console.log(interval);
       props.dataPoints.map((point) => {
-          if (point > maxData) {
-            maxData = point;
-          }
+        if (point > maxData) {
+          maxData = point;
+        }
       });
 
       let vertTicFactor = 10;
@@ -81,12 +81,14 @@ const Set = (props) => {
         let tic = canvas.getContext("2d");
         tic.beginPath();
         tic.moveTo(
-            ((1 - graphRatio) / 2)  * props.width - 2,
-          ((1 - graphRatio) / 2) * props.height + (1- (i / vertTicFactor))* graphRatio * props.height
+          ((1 - graphRatio) / 2) * props.width - 2,
+          ((1 - graphRatio) / 2) * props.height +
+            (1 - i / vertTicFactor) * graphRatio * props.height
         );
         tic.lineTo(
-            ((1 - graphRatio) / 2)  * props.width + 2,
-            ((1 - graphRatio) / 2) * props.height + (1- (i / vertTicFactor))* graphRatio * props.height
+          ((1 - graphRatio) / 2) * props.width + 2,
+          ((1 - graphRatio) / 2) * props.height +
+            (1 - i / vertTicFactor) * graphRatio * props.height
         );
         tic.stroke();
 
@@ -94,9 +96,10 @@ const Set = (props) => {
         pointText.font = "11px Arial";
         pointText.fillStyle = "black";
         pointText.fillText(
-            Math.floor( (i / vertTicFactor)* maxData ),
-          ((1 - graphRatio) / 2)  * props.width - 35,
-          ((1 - graphRatio) / 2) * props.height + (1- (i / vertTicFactor)) * graphRatio * props.height
+          Math.floor((i / vertTicFactor) * maxData),
+          ((1 - graphRatio) / 2) * props.width - 35,
+          ((1 - graphRatio) / 2) * props.height +
+            (1 - i / vertTicFactor) * graphRatio * props.height
         );
       }
 
@@ -144,6 +147,49 @@ const Set = (props) => {
           props.height * graphRatio + (1 - graphRatio) * 0.5 * props.height + 12
         );
       });
+
+
+      if (props.linearRegression) {
+        let xSum = 0,
+        ySum = 0,
+        xxSum = 0,
+        xySum = 0;
+      let count = props.dataPoints.length;
+      for (let i = 0, len = count; i < count; i++) {
+        xSum += i;
+        ySum += props.dataPoints[i];
+        xxSum += i * i;
+        xySum += i * props.dataPoints[i];
+      }
+      let slope = (count * xySum - xSum * ySum) / (count * xxSum - xSum * xSum);
+      let intercept = ySum / count - (slope * xSum) / count;
+
+      console.log("slope: " + slope)
+      console.log("intercept: " + intercept);
+
+      const findPoint = (x) => {
+        return slope * x + intercept;
+      }
+
+
+      let linearRegression = canvas.getContext("2d");
+      linearRegression.beginPath();
+      linearRegression.moveTo(
+          ((1 - graphRatio) / 2) * props.width,
+          props.height - ((findPoint(0) / maxData) * graphRatio * props.height + ((1 - graphRatio) / 2) * props.height)
+        );
+        linearRegression.lineTo(
+          ((1 - graphRatio) / 2) * props.width + graphRatio * props.width ,
+          ((1 - graphRatio) / 2) * props.height +
+          props.height - ((findPoint(count + 1) / maxData) * graphRatio * props.height + ((1 - graphRatio) / 2) * props.height)
+        );
+        linearRegression.stroke();
+      }
+
+
+
+
+
     }
   }, [workouts]);
   return (
