@@ -35,12 +35,27 @@ const Set = (props) => {
     const xText = canvas.getContext("2d");
     xText.font = "11px Arial";
     xText.fillStyle = "black";
+    xText.textAlign = "left";
+
     xText.fillText(props.yAxis, 5, props.height / 2);
 
     const yText = canvas.getContext("2d");
     yText.font = "11px Arial";
     yText.fillStyle = "black";
+    yText.textAlign = "left";
+
     yText.fillText(props.xAxis, props.width / 2, props.height * 0.95);
+
+    if(props.title) {
+
+        const title = canvas.getContext("2d");
+        title.textAlign = "center";
+
+        title.font = "30px Arial";
+        title.fillStyle = "black";
+        title.fillText(props.title, props.width / 2, props.height * 0.1);
+    }
+
 
     //workout data tracker
     let maxData = 0;

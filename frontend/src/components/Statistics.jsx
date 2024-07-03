@@ -132,6 +132,7 @@ function Statistics() {
               width={600}
               height={500}
               linearRegression={[true]}
+              title={"Graph of Volume"}
             />
           )}
           {totalVolumes.length > 0 && (
@@ -143,6 +144,8 @@ function Statistics() {
               width={600}
               height={500}
               linearRegression={[false]}
+              title={"Graph of Volume"}
+
             />
           )}
         </section>
@@ -156,6 +159,8 @@ function Statistics() {
               width={600}
               height={500}
               linearRegression={[true]}
+              title={"Graph of Calories"}
+
             />
           )}
           {totalCalories.length > 0 && (
@@ -167,6 +172,8 @@ function Statistics() {
               width={600}
               height={500}
               linearRegression={[false]}
+              title={"Graph of Calories"}
+
             />
           )}
           {totalGrams.length > 0 && (
@@ -178,6 +185,8 @@ function Statistics() {
               width={600}
               height={500}
               linearRegression={[true, false, false, false]}
+              title={"Grams for Meals"}
+
             />
           )}
           {totalGrams.length > 0 && (
@@ -189,6 +198,8 @@ function Statistics() {
               width={600}
               height={500}
               linearRegression={[false, false, true, false]}
+              title={"Grams for Meals"}
+
             />
           )}
         </section>
