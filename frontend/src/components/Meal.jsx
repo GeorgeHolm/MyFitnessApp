@@ -31,6 +31,12 @@ const Meal = (props) => {
       </button>
       <h2>Meal placeholder</h2>
       <p>{props.content.notes}</p>
+      <p>calories: {props.content.totalCalories} cal</p>
+      <p>carbohydrates: {props.content.totalCarbs} g</p>
+      <p>fats: {props.content.totalFats} g</p>
+      <p>proteins: {props.content.totalProteins} g</p>
+      <p>grams: {props.content.totalGrams} g</p>
+
     </div>
   );
 };
