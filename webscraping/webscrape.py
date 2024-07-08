@@ -25,7 +25,7 @@ def requestHTML(reqName):
 
 def parse_exercise(idx):
     OUTPUT = requestHTML("/resources/everyone/exercise-library/" + str(idx) + "/")
-    linkIndexes = [i for i in range(len(OUTPUT)) if OUTPUT.startswith('"', i)]
+    linkIndexes = [i for i in range(len(OUTPUT)) if OUTPUT.startswith('"', i)] #Find wherever the quotes are
     if len(linkIndexes) > 1: 
         newLink = OUTPUT[linkIndexes[0] + 1:linkIndexes[1]]
         exerciseHTML = requestHTML(newLink)
