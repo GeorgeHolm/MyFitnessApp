@@ -48,7 +48,7 @@ app.get("/profiles/:uid/meals", async (req, res) => {
     return res.status(404).send({ error: "Profile not found" });
   }
   const meals = await prisma.meal.findMany({
-    where: { profileId: profile[0].id }
+    where: { profileId: profile[0].id },
   });
   return res.json(meals);
 });
@@ -78,12 +78,8 @@ app.get("/meals", async (req, res) => {
   res.json(meals);
 });
 
-
-
 app.post("/exercises/:id/sets", async (req, res) => {
-
   try {
-
     const { id } = req.params;
     const { weight, reps } = req.body;
     const newSet = await prisma.set.create({
@@ -95,9 +91,8 @@ app.post("/exercises/:id/sets", async (req, res) => {
     });
     res.json(newSet);
   } catch (error) {
-    console.log('Error:', error.message);
+    console.log("Error:", error.message);
   }
-
 });
 
 app.post("/workouts/:id/exercises", async (req, res) => {
@@ -131,7 +126,7 @@ app.post("/meals/:id/foods", async (req, res) => {
     data: {
       name,
       calories,
-      carbs, 
+      carbs,
       fats,
       proteins,
       grams,
@@ -143,7 +138,14 @@ app.post("/meals/:id/foods", async (req, res) => {
 
 app.post("/profiles/:id/meals", async (req, res) => {
   const { id } = req.params;
-  const { notes, totalCalories, totalCarbs, totalFats, totalProteins, totalGrams } = req.body;
+  const {
+    notes,
+    totalCalories,
+    totalCarbs,
+    totalFats,
+    totalProteins,
+    totalGrams,
+  } = req.body;
   const newMeal = await prisma.meal.create({
     data: {
       notes,
@@ -158,8 +160,6 @@ app.post("/profiles/:id/meals", async (req, res) => {
   res.json(newMeal);
 });
 
-//post for adding a food item to a meal (not necessary atm)
-
 app.post("/profiles", async (req, res) => {
   const { email, uid } = req.body;
   const profile = await prisma.profile.create({
@@ -171,16 +171,35 @@ app.post("/profiles", async (req, res) => {
   res.json(profile);
 });
 
-app.delete('/workouts/:id', async (req, res) => {
-  const { id } = req.params
+app.delete("/workouts/:id", async (req, res) => {
+  const { id } = req.params;
   const deletedWorkout = await prisma.workout.deleteMany({
-      where: { id: parseInt(id) }      })
-  res.json(deletedWorkout)
-})
+    where: { id: parseInt(id) },
+  });
+  res.json(deletedWorkout);
+});
 
-app.delete('/meals/:id', async (req, res) => {
-  const { id } = req.params
+app.delete("/meals/:id", async (req, res) => {
+  const { id } = req.params;
   const deletedMeal = await prisma.meal.deleteMany({
-      where: { id: parseInt(id) }      })
-  res.json(deletedMeal)
-})
+    where: { id: parseInt(id) },
+  });
+  res.json(deletedMeal);
+});
+
+app.put("/profiles/:id", async (req, res) => {
+  const { id } = req.params;
+  const { email, uid, name, age, sex, bio } = req.body;
+  const updatedProfile = await prisma.profile.updateMany({
+    where: { id: parseInt(id) },
+    data: {
+      email,
+      uid,
+      name,
+      age,
+      sex,
+      bio,
+    },
+  });
+  res.json(updatedProfile);
+});

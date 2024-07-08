@@ -31,6 +31,10 @@ function Profile(props) {
         <Link to={"/profile"}>
           <button>Profile</button>
           </Link>
+          <Link to={"/statistics"}>
+          <button>Statistics</button>
+          </Link>
+
 
         <button onClick={handleLogout}>Logout</button>
 
