@@ -38,7 +38,7 @@ const Exercise = (props) => {
             type="text"
             placeholder=""
             onChange={handleName}
-            value={eName}
+            value={exerciseName}
           />
         </span>
       </div>
