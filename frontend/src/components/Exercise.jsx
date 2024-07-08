@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import Set from "./Set";
 
 const Exercise = (props) => {
-  const [eName, setEName] = useState("");
+  const [exerciseName, setExerciseName] = useState("");
 
   const addSet = () => {
     const updatedWorkout = props.workout.map((c, i) => {
@@ -24,7 +24,7 @@ const Exercise = (props) => {
   };
 
   const handleName = (e) => {
-    setEName(e.target.value);
+    setExerciseName(e.target.value);
     console.log(eName);
   };
 
