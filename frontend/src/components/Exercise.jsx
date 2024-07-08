@@ -13,7 +13,7 @@ const Exercise = (props) => {
     const updatedWorkout = props.workout.map((c, i) => {
       if (i === props.index) {
         let temp = c;
-        temp.name = eName;
+        temp.name = exerciseName;
         temp.sets.push({ weight: 0, reps: 0 });
         return temp;
       } else {
@@ -25,7 +25,7 @@ const Exercise = (props) => {
 
   const handleName = (e) => {
     setExerciseName(e.target.value);
-    console.log(eName);
+    console.log(exerciseName);
   };
 
   return (
@@ -35,11 +35,17 @@ const Exercise = (props) => {
 
         <span>
           <input
+            list="exercises"
             type="text"
             placeholder=""
             onChange={handleName}
             value={exerciseName}
           />
+          <datalist id="exercises">
+            {props.exerciseInfo.exercises.map((exercise, exerciseIdx) => (
+              <option key={exerciseIdx} value={exercise.name} />
+            ))}
+          </datalist>
         </span>
       </div>
 

@@ -303,6 +303,7 @@ export function Modal(props) {
           <section>
             {workout.map((exercise, idx) => (
               <Exercise
+                exerciseInfo={exerciseInfo}
                 workout={workout}
                 setWorkout={setWorkout}
                 index={idx}
