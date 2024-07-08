@@ -25,6 +25,12 @@ const Exercise = (props) => {
 
   const handleName = (e) => {
     setExerciseName(e.target.value);
+
+    props.exerciseInfo.exercises.map((exercise) => { //WANT SPECIAL EVENT WHEN FIND AN EXERCISE THAT EXISTS
+      if(exercise.name.toLowerCase() === e.target.value.toLowerCase()){
+        console.log("exists");
+      }
+    })
     console.log(exerciseName);
   };
 
