@@ -4,15 +4,20 @@ import PropTypes from "prop-types";
 import "./Modal.css";
 import { useState, useEffect } from "react";
 import Exercise from "./Exercise";
+import ExerciseInformation from "../../../webscraping/exercises.json"
 export function Modal(props) {
   const [workout, setWorkout] = useState([]);
+  const [exerciseInfo, setExerciseInfo] = useState([]);
 
   const addExercise = () => {
     setWorkout((prevState) => [...prevState, { name: "", sets: [] }]);
+    console.log(exerciseInfo);
+
   };
 
   useEffect(() => {
     console.log(workout);
+    setExerciseInfo(ExerciseInformation);
   }, [workout]);
 
   const confirmWorkout = () => {
