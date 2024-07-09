@@ -2,12 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import "./Exercise.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Set from "./Set";
+import ExerciseInfo from "./ExerciseInfo";
 
 const Exercise = (props) => {
+  const [extraInfo, setExtraInfo] = useState(false);
   const [exerciseName, setExerciseName] = useState("");
+  const [infoPopup, setInfoPopup] = useState(false);
+  const [infoPopupExercise, setInfoPopupExercise] = useState({});
 
   const addSet = () => {
     const updatedWorkout = props.workout.map((c, i) => {
@@ -25,18 +29,41 @@ const Exercise = (props) => {
 
   const handleName = (e) => {
     setExerciseName(e.target.value);
-
-    props.exerciseInfo.exercises.map((exercise) => { //WANT SPECIAL EVENT WHEN FIND AN EXERCISE THAT EXISTS
-      if(exercise.name.toLowerCase() === e.target.value.toLowerCase()){
-        console.log("exists");
+    setExtraInfo(false);
+    setInfoPopupExercise({});
+    props.exerciseInfo.exercises.map((exercise) => {
+      //If we have that exercise, then create a ? buttton to get more information on it.
+      if (exercise.name.toLowerCase() === e.target.value.toLowerCase()) {
+        setExtraInfo(true);
+        setInfoPopupExercise(exercise);
       }
-    })
-    console.log(exerciseName);
+    });
   };
+
+  const toggleInfo = () => {
+    setInfoPopup(!infoPopup);
+  };
+ 
 
   return (
     <div className="exercise">
       <div className="exercise">
+        {extraInfo ? (
+          <span className="popupWrap">
+            {infoPopup && <ExerciseInfo toggleInfo={toggleInfo} exercise={infoPopupExercise} />}
+            <button onClick={toggleInfo} className="info">
+              ?
+            </button>
+          </span>
+        ) : (
+          <span className="popupWrap">
+            {infoPopup && <ExerciseInfo toggleInfo={toggleInfo}/>}
+
+            <button onClick={toggleInfo} className="info">
+              !
+            </button>
+          </span>
+        )}
         <span>Exercise:</span>
 
         <span>
