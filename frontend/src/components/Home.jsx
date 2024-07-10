@@ -6,7 +6,7 @@ import Meal from "./Meal";
 
 import Modal from "./Modal";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth, generateContent } from "../firebase";
 
 function Home() {
   const [user, setUser] = useState();
@@ -15,6 +15,7 @@ function Home() {
   const [modal, setModal] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [workoutMeal, setWorkoutMeal] = useState(true); //true == workout, false == meal
+  const [response, setResponse] = useState("");
 
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
@@ -118,6 +119,13 @@ function Home() {
     setWorkoutMeal(!workoutMeal);
   };
 
+  const getContent = () => {
+    setResponse(generateContent());
+  };
+  useEffect(() => {
+    console.log(response);
+  }, [response]);
+
   return (
     <>
       {modal && <Modal type={workoutMeal} setModal={setModal} user={user} />}
@@ -144,6 +152,9 @@ function Home() {
         </section>
         <section id="chat">
           <p>Chat</p>
+          <button onClick={getContent}>
+            Click Me!
+          </button>
         </section>
         <button
           onClick={workoutMealSwitch}

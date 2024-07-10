@@ -3,6 +3,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
+import { getVertexAI, getGenerativeModel } from "firebase/vertexai-preview";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -19,6 +20,10 @@ const firebaseConfig = {
   measurementId: "G-QDZ14S16DZ",
 };
 
+
+
+
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
@@ -26,3 +31,24 @@ const analytics = getAnalytics(app);
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
 export default app;
+
+
+// Initialize the Vertex AI service
+const vertexAI = getVertexAI(app);
+
+// Initialize the generative model with a model that supports your use case
+// Gemini 1.5 models are versatile and can be used with all API capabilities
+const model = getGenerativeModel(vertexAI, { model: "gemini-1.5-flash" });
+
+// Wrap in an async function so you can use await
+export async function generateContent() {
+  // Provide a prompt that contains text
+  const prompt = "Give me a lower body workout."
+
+  // To generate text output, call generateContent with the text input
+  const result = await model.generateContent(prompt);
+
+  const response = result.response;
+  const text = response.text();
+  console.log(text);
+}

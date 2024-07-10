@@ -1,0 +1,26 @@
+.exerciseInfo {
+    z-index: 10000;
+    right: 50px;
+    position: absolute;
+    border: black solid 1px;
+    padding: 10px;
+    background-color: white;
+    color: black;
+    max-height: 400px;
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll;
+}
+
+  .exerciseInfo::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+
+.eImage {
+    width: 150px;
+    height: auto;
+}
+
+.steps {
+    font-size: 8px;
+}

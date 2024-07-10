@@ -2,18 +2,22 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import "./Exercise.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Set from "./Set";
+import ExerciseInfo from "./ExerciseInfo";
 
 const Exercise = (props) => {
+  const [extraInfo, setExtraInfo] = useState(false);
   const [exerciseName, setExerciseName] = useState("");
+  const [infoPopup, setInfoPopup] = useState(false);
+  const [infoPopupExercise, setInfoPopupExercise] = useState({});
 
   const addSet = () => {
     const updatedWorkout = props.workout.map((c, i) => {
       if (i === props.index) {
         let temp = c;
-        temp.name = eName;
+        temp.name = exerciseName;
         temp.sets.push({ weight: 0, reps: 0 });
         return temp;
       } else {
@@ -25,21 +29,56 @@ const Exercise = (props) => {
 
   const handleName = (e) => {
     setExerciseName(e.target.value);
-    console.log(eName);
+    setExtraInfo(false);
+    setInfoPopupExercise({});
+    props.exerciseInfo.exercises.map((exercise) => {
+      //If we have that exercise, then create a ? buttton to get more information on it.
+      if (exercise.name.toLowerCase() === e.target.value.toLowerCase()) {
+        setExtraInfo(true);
+        setInfoPopupExercise(exercise);
+      }
+    });
   };
+
+  const toggleInfo = () => {
+    setInfoPopup(!infoPopup);
+  };
+ 
 
   return (
     <div className="exercise">
       <div className="exercise">
+        {extraInfo ? (
+          <span className="popupWrap">
+            {infoPopup && <ExerciseInfo toggleInfo={toggleInfo} exercise={infoPopupExercise} />}
+            <button onClick={toggleInfo} className="info">
+              ?
+            </button>
+          </span>
+        ) : (
+          <span className="popupWrap">
+            {infoPopup && <ExerciseInfo toggleInfo={toggleInfo}/>}
+
+            <button onClick={toggleInfo} className="info">
+              !
+            </button>
+          </span>
+        )}
         <span>Exercise:</span>
 
         <span>
           <input
+            list="exercises"
             type="text"
             placeholder=""
             onChange={handleName}
-            value={eName}
+            value={exerciseName}
           />
+          <datalist id="exercises">
+            {props.exerciseInfo.exercises.map((exercise, exerciseIdx) => (
+              <option key={exerciseIdx} value={exercise.name} />
+            ))}
+          </datalist>
         </span>
       </div>
 
