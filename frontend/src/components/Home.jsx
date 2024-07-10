@@ -3,7 +3,7 @@ import "./Home.css";
 import SearchBar from "./SearchBar";
 import Workout from "./Workout";
 import Meal from "./Meal";
-
+import Trainer from "./Trainer";
 import Modal from "./Modal";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, generateContent } from "../firebase";
@@ -151,10 +151,7 @@ function Home() {
             ))}
         </section>
         <section id="chat">
-          <p>Chat</p>
-          <button onClick={getContent}>
-            Click Me!
-          </button>
+          <Trainer/>
         </section>
         <button
           onClick={workoutMealSwitch}
