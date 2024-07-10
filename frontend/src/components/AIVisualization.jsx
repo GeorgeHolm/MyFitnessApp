@@ -4,27 +4,16 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, generateContent } from "../firebase";
 import { useRef } from "react";
 
-
-
-function AIVisualization() {
+function AIVisualization(props) {
   let ref = useRef();
+  const renderCircleNumber = 16;
+  const findTheta = (w, h) => Math.atan(w / h) / (Math.PI / 180); //degrees
+
   const [mousePos, setMousePosition] = useState({
     x: null,
     y: null,
   });
-
-  useEffect(() => {
-    const updateMousePosition = (ev) => {
-      setMousePosition({ x: ev.clientX, y: ev.clientY });
-    };
-
-    window.addEventListener("mousemove", updateMousePosition);
-
-    return () => {
-      window.removeEventListener("mousemove", updateMousePosition);
-    };
-  }, []);
-
+  const [currI, setCurrI] = useState(0);
 
   const getPixelRatio = (context) => {
     var backingStore =
@@ -53,15 +42,24 @@ function AIVisualization() {
     canvas.height = height * ratio;
     canvas.style.width = `${width}px`;
 
-    function getMousePos(canvas, evt) {
-      var rect = canvas.getBoundingClientRect();
-      return {
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top,
-      };
-    }
+    const updateMousePosition = (ev) => {
+      if (ref) {
+        setMousePosition({
+          x: Math.floor(
+            ((ev.clientX - ref?.current?.getBoundingClientRect().left) * 100) /
+              width
+          ),
+          y: Math.floor(
+            ((ev.clientY - ref?.current?.getBoundingClientRect().top) * 100) /
+              height
+          ),
+        });
+      }
+    };
 
-    const circle = (x, y, r, color, a) => {
+    window.addEventListener("mousemove", updateMousePosition);
+
+    const circle = (x, y, r, color, a, w, border) => {
       context.fillStyle = color;
       context.globalAlpha = a;
 
@@ -76,40 +74,85 @@ function AIVisualization() {
       );
 
       context.fill();
+
+      if (border) {
+        context.lineWidth = w;
+        context.stroke();
+      }
       context.fillStyle = "black";
       context.globalAlpha = 1;
+      context.lineWidth = 0;
+      context.closePath();
     };
 
-    circle(50, 50, 100, "white", 1);
-    circle(50, 50, 100, `rgb(255, 155,0)`);
-    circle(75, 50, 50, "white");
+    circle(50, 50, 50, "white");
 
     let requestId,
-      i = 0;
+      i = currI;
+    let forceArray = Array(renderCircleNumber).fill([0, 0]);
     const render = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
-      circle(50, 50, 100, "white", 1);
 
-      for (let j = 0; j < 16; j++) {
-        let offset = (j / 8) * Math.PI;
+      let border =
+        100 / (Math.sqrt((mousePos.x - 50) ** 2 + (mousePos.y - 50) ** 2) + 5);
+      circle(50, 50, 50, "white", 1, border, true);
+
+      for (let j = 0; j < renderCircleNumber; j++) {
+        let offset = (j / (renderCircleNumber / 2)) * Math.PI;
+        let coord = [
+          50 +
+            10 *
+              Math.cos(((j / (renderCircleNumber / 2) + 1) * i) / 6 + offset) +
+            10 * Math.sin(i + offset),
+          50 +
+            10 *
+              Math.sin(((j / (renderCircleNumber / 2) + 1) * i) / 6 + offset) +
+            10 * Math.cos(i + offset),
+        ];
+
+        let dist = Math.sqrt(
+          (coord[0] + forceArray[j][0] - mousePos.x) ** 2 +
+            (coord[1] - forceArray[j][1] - mousePos.y) ** 2
+        );
+
+        let theta = findTheta(coord[0] - mousePos.x, coord[1] - mousePos.y);
+
+        forceArray[j] = [
+          forceArray[j][0] * 0.9 + (10 * Math.cos(theta)) / dist,
+          forceArray[j][1] * 0 + (10 * Math.sin(theta)) / dist,
+        ];
+
+        let color;
+        if (props.isThinking) {
+          color = `rgb(${200 - 150 * Math.abs(Math.cos((i * j) / 6))}, 102,${
+            255 - 255 * Math.abs(Math.cos((i * j) / 6))
+          })`;
+        } else {
+          color = `rgb(${255 - 200 * Math.abs(Math.cos((i * j) / 6))}, ${
+            255 - 200 * Math.abs(Math.cos((i * j) / 6))
+          }, ${255 - 200 * Math.abs(Math.cos((i * j) / 6))})`;
+        }
+
         circle(
-          50 +
-            22.5 * Math.cos(((j / 8 + 1) * i) / 6 + offset) +
-            22.5 * Math.sin(i + offset),
-          50 +
-            22.5 * Math.sin(((j / 8 + 1) * i) / 6 + offset) +
-            22.5 * Math.cos(i + offset),
+          coord[0] + forceArray[j][0],
+          coord[1] - forceArray[j][1],
           (10 *
             Math.abs(
               Math.cos(((j / 8 + 1) * i) / 6 + offset) + Math.sin(i + offset)
             )) /
             2,
-          `rgb(0, 102,${255 - 255 * Math.abs(Math.cos((i * j) / 6))})`,
+          color,
           1
         );
       }
+      setCurrI(i);
 
-      i += 0.05;
+      if (props.isThinking) {
+        i += 0.05;
+      } else {
+        i += 0.005;
+      }
+
       requestId = requestAnimationFrame(render);
     };
 
@@ -117,14 +160,12 @@ function AIVisualization() {
 
     return () => {
       cancelAnimationFrame(requestId);
+      window.removeEventListener("mousemove", updateMousePosition);
     };
   });
 
   return (
     <div>
-        <p>
-            {JSON.stringify(mousePos)}
-        </p>
       <canvas ref={ref} width="200px" height="200px" />
     </div>
   );
