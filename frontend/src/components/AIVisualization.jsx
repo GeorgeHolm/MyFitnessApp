@@ -4,8 +4,27 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, generateContent } from "../firebase";
 import { useRef } from "react";
 
+
+
 function AIVisualization() {
   let ref = useRef();
+  const [mousePos, setMousePosition] = useState({
+    x: null,
+    y: null,
+  });
+
+  useEffect(() => {
+    const updateMousePosition = (ev) => {
+      setMousePosition({ x: ev.clientX, y: ev.clientY });
+    };
+
+    window.addEventListener("mousemove", updateMousePosition);
+
+    return () => {
+      window.removeEventListener("mousemove", updateMousePosition);
+    };
+  }, []);
+
 
   const getPixelRatio = (context) => {
     var backingStore =
@@ -33,7 +52,14 @@ function AIVisualization() {
     canvas.width = width * ratio;
     canvas.height = height * ratio;
     canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
+
+    function getMousePos(canvas, evt) {
+      var rect = canvas.getBoundingClientRect();
+      return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top,
+      };
+    }
 
     const circle = (x, y, r, color, a) => {
       context.fillStyle = color;
@@ -54,6 +80,7 @@ function AIVisualization() {
       context.globalAlpha = 1;
     };
 
+    circle(50, 50, 100, "white", 1);
     circle(50, 50, 100, `rgb(255, 155,0)`);
     circle(75, 50, 50, "white");
 
@@ -61,15 +88,26 @@ function AIVisualization() {
       i = 0;
     const render = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
+      circle(50, 50, 100, "white", 1);
 
-      circle(
-        50,
-        50,
-        100 * Math.abs(Math.cos(i/6)),
-        `rgb(100, 155,${255 - 255 * Math.abs(Math.cos(i/6))})`,
-        Math.abs(Math.cos(i))
-      );
-      circle(75, 50,100 -  50 * Math.abs(Math.cos(i/2)), "white", 1 -  Math.abs(Math.cos(i)));
+      for (let j = 0; j < 16; j++) {
+        let offset = (j / 8) * Math.PI;
+        circle(
+          50 +
+            22.5 * Math.cos(((j / 8 + 1) * i) / 6 + offset) +
+            22.5 * Math.sin(i + offset),
+          50 +
+            22.5 * Math.sin(((j / 8 + 1) * i) / 6 + offset) +
+            22.5 * Math.cos(i + offset),
+          (10 *
+            Math.abs(
+              Math.cos(((j / 8 + 1) * i) / 6 + offset) + Math.sin(i + offset)
+            )) /
+            2,
+          `rgb(0, 102,${255 - 255 * Math.abs(Math.cos((i * j) / 6))})`,
+          1
+        );
+      }
 
       i += 0.05;
       requestId = requestAnimationFrame(render);
@@ -84,7 +122,10 @@ function AIVisualization() {
 
   return (
     <div>
-      <canvas ref={ref} width="100" height="100" className="graphCanvas" />
+        <p>
+            {JSON.stringify(mousePos)}
+        </p>
+      <canvas ref={ref} width="200px" height="200px" />
     </div>
   );
 }
