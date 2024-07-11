@@ -11,12 +11,10 @@ export function Modal(props) {
 
   const addExercise = () => {
     setWorkout((prevState) => [...prevState, { name: "", sets: [] }]);
-    console.log(exerciseInfo);
 
   };
 
   useEffect(() => {
-    console.log(workout);
     setExerciseInfo(ExerciseInformation);
   }, [workout]);
 
@@ -45,19 +43,14 @@ export function Modal(props) {
         .then((response) => response.json())
         .then((data) => {
           wid = data.id;
-          console.log(data);
         })
         .catch((error) => console.error(error));
 
       Promise.all([workoutCreation])
-        .then((res) => {
-          console.log(res);
-        })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
       workout.map((exercise) => {
-        console.log(wid);
         const asyncExercises = async () => {
           //may need loading here
 
@@ -78,16 +71,12 @@ export function Modal(props) {
             .then((response) => response.json())
             .then((data) => {
               eid = data.id;
-              console.log(data);
             })
             .catch((error) => console.error(error));
 
           Promise.all([exerciseCreation])
-            .then((res) => {
-              console.log(res);
-            })
             .catch((error) => {
-              console.log(error);
+              console.error(error);
             });
 
           exercise.sets.map((set) => {
@@ -107,15 +96,11 @@ export function Modal(props) {
                 }
               )
                 .then((response) => response.json())
-                .then((data) => console.log(data))
                 .catch((error) => console.error(error));
 
               Promise.all([setCreation])
-                .then((res) => {
-                  console.log(res);
-                })
                 .catch((error) => {
-                  console.log(error);
+                  console.error(error);
                 });
             };
             asyncSets();
@@ -141,8 +126,6 @@ export function Modal(props) {
   };
 
   const searchForFood = () => {
-    console.log(mealSearch);
-
     fetch(
       `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${
         import.meta.env.VITE_FOOD_API_KEY
@@ -157,7 +140,6 @@ export function Modal(props) {
       .then((data) => {
         // Handle successful response
         setMealSearchResults(data);
-        console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching boards:", error);
@@ -165,13 +147,6 @@ export function Modal(props) {
   };
 
   const confirmMeal = () => {
-    console.log("Meal created");
-    console.log(meal);
-
-
-
-
-
     const makeAsyncMeal = async () => {
       
     let carbs = 0;
@@ -215,7 +190,6 @@ export function Modal(props) {
         .then((response) => response.json())
         .then((data) => {
           mid = data.id
-          console.log(data);
         })
         .catch((error) => console.error(error));
 
@@ -252,10 +226,6 @@ export function Modal(props) {
             }
           )
             .then((response) => response.json())
-            .then((data) => {
-    
-              console.log(data);
-            })
             .catch((error) => console.error(error));
         }
       addFoodAsync();
@@ -279,16 +249,12 @@ export function Modal(props) {
   };
 
   useEffect(() => {
-    console.log(foodChoice);
-    console.log(meal);
     if (foodChoice.description) {
       setMeal((prevState) => [...prevState, {foodData: foodChoice, weight: 0}]);
     }
   }, [foodChoice]);
 
-  useEffect(() => {
-    console.log(meal);
-  }, [meal]);
+
 
   return (
     <div className="overlay">
@@ -366,12 +332,8 @@ export function Modal(props) {
                     {foodItem.foodData.foodMeasures.length > 0 ? (
                       <select onChange={
                         (e) => {
-                          console.log(foodItem.weight);
-                          let tempMeal = [...meal];
-                          console.log(e.target.value);
-                     
+                          let tempMeal = [...meal];                     
                           tempMeal[idx].weight = e.target.value;                          
-                           //may need if statement
                           setMeal(tempMeal);
 
                         }
@@ -390,7 +352,6 @@ export function Modal(props) {
                         placeholder="enter weight (g)"
                         className="chooseWeight"
                         onChange={(e) => {
-                          console.log(foodItem.weight);
                           let tempMeal = [...meal];
                           if(Number(e.target.value)){
                             tempMeal[idx].weight = e.target.value;

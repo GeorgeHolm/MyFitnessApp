@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import "./AIVisualization.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, generateContent } from "../firebase";
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 
 function AIVisualization(props) {
   let ref = useRef();
@@ -90,6 +89,9 @@ function AIVisualization(props) {
     let requestId,
       i = currI;
     let forceArray = Array(renderCircleNumber).fill([0, 0]);
+
+    //Comment, break it up, and useCallback
+
     const render = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
 

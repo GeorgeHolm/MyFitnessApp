@@ -15,7 +15,6 @@ export function ProfileEdit(props) {
 
   const submitEdits = (e) => {
     e.preventDefault();
-    console.log(name, sex, age, bio);
 
     fetch(`${import.meta.env.VITE_BACKEND_LINK}/profiles/${props.user.id}`, {
         method: "PUT",
@@ -32,8 +31,6 @@ export function ProfileEdit(props) {
         }),
       })
         .then((response) => response.json())
-        .then((data) => {
-            console.log(data)})
         .catch((error) => console.error(error));
 
 

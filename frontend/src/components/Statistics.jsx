@@ -57,7 +57,6 @@ function Statistics() {
         .then((data) => {
           // Handle successful response
           setWorkouts(data);
-          console.log(data);
         })
         .catch((error) => {
           console.error("Error fetching boards:", error);
@@ -73,7 +72,6 @@ function Statistics() {
         .then((data) => {
           // Handle successful response
           setMeals(data);
-          console.log(data);
         })
         .catch((error) => {
           console.error("Error fetching boards:", error);

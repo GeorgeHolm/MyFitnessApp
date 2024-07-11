@@ -111,20 +111,13 @@ function Home() {
 
   const addWorkout = () => {
     setModal(!modal);
-
-    console.log(modal);
   };
 
   const workoutMealSwitch = () => {
     setWorkoutMeal(!workoutMeal);
   };
 
-  const getContent = () => {
-    setResponse(generateContent());
-  };
-  useEffect(() => {
-    console.log(response);
-  }, [response]);
+
 
   return (
     <>

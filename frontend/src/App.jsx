@@ -6,7 +6,7 @@ import Signup from "./components/Signup";
 import Login from "./components/Login";
 import "./App.css";
 import Statistics from "./components/Statistics";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import  'bootstrap/dist/css/bootstrap.min.css';
 
 
 
