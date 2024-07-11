@@ -150,7 +150,8 @@ function Statistics() {
         <section id="half">
           {meals[0] && (
             <PiChart
-              chartObject={meals[0]}
+              chartData={[["protien", meals[0].totalProteins], ["carbs", meals[0].totalCarbs], ["fats", meals[0].totalFats]]}
+              chartTotal={["grams", meals[0].totalGrams]}
               user={user}
               width={600}
               height={500}

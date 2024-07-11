@@ -35,60 +35,51 @@ const PiChart = (props) => {
     context.fillStyle = "white";
     context.fillRect(0, 0, props.width, props.height);
 
-    // Draw canvas here...
-
-    const border = canvas.getContext("2d");
-    border.rect(
-      ((1 - graphRatio) / 2) * props.width,
-      ((1 - graphRatio) / 2) * props.height,
-      graphRatio * props.width,
-      graphRatio * props.height
-    );
-    border.strokeStyle = "black";
-    border.lineWidth = "1";
-    border.stroke();
 
     //Make pichart
 
-    if(props.chartObject.totalCalories) {
+    let textAlignStart = props.width * 4/5;
 
-        let proteinRatio = props.chartObject.totalProteins / props.chartObject.totalGrams;
-        let carbRatio =  props.chartObject.totalCarbs / props.chartObject.totalGrams;
-        let fatRatio =  props.chartObject.totalFats / props.chartObject.totalGrams;
-        let remainder = 1 - proteinRatio - carbRatio - fatRatio;
+    let runningTotal = 0;
+    props.chartData.map((part, idx) => {
+        let ratio = part[1]/props.chartTotal[1];
+        let color = `rgb(${200 * runningTotal + 50}, 0, ${200 * runningTotal + 55})`;
         arcPart(
             props.width / 2,
             props.height / 2,
             props.height / 4,
-            "rgb(158,49,49)",
-            0,
-            2 * Math.PI * proteinRatio
+            color,
+            Math.PI * 2 * runningTotal,
+            Math.PI * 2 * runningTotal + 2 * Math.PI * ratio
           );
-          arcPart(
-              props.width / 2,
-              props.height / 2,
-              props.height / 4,
-              "rgb(49,53,158)",
-              2 * Math.PI * proteinRatio,
-              2 * Math.PI * carbRatio + 2 * Math.PI * proteinRatio
-            );
-            arcPart(
-              props.width / 2,
-              props.height / 2,
-              props.height / 4,
-              "rgb(50,209,134)",
-              2 * Math.PI * carbRatio + 2 * Math.PI * proteinRatio,
-              2 * Math.PI * fatRatio + 2 * Math.PI * carbRatio + 2 * Math.PI * proteinRatio
-            );      
-            arcPart(
-                props.width / 2,
-                props.height / 2,
-                props.height / 4,
-                "rgb(152,152,152)",
-                2 * Math.PI * fatRatio + 2 * Math.PI * carbRatio + 2 * Math.PI * proteinRatio,
-                2 * Math.PI 
-              );      
-    }
+          runningTotal = runningTotal + ratio
+
+          context.fillStyle = color;
+        
+          context.fillRect(
+            textAlignStart - 30,
+            props.height * idx / props.chartData.length + props.height * 0.5 / props.chartData.length - 20,
+            20,
+            20
+          );
+          context.strokeStyle = color;
+          context.lineWidth = "1";
+          context.stroke();
+
+          context.font = "20px Arial";
+          context.fillStyle = "black";
+          context.fillText(part[0], textAlignStart, props.height * idx / props.chartData.length + props.height * 0.5 / props.chartData.length);
+    })
+
+    arcPart(
+        props.width / 2,
+        props.height / 2,
+        props.height / 4,
+        `rgb(155, 155, 155)`,
+        Math.PI * 2 * runningTotal,
+        2 * Math.PI
+      );
+
 
   }, [props.chartObject]);
 
