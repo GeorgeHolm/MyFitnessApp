@@ -5,6 +5,7 @@ import ProfileEdit from "./ProfileEdit";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import Graph from "./Graph";
+import PiChart from "./PiChart";
 function Statistics() {
   const [user, setUser] = useState();
   const [workouts, setWorkouts] = useState([]);
@@ -143,11 +144,18 @@ function Statistics() {
               height={500}
               linearRegression={[false]}
               title={"Graph of Volume"}
-
             />
           )}
         </section>
         <section id="half">
+          {meals[0] && (
+            <PiChart
+              chartObject={meals[0]}
+              user={user}
+              width={600}
+              height={500}
+            />
+          )}
           {totalCalories.length > 0 && (
             <Graph
               dataPoints={[totalCalories]}
@@ -158,7 +166,6 @@ function Statistics() {
               height={500}
               linearRegression={[true]}
               title={"Graph of Calories"}
-
             />
           )}
           {totalCalories.length > 0 && (
@@ -171,7 +178,6 @@ function Statistics() {
               height={500}
               linearRegression={[false]}
               title={"Graph of Calories"}
-
             />
           )}
           {totalGrams.length > 0 && (
@@ -184,7 +190,6 @@ function Statistics() {
               height={500}
               linearRegression={[true, false, false, false]}
               title={"Grams for Meals"}
-
             />
           )}
           {totalGrams.length > 0 && (
@@ -197,7 +202,6 @@ function Statistics() {
               height={500}
               linearRegression={[false, false, true, false]}
               title={"Grams for Meals"}
-
             />
           )}
         </section>
