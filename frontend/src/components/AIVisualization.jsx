@@ -179,6 +179,7 @@ function AIVisualization(props) {
           );
         }
         else if(centerDist <= 30){
+            //Further way from the  center you are the less visible it is
             circle(
                 newX,
                 newY,
