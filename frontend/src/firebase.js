@@ -41,14 +41,15 @@ const vertexAI = getVertexAI(app);
 const model = getGenerativeModel(vertexAI, { model: "gemini-1.5-flash" });
 
 // Wrap in an async function so you can use await
-export async function generateContent() {
+export async function generateContent(message) {
   // Provide a prompt that contains text
-  const prompt = "Give me a lower body workout."
+  const prompt = message + "Respond as a personal trainer."
 
   // To generate text output, call generateContent with the text input
   const result = await model.generateContent(prompt);
 
   const response = result.response;
   const text = response.text();
-  console.log(text);
+  //console.log(text);
+  return text;
 }
