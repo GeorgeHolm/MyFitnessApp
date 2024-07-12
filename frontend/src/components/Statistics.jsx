@@ -155,6 +155,19 @@ function Statistics() {
               user={user}
               width={600}
               height={500}
+              title={"Meal one macros"}
+              units={"g"}
+            />
+          )}
+          {meals[0] && (
+            <PiChart
+              chartData={[["protien", meals[0].totalProteins], ["carbs", meals[0].totalCarbs], ["fats", meals[0].totalFats]]}
+              chartTotal={["grams", meals[0].totalGrams]}
+              user={user}
+              width={600}
+              height={500}
+              title={"Meal one macros"}
+              untis={"g"}
             />
           )}
           {totalCalories.length > 0 && (
