@@ -6,7 +6,7 @@ import propTypes from "prop-types";
 import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const Set = (props) => {
+const Graph = (props) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -222,4 +222,4 @@ const Set = (props) => {
   );
 };
 
-export default Set;
+export default Graph;
