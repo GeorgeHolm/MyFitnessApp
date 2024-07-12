@@ -7,7 +7,6 @@ import Trainer from "./Trainer";
 import Modal from "./Modal";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, generateContent } from "../firebase";
-import Collapse from "react-bootstrap/Collapse";
 import DisplayWorkout from "./DisplayWorkout";
 
 function Home() {
@@ -155,14 +154,9 @@ function Home() {
               ))}
         </section>
         <section id="chat">
+          {chatting && <Trainer />}
 
-          <Collapse in={chatting}>
-            <div>
-              <Trainer />
-            </div>
-          </Collapse>
-          <DisplayWorkout workout={currentWorkout}/>
-
+          <DisplayWorkout workout={currentWorkout} />
         </section>
         <button
           onClick={workoutMealSwitch}
