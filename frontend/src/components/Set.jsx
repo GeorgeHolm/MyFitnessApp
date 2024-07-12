@@ -15,7 +15,6 @@ const Set = (props) => {
       return;
     }
     setWeight(e.target.value);
-    console.log(weight);
   };
 
   const handleReps = (e) => {
@@ -23,12 +22,9 @@ const Set = (props) => {
       return;
     }
     setReps(e.target.value);
-    console.log(reps);
   };
 
   useEffect(() => {
-    console.log("OurWorkout:");
-    console.log(props.workout);
     const updatedWorkout = props.workout.map((c, i) => {
       if (i === props.exerciseIndex) {
         let newSets = props.workout[i].sets.map((s, j) => {
@@ -44,8 +40,6 @@ const Set = (props) => {
       }
     });
 
-    console.log("updated:");
-    console.log(updatedWorkout);
     props.setWorkout(updatedWorkout);
   }, [weight, reps]);
 

@@ -13,7 +13,6 @@ function Profile(props) {
       signOut(auth).then(() => {
       // Sign-out successful.
           navigate("/");
-          console.log("Signed out successfully")
       }).catch((error) => {
       // An error happened.
       });

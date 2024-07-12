@@ -16,11 +16,7 @@ const Signup = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log(user);
 
-        // attempting backend stuff
-        console.log("Link");
-        console.log(import.meta.env.VITE_BACKEND_LINK);
         fetch(`${import.meta.env.VITE_BACKEND_LINK}/profiles`, {
           method: "POST",
           headers: {
@@ -32,7 +28,6 @@ const Signup = () => {
           }),
         })
           .then((response) => response.json())
-          .then((data) => console.log(data))
           .catch((error) => console.error(error));
 
         navigate("/login");
@@ -41,7 +36,7 @@ const Signup = () => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
+        console.error(errorCode, errorMessage);
         // ..
       });
   };

@@ -64,8 +64,6 @@ const Set = (props) => {
 
       if (dataPoints.length > 0) {
         interval = (graphRatio * props.width) / dataPoints.length;
-
-        console.log(interval);
         dataPoints.map((point) => {
           if (point > maxData) {
             maxData = point;
@@ -185,8 +183,7 @@ const Set = (props) => {
             (count * xySum - xSum * ySum) / (count * xxSum - xSum * xSum);
           let intercept = ySum / count - (slope * xSum) / count;
 
-          console.log("slope: " + slope);
-          console.log("intercept: " + intercept);
+
 
           const findPoint = (x) => {
             return slope * x +  intercept;

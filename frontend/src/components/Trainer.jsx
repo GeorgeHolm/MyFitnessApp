@@ -5,6 +5,7 @@ import { auth, generateContent } from "../firebase";
 import AIVisualization from "./AIVisualization";
 import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
+import  'bootstrap/dist/css/bootstrap.min.css';
 
 import Accordion from "react-bootstrap/Accordion";
 
@@ -25,7 +26,6 @@ function Trainer() {
   }
   useEffect(() => {
     setThinking(false);
-    console.log(response);
   }, [response]);
 
   return (
@@ -33,19 +33,6 @@ function Trainer() {
       <p>PERSONAL TRAINER</p>
 
       <AIVisualization isThinking={thinking} />
-      {/* 
-      <input
-        type="text"
-        placeholder="Ask your personal Trainer a question!"
-        onChange={handleMessage}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            getContent(message);
-          }
-        }}
-        value={message}
-      /> */}
-
 
       <Accordion className="messages" defaultActiveKey="0">
         {response.map((res, idx) => (
