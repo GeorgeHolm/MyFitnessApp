@@ -155,13 +155,14 @@ function Home() {
               ))}
         </section>
         <section id="chat">
-          <DisplayWorkout workout={currentWorkout}/>
 
           <Collapse in={chatting}>
             <div>
               <Trainer />
             </div>
           </Collapse>
+          <DisplayWorkout workout={currentWorkout}/>
+
         </section>
         <button
           onClick={workoutMealSwitch}
