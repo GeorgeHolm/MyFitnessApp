@@ -7,6 +7,8 @@ import Trainer from "./Trainer";
 import Modal from "./Modal";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, generateContent } from "../firebase";
+import Collapse from "react-bootstrap/Collapse";
+import DisplayWorkout from "./DisplayWorkout";
 
 function Home() {
   const [user, setUser] = useState();
@@ -15,7 +17,8 @@ function Home() {
   const [modal, setModal] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [workoutMeal, setWorkoutMeal] = useState(true); //true == workout, false == meal
-  const [response, setResponse] = useState("");
+  const [chatting, setChatting] = useState(false);
+  const [currentWorkout, setCurrentWorkout] = useState([]);
 
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
@@ -117,7 +120,14 @@ function Home() {
     setWorkoutMeal(!workoutMeal);
   };
 
+  const handleChatting = () => {
+    setChatting(!chatting);
+  };
 
+  const handleCurrentWorkout = (e) => {
+    setCurrentWorkout(e);
+    console.log(e);
+  };
 
   return (
     <>
@@ -128,6 +138,7 @@ function Home() {
           {workoutMeal
             ? workouts.map((res) => (
                 <Workout
+                  onClick={handleCurrentWorkout}
                   refresh={refresh}
                   setRefresh={setRefresh}
                   key={res.id}
@@ -135,16 +146,22 @@ function Home() {
                 />
               ))
             : meals.map((res) => (
-              <Meal
-              refresh={refresh}
-              setRefresh={setRefresh}
-              key={res.id}
-              content={res}
-              />
-            ))}
+                <Meal
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  key={res.id}
+                  content={res}
+                />
+              ))}
         </section>
         <section id="chat">
-          <Trainer/>
+          <DisplayWorkout workout={currentWorkout}/>
+
+          <Collapse in={chatting}>
+            <div>
+              <Trainer />
+            </div>
+          </Collapse>
         </section>
         <button
           onClick={workoutMealSwitch}
@@ -155,6 +172,9 @@ function Home() {
         </button>
         <button onClick={addWorkout} className="round">
           {modal ? "-" : "+"}
+        </button>
+        <button onClick={handleChatting} className="round" id="chatButton">
+          {chatting ? "Chat" : "None"}
         </button>
       </div>
     </>
