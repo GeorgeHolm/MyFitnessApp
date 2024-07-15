@@ -204,5 +204,32 @@ app.put("/profiles/:id", async (req, res) => {
   res.json(updatedProfile);
 });
 
+app.put("/workouts/:id", async (req, res) => {
+  const { id } = req.params;
+  const { workout } = req.body;
 
+  await prisma.exercise.deleteMany({
+    where: {
+      workoutId: Number(id)
+    }
+  })
 
+  const updatedWorkout = await prisma.workout.update({
+    where: { id: parseInt(id) },
+    data: {
+      exercises: {
+        create: workout.map((exercise) => ({
+          name: exercise.name,
+          sets: {
+            create: exercise.sets.map((set) => ({
+              weight: Number(set.weight),
+              reps: Number(set.reps)
+            })),
+          },
+        })),
+      },
+      notes: ""
+    },
+  });
+  res.json(updatedWorkout);
+});

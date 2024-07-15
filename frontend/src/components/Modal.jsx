@@ -112,6 +112,15 @@ export function Modal(props) {
     setWorkout([]);
   };
 
+
+  const deleteExercise = (index) => {
+    const updatedWorkout = workout.filter((exercise, idx) => {
+        console.log(idx != index);
+        return idx != index;
+    });
+    setWorkout(updatedWorkout);
+  }
+
   //Code for creating meal
 
   const [mealSearch, setMealSearch] = useState("");
@@ -267,6 +276,7 @@ export function Modal(props) {
           <section>
             {workout.map((exercise, idx) => (
               <Exercise
+                deleteExercise={deleteExercise}
                 exerciseInfo={exerciseInfo}
                 workout={workout}
                 setWorkout={setWorkout}

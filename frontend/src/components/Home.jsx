@@ -125,7 +125,6 @@ function Home() {
 
   const handleCurrentWorkout = (e) => {
     setCurrentWorkout(e);
-    console.log(e);
   };
 
   return (
@@ -156,7 +155,11 @@ function Home() {
         <section id="chat">
           {chatting && <Trainer />}
 
-          <DisplayWorkout workout={currentWorkout} />
+          <DisplayWorkout
+            workout={currentWorkout}
+            refresh={refresh}
+            setRefresh={setRefresh}
+          />
         </section>
         <button
           onClick={workoutMealSwitch}
