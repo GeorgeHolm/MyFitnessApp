@@ -1,10 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import PropTypes from "prop-types";
 import "./Workout.css";
-import propTypes from "prop-types";
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 
 const Workout = (props) => {
 

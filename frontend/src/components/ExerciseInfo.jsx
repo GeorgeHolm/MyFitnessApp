@@ -1,10 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import PropTypes from "prop-types";
 import "./ExerciseInfo.css";
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Set from "./Set";
 
 const ExerciseInfo = (props) => {
   const checkToggleOff = (e) => {

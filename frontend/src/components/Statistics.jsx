@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import "./Statistics.css";
 import SearchBar from "./SearchBar";
-import ProfileEdit from "./ProfileEdit";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import Graph from "./Graph";
