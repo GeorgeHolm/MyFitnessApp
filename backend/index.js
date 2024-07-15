@@ -49,6 +49,9 @@ app.get("/profiles/:uid/meals", async (req, res) => {
   }
   const meals = await prisma.meal.findMany({
     where: { profileId: profile[0].id },
+    include: {
+      foods: true,
+    },
   });
   return res.json(meals);
 });

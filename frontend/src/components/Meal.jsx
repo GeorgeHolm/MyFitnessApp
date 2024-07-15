@@ -19,8 +19,12 @@ const Meal = (props) => {
     props.setRefresh(props.refresh + 1);
   };
 
+  const onClick = () => {
+    props.onClick(props.content);
+  }
+
   return (
-    <div className="meal">
+    <div onClick={onClick} className="meal">
       <button onClick={deleteMeal} className="delete">
         -
       </button>
