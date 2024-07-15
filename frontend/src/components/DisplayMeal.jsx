@@ -1,11 +1,8 @@
-import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./DisplayMeal.css";
 import PiChart from "./PiChart";
 
 function DisplayMeal(props) {
-  useEffect(() => {
-  }, [props.meal]);
 
   return (
     <div className="mealDisplay">
