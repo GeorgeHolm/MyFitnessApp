@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth, generateContent } from "../firebase";
 import { useRef, useCallback } from "react";
-import { createMemoryRouter } from "react-router-dom";
 
 function AIVisualization(props) {
   let ref = useRef();

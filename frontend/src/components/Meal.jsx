@@ -1,10 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import PropTypes from "prop-types";
 import "./Meal.css";
-import propTypes from "prop-types";
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 
 const Meal = (props) => {
   const deleteMeal = () => {

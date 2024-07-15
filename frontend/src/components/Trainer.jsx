@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import "./Trainer.css";
-import { onAuthStateChanged } from "firebase/auth";
 import { auth, generateContent } from "../firebase";
 import AIVisualization from "./AIVisualization";
 import InputGroup from "react-bootstrap/InputGroup";

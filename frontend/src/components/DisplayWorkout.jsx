@@ -1,10 +1,5 @@
 import { useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth, generateContent } from "../firebase";
-import InputGroup from "react-bootstrap/InputGroup";
-import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Accordion from "react-bootstrap/Accordion";
 import "./DisplayWorkout.css";
 import PiChart from "./PiChart";
 function DisplayWorkout(props) {
