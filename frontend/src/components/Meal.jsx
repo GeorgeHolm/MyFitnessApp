@@ -6,23 +6,23 @@ import propTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-
 const Meal = (props) => {
-
   const deleteMeal = () => {
-
     const asyncDelete = async () => {
+      fetch(`${import.meta.env.VITE_BACKEND_LINK}/meals/${props.content.id}`, {
+        method: "DELETE",
+      })
+        .then((response) => response.json())
+        .catch((error) => console.error(error));
+    };
 
-    fetch(`${import.meta.env.VITE_BACKEND_LINK}/meals/${props.content.id}`, {
-      method: "DELETE",
-    })
-      .then((response) => response.json())
-      .catch((error) => console.error(error));
-  }
+    asyncDelete();
 
-  asyncDelete();
-  props.setRefresh(props.refresh + 1);
-  }
+    Promise.all([asyncDelete]).catch((error) => {
+      console.error(error);
+    });
+    props.setRefresh(props.refresh + 1);
+  };
 
   return (
     <div className="meal">
@@ -36,7 +36,6 @@ const Meal = (props) => {
       <p>fats: {props.content.totalFats} g</p>
       <p>proteins: {props.content.totalProteins} g</p>
       <p>grams: {props.content.totalGrams} g</p>
-
     </div>
   );
 };

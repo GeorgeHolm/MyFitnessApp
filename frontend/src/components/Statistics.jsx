@@ -167,7 +167,6 @@ function Statistics() {
               width={600}
               height={500}
               title={"Meal one macros"}
-              untis={"g"}
             />
           )}
           {totalCalories.length > 0 && (

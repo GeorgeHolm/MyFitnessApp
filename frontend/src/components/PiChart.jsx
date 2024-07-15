@@ -15,7 +15,7 @@ const PiChart = (props) => {
     context.fillStyle = color;
     context.beginPath();
     context.moveTo(x, y);
-    
+
     context.arc(x, y, r, start, end);
 
     context.lineTo(x, y);
@@ -28,7 +28,6 @@ const PiChart = (props) => {
   }, []);
 
   useEffect(() => {
-
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     context.fillStyle = "white";
@@ -42,14 +41,14 @@ const PiChart = (props) => {
       context.textAlign = "left";
     }
 
-      arcPart(
-        props.width / 2,
-        props.height / 2,
-        props.height / 4 + 4,
-        "black",
-        0,
-        2 * Math.PI
-      );
+    arcPart(
+      props.width / 2,
+      props.height / 2,
+      props.height / 4 + 4,
+      "black",
+      0,
+      2 * Math.PI
+    );
     //Create Pichart
     //Map through the chart data, creating a slice of the chart that is proportional to
     //the amount it takes up in the whole data set
@@ -87,73 +86,72 @@ const PiChart = (props) => {
 
       context.font = "20px Arial";
       context.fillStyle = "black";
-      if(props.units) {
+      if (props.units) {
         context.fillText(
-            part[0] + ": " + (Math.floor(ratio * part[1] * 10) / 10).toString() + props.units,
-            textAlignStart,
-            (props.height * idx) / (1 + props.chartData.length) +
-              (props.height * 0.5) / (1 + props.chartData.length)
-          );
-      }
-      else {
+          part[0] +
+            ": " +
+            (part[1]).toString() +
+            props.units,
+          textAlignStart,
+          (props.height * idx) / (1 + props.chartData.length) +
+            (props.height * 0.5) / (1 + props.chartData.length)
+        );
+      } else {
         context.fillText(
-            part[0] + ": " + (Math.floor(ratio * 1000) / 10).toString() + "%",
-            textAlignStart,
-            (props.height * idx) / (1 + props.chartData.length) +
-              (props.height * 0.5) / (1 + props.chartData.length)
-          );
+          part[0] + ": " + (Math.floor(ratio * 1000) / 10).toString() + "%",
+          textAlignStart,
+          (props.height * idx) / (1 + props.chartData.length) +
+            (props.height * 0.5) / (1 + props.chartData.length)
+        );
       }
-
     });
 
-    arcPart(
-      props.width / 2,
-      props.height / 2,
-      props.height / 4,
-      `rgb(155, 155, 155)`,
-      Math.PI * 2 * runningTotal,
-      2 * Math.PI
-    );
+    //if there is any non-negligible remainder leftover, include it
+    if (Math.floor((1 - runningTotal) * 1000) > 0) {
+      arcPart(
+        props.width / 2,
+        props.height / 2,
+        props.height / 4,
+        `rgb(155, 155, 155)`,
+        Math.PI * 2 * runningTotal,
+        2 * Math.PI
+      );
 
-    context.fillStyle = `rgb(155, 155, 155)`;
-    
+      context.fillStyle = `rgb(155, 155, 155)`;
 
-    context.fillRect(
-      textAlignStart - 30,
-      props.height -  
-        (props.height * 0.5) / (props.chartData.length + 1) -
+      context.fillRect(
+        textAlignStart - 30,
+        props.height - (props.height * 0.5) / (props.chartData.length + 1) - 20,
         20,
-      20,
-      20
-    );
-    context.strokeStyle = `rgb(155, 155, 155)`;
-    context.lineWidth = "1";
-    context.stroke();
-  
-    context.font = "20px Arial";
-    context.fillStyle = "black";
+        20
+      );
+      context.strokeStyle = `rgb(155, 155, 155)`;
+      context.lineWidth = "1";
+      context.stroke();
 
-    if(props.units) {
+      context.font = "20px Arial";
+      context.fillStyle = "black";
+      if (props.units) {
         context.fillText(
-            "other: " + (Math.ceil((1 - runningTotal) * props.chartTotal[1] * 10) / 10).toString() + props.units,
-            textAlignStart,
-            props.height -  
-              (props.height * 0.5) / (props.chartData.length + 1)
-          );
-    }
-    else {
+          "other: " +
+            (
+              Math.ceil((1 - runningTotal) * props.chartTotal[1] * 10) / 10
+            ).toString() +
+            props.units,
+          textAlignStart,
+          props.height - (props.height * 0.5) / (props.chartData.length + 1)
+        );
+      } else {
         context.fillText(
-            "other: " + (Math.ceil((1 - runningTotal) * 1000) / 10).toString() + "%",
-            textAlignStart,
-            props.height -  
-              (props.height * 0.5) / (props.chartData.length + 1)
-          );
+          "other: " +
+            (Math.ceil((1 - runningTotal) * 1000) / 10).toString() +
+            "%",
+          textAlignStart,
+          props.height - (props.height * 0.5) / (props.chartData.length + 1)
+        );
+      }
     }
-
-  
-  }, [props.chartObject]);
-
-
+  }, [props.chartObject, props.chartData, props.chartTotal]);
 
   return (
     <div className="graphDiv">

@@ -40,6 +40,13 @@ body {
   margin: 0;
   border: 1px black solid;
   background-color: rgb(66, 182, 186);
+  overflow-y: scroll;
+
+}
+
+#chatButton {
+  transform: translateY(-220px);
+
 }
 
 button.round {

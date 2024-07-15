@@ -20,11 +20,21 @@ const Workout = (props) => {
   }
 
   asyncDelete();
+
+  Promise.all([asyncDelete])
+  .catch((error) => {
+    console.error(error);
+  });
+
   props.setRefresh(props.refresh + 1);
   }
 
+  const handleClick = () => {
+    props.onClick(props.content)
+  }
+
   return (
-    <div className="workout">
+    <div className="workout" onClick={handleClick}>
       <button onClick={deleteWorkout} className="delete">
         -
       </button>
