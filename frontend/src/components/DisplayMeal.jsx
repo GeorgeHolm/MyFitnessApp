@@ -5,7 +5,6 @@ import PiChart from "./PiChart";
 
 function DisplayMeal(props) {
   useEffect(() => {
-    console.log(props.meal?.foods?.map(food => ([food.name, food.calories])));
   }, [props.meal]);
 
   return (
