@@ -21,6 +21,13 @@ const Set = (props) => {
   };
 
   useEffect(() => {
+    if(props.data.id) {
+      setWeight(props.data.weight);
+      setReps(props.data.reps);
+    }
+  });
+
+  useEffect(() => {
     const updatedWorkout = props.workout.map((c, i) => {
       if (i === props.exerciseIndex) {
         let newSets = props.workout[i].sets.map((s, j) => {
@@ -39,6 +46,13 @@ const Set = (props) => {
     props.setWorkout(updatedWorkout);
   }, [weight, reps]);
 
+
+  const deleteSet = () => {
+    props.deleteSet(props.setIndex);
+  };
+
+
+
   return (
     <div className="exercise">
       <span>weight:</span>
@@ -53,6 +67,8 @@ const Set = (props) => {
       <span>Reps:</span>
       <span>
         <input placeholder="0" type="text" onChange={handleReps} value={reps} />
+        <button onClick={deleteSet} className="info deleteButton">x</button>
+
       </span>
     </div>
   );

@@ -3,6 +3,7 @@ import "./Exercise.css";
 import { useState, useEffect } from "react";
 import Set from "./Set";
 import ExerciseInfo from "./ExerciseInfo";
+import useEffectAfter from "./useEffectAfter";
 
 const Exercise = (props) => {
   const [extraInfo, setExtraInfo] = useState(false);
@@ -40,21 +41,69 @@ const Exercise = (props) => {
   const toggleInfo = () => {
     setInfoPopup(!infoPopup);
   };
- 
+
+
+  useEffect(() => {
+    if (props.data.id) {
+      setExerciseName(props.data.name);
+    }
+  }, [props.data]);
+
+
+  useEffectAfter(() => {
+    if (props.data.id) {
+      const updatedWorkout = props.workout.map((c, i) => {
+        if (i === props.index) {
+          let temp = c;
+          temp.name = exerciseName;
+          return temp;
+        } else {
+          return c;
+        }
+      });
+      props.setWorkout(updatedWorkout);
+    }
+  }, [exerciseName]);
+
+
+  const deleteExercise = () => {
+    props.deleteExercise(props.index);
+  }
+
+  const deleteSet = (index) => {
+    const updatedWorkout = props.workout.map((c, i) => {
+      if (i === props.index) {
+        let temp = c;
+        temp.name = exerciseName;
+        temp.sets = temp.sets.filter((set, idx) => {
+          return idx !== index;
+        });
+        return temp;
+      } else {
+        return c;
+      }
+    });
+    props.setWorkout(updatedWorkout);
+  }
 
   return (
     <div className="exercise">
       <div className="exercise">
         {extraInfo ? (
           <span className="popupWrap">
-            {infoPopup && <ExerciseInfo toggleInfo={toggleInfo} exercise={infoPopupExercise} />}
+            {infoPopup && (
+              <ExerciseInfo
+                toggleInfo={toggleInfo}
+                exercise={infoPopupExercise}
+              />
+            )}
             <button onClick={toggleInfo} className="info">
               ?
             </button>
           </span>
         ) : (
           <span className="popupWrap">
-            {infoPopup && <ExerciseInfo toggleInfo={toggleInfo}/>}
+            {infoPopup && <ExerciseInfo toggleInfo={toggleInfo} />}
 
             <button onClick={toggleInfo} className="info">
               !
@@ -76,11 +125,13 @@ const Exercise = (props) => {
               <option key={exerciseIdx} value={exercise.name} />
             ))}
           </datalist>
+          <button onClick={deleteExercise} className="info deleteButton">x</button>
         </span>
       </div>
 
       {props.workout[props.index].sets.map((set, idx) => (
         <Set
+          deleteSet={deleteSet}
           setWorkout={props.setWorkout}
           workout={props.workout}
           exerciseIndex={props.index}
