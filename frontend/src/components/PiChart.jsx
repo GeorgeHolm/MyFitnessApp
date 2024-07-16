@@ -4,6 +4,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 
 const PiChart = (props) => {
   const canvasRef = useRef(null);
+  const chartCenter = props.width / 3;
 
   const arcPart = useCallback((x, y, r, color, start, end) => {
     let canvas = canvasRef.current;
@@ -34,12 +35,12 @@ const PiChart = (props) => {
       context.textAlign = "center";
       context.font = "30px Arial";
       context.fillStyle = "black";
-      context.fillText(props.title, props.width / 2, props.height * 0.1);
+      context.fillText(props.title, chartCenter, props.height * 0.1);
       context.textAlign = "left";
     }
 
     arcPart(
-      props.width / 2,
+      chartCenter,
       props.height / 2,
       props.height / 4 + 4,
       "black",
@@ -50,7 +51,7 @@ const PiChart = (props) => {
     //Map through the chart data, creating a slice of the chart that is proportional to
     //the amount it takes up in the whole data set
     //If there is any remainder, fill it with grey
-    let textAlignStart = (props.width * 4) / 5;
+    let textAlignStart = chartCenter * 2;
     let runningTotal = 0;
     props.chartData.map((part, idx) => {
       let ratio = part[1] / props.chartTotal[1];
@@ -58,7 +59,7 @@ const PiChart = (props) => {
         200 * runningTotal + 55
       })`;
       arcPart(
-        props.width / 2,
+        chartCenter,
         props.height / 2,
         props.height / 4,
         color,
@@ -106,7 +107,7 @@ const PiChart = (props) => {
     //if there is any non-negligible remainder leftover, include it
     if (Math.floor((1 - runningTotal) * 1000) > 0) {
       arcPart(
-        props.width / 2,
+        chartCenter,
         props.height / 2,
         props.height / 4,
         `rgb(155, 155, 155)`,

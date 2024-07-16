@@ -212,7 +212,7 @@ function Statistics() {
               user={user}
               width={600}
               height={500}
-              linearRegression={[false, false, true, false]}
+              linearRegression={[true, false, true, false]}
               title={"Grams for Meals"}
             />
           )}
