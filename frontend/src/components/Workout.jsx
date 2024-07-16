@@ -2,37 +2,38 @@ import React from "react";
 import "./Workout.css";
 
 const Workout = (props) => {
-
   const deleteWorkout = () => {
-
     const asyncDelete = async () => {
+      fetch(
+        `${import.meta.env.VITE_BACKEND_LINK}/workouts/${props.content.id}`,
+        {
+          method: "DELETE",
+        }
+      )
+        .then((response) => response.json())
+        .catch((error) => console.error(error));
+    };
 
-    fetch(`${import.meta.env.VITE_BACKEND_LINK}/workouts/${props.content.id}`, {
-      method: "DELETE",
-    })
-      .then((response) => response.json())
-      .catch((error) => console.error(error));
-  }
+    asyncDelete();
 
-  asyncDelete();
+    Promise.all([asyncDelete]).catch((error) => {
+      console.error(error);
+    });
 
-  Promise.all([asyncDelete])
-  .catch((error) => {
-    console.error(error);
-  });
-
-  props.setRefresh(props.refresh + 1);
-  }
+    props.setRefresh(props.refresh + 1);
+  };
 
   const handleClick = () => {
-    props.onClick(props.content)
-  }
+    props.onClick(props.content);
+  };
 
   return (
     <div className="workout" onClick={handleClick}>
-      <button onClick={deleteWorkout} className="delete">
-        -
-      </button>
+      {props.edit && (
+        <button onClick={deleteWorkout} className="delete">
+          -
+        </button>
+      )}
       <h2>Workout placeholder</h2>
       <p>{props.content.notes}</p>
 

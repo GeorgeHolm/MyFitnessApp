@@ -97,7 +97,7 @@ function DisplayWorkout(props) {
         units={" "}
       />
 
-      {props.workout.exercises && (
+      {props.workout.exercises && props.edit && (
         <section>
           {workout.map((exercise, idx) => (
             <Exercise
