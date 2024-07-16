@@ -115,7 +115,6 @@ export function Modal(props) {
 
   const deleteExercise = (index) => {
     const updatedWorkout = workout.filter((exercise, idx) => {
-        console.log(idx != index);
         return idx != index;
     });
     setWorkout(updatedWorkout);
@@ -146,7 +145,15 @@ export function Modal(props) {
       })
       .then((data) => {
         // Handle successful response
-        setMealSearchResults(data);
+        const limitedFoods = data.foods.filter(
+          (food, idx, self) =>
+            self.findIndex((i) => i.description === food.description) === idx
+        );
+
+        let dummy = data;
+        dummy.foods = limitedFoods;
+
+        setMealSearchResults(dummy);
       })
       .catch((error) => {
         console.error("Error fetching boards:", error);
@@ -251,7 +258,9 @@ export function Modal(props) {
   };
 
   const foodSelected = (f) => {
-    setFoodChoice(f.food);
+    let dummy = f.food;
+    dummy.description = dummy.description.toLowerCase();
+    setFoodChoice(dummy);
     setMealSearchResults([]);
   };
 
@@ -309,19 +318,20 @@ export function Modal(props) {
               value={mealSearch}
             />
 
-            {mealSearchResults.foods?.map((food, idx) => (
+            {mealSearchResults.foods?.filter((food, idx) => (idx < 5)).map((food, idx) => (
               <p
                 key={idx}
                 onClick={() => {
                   foodSelected({ food });
                 }}
               >
-                {food.description}
+                {food.description.toLowerCase()}
               </p>
             ))}
 
             <section id="mealContainer">
-              {meal.map((foodItem, idx) => (
+              {
+              meal.map((foodItem, idx) => (
                 <div key={idx}>
                   <span>{foodItem.foodData.description}</span>
                   <span>

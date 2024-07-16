@@ -8,6 +8,7 @@ import Modal from "./Modal";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, generateContent } from "../firebase";
 import DisplayWorkout from "./DisplayWorkout";
+import DisplayMeal from "./DisplayMeal";
 
 function Home() {
   const [user, setUser] = useState();
@@ -18,6 +19,7 @@ function Home() {
   const [workoutMeal, setWorkoutMeal] = useState(true); //true == workout, false == meal
   const [chatting, setChatting] = useState(false);
   const [currentWorkout, setCurrentWorkout] = useState([]);
+  const [currentMeal, setCurrentMeal] = useState([]);
 
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
@@ -127,6 +129,11 @@ function Home() {
     setCurrentWorkout(e);
   };
 
+  const handleCurrentMeal = (e) => {
+    console.log(e);
+    setCurrentMeal(e);
+  };
+
   return (
     <>
       {modal && <Modal type={workoutMeal} setModal={setModal} user={user} />}
@@ -145,6 +152,7 @@ function Home() {
               ))
             : meals.map((res) => (
                 <Meal
+                  onClick={handleCurrentMeal}
                   refresh={refresh}
                   setRefresh={setRefresh}
                   key={res.id}
@@ -155,11 +163,19 @@ function Home() {
         <section id="chat">
           {chatting && <Trainer />}
 
-          <DisplayWorkout
-            workout={currentWorkout}
-            refresh={refresh}
-            setRefresh={setRefresh}
-          />
+          {workoutMeal ? (
+            <DisplayWorkout
+              workout={currentWorkout}
+              refresh={refresh}
+              setRefresh={setRefresh}
+            />
+          ) : (
+            <DisplayMeal
+              meal={currentMeal}
+              refresh={refresh}
+              setRefresh={setRefresh}
+            />
+          )}
         </section>
         <button
           onClick={workoutMealSwitch}
