@@ -179,29 +179,46 @@ const Graph = (props) => {
             (count * xySum - xSum * ySum) / (count * xxSum - xSum * xSum);
           let intercept = ySum / count - (slope * xSum) / count;
 
+          const findIntercept = (height) => {
+            return(height - intercept)/slope;
+          } 
 
-
-          const findPoint = (x) => {
-            return slope * x +  intercept;
+          const findPointSlope = (x, slo, inter) => {
+            return (slo * x +  inter);
           };
 
-          let linearRegression = canvas.getContext("2d");
-          linearRegression.beginPath();
-          linearRegression.moveTo(
-            ((1 - graphRatio) / 2) * props.width,
-            props.height -
-              ((findPoint(1) / maxData) * graphRatio * props.height +
-                ((1 - graphRatio) / 2) * props.height)
-          );
-          linearRegression.lineTo(
-            ((1 - graphRatio) / 2) * props.width + graphRatio * props.width,
+          const drawLine = (start, end, lineSlope, lineIntercept) => {
+            let line = canvas.getContext("2d");
+            line.beginPath();
+            line.moveTo(
+              ((1 - graphRatio) / 2) * props.width + (start - 1)/(count) * graphRatio * props.width,
               props.height -
-              ((findPoint(count + 1) / maxData) * graphRatio * props.height +
-                ((1 - graphRatio) / 2) * props.height)
-          );
-          linearRegression.strokeStyle = color;
+                ((findPointSlope(start, lineSlope, lineIntercept) / maxData) * graphRatio * props.height +
+                  ((1 - graphRatio) / 2) * props.height)
+            );
+  
+  
+            line.lineTo(
+              ((1 - graphRatio) / 2) * props.width +   (end - 1)/(count) * graphRatio  * props.width,
+                props.height -
+                ((findPointSlope(end, lineSlope, lineIntercept)  / maxData) * graphRatio * props.height +
+                  ((1 - graphRatio) / 2) * props.height)
+            );
+            line.strokeStyle = color;
+  
+            line.stroke();
+          }
+          let lineRatio = 1;
+          //cannot cross borders of graph
+          if(slope > 0) {
+            lineRatio = Math.min(count + 1, findIntercept(maxData))/(count  + 1);
+          }
+          else {
+            lineRatio = Math.min(count + 1, findIntercept(0))/(count + 1);
+          }
+          drawLine(1, lineRatio * (count + 1), slope, intercept);
 
-          linearRegression.stroke();
+
         }
       }
     });
