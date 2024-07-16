@@ -141,7 +141,7 @@ function Explore() {
       <div className="flexbox">
         <section id="workouts">
           {workoutMeal
-            ? workouts.map((res) => (
+            ? workouts.sort((a, b) => (b.id - a.id)).map((res) => (
                 <Workout
                   onClick={handleCurrentWorkout}
                   refresh={refresh}
@@ -152,7 +152,7 @@ function Explore() {
 
                 />
               ))
-            : meals.map((res) => (
+            : meals.sort((a, b) => (b.id - a.id)).map((res) => (
                 <Meal
                   onClick={handleCurrentMeal}
                   refresh={refresh}
