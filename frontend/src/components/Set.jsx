@@ -3,8 +3,8 @@ import "./Set.css";
 import { useState, useEffect } from "react";
 
 const Set = (props) => {
-  const [weight, setWeight] = useState(0);
-  const [reps, setReps] = useState(0);
+  const [weight, setWeight] = useState();
+  const [reps, setReps] = useState();
 
   const handleWeight = (e) => {
     if (!Number(e.target.value)) {
@@ -55,7 +55,7 @@ const Set = (props) => {
 
   return (
     <div className="exercise">
-      <span>weight:</span>
+      <span>Weight (lbs):</span>
       <span>
         <input
           type="text"
