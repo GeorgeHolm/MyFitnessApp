@@ -93,6 +93,66 @@ app.get("/meals", async (req, res) => {
   res.json(meals);
 });
 
+app.post("/touchworkout", async (req, res) => {
+  try {
+    const { id, wid } = req.body;
+    const newTouch = await prisma.profileWorkoutTouched.create({
+      data: {
+        workoutId: Number (wid),
+        profileId: Number(id),
+      },
+    });
+    res.json(newTouch);
+  } catch (error) {
+    console.log("Error:", error.message);
+  }
+});
+
+app.post("/touchmeal", async (req, res) => {
+  try {
+    const { id, mid } = req.body;
+    const newTouch = await prisma.profileMealTouched.create({
+      data: {
+        mealId: Number (mid),
+        profileId: Number(id),
+      },
+    });
+    res.json(newTouch);
+  } catch (error) {
+    console.log("Error:", error.message);
+  }
+});
+
+app.post("/likeworkout", async (req, res) => {
+  try {
+    const { id, wid } = req.body;
+    const newTouch = await prisma.profileWorkoutLikes.create({
+      data: {
+        workoutId: Number (wid),
+        profileId: Number(id),
+      },
+    });
+    res.json(newTouch);
+  } catch (error) {
+    console.log("Error:", error.message);
+  }
+});
+
+app.post("/likemeal", async (req, res) => {
+  try {
+    const { id, mid } = req.body;
+    const newTouch = await prisma.profileMealLikes.create({
+      data: {
+        mealId: Number (mid),
+        profileId: Number(id),
+      },
+    });
+    res.json(newTouch);
+  } catch (error) {
+    console.log("Error:", error.message);
+  }
+});
+
 app.post("/exercises/:id/sets", async (req, res) => {
   try {
     const { id } = req.params;
