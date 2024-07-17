@@ -131,7 +131,6 @@ function Explore() {
     setRefresh(refresh + 1);
 
     if (!user.touchWorkouts.some((workout) => workout.workoutId === e.id)) {
-      console.log("calling")
       const asyncTouch = async () => {
         const touchworkout = await fetch(
           `${import.meta.env.VITE_BACKEND_LINK}/touchworkout`,
@@ -160,7 +159,6 @@ function Explore() {
     setRefresh(refresh + 1);
 
     if (!user.touchMeals.some((meal) => meal.mealId === e.id)) {
-      console.log("touch");
       const asyncTouch = async () => {
         const touchmeal = await fetch(
           `${import.meta.env.VITE_BACKEND_LINK}/touchmeal`,
