@@ -59,7 +59,15 @@ app.get("/profiles/:uid/meals", async (req, res) => {
 app.get("/profiles/:uid", async (req, res) => {
   const { uid } = req.params;
 
-  const profile = await prisma.profile.findMany({ where: { uid: uid } });
+  const profile = await prisma.profile.findMany({
+    where: { uid: uid },
+    include: {
+      likedWorkouts: true,
+      touchWorkouts: true,
+      likedMeals: true,
+      touchMeals: true,
+    },
+  });
   if (!profile[0]) {
     return res.status(404).send({ error: "Profile not found" });
   }
@@ -96,13 +104,22 @@ app.get("/meals", async (req, res) => {
 app.post("/touchworkout", async (req, res) => {
   try {
     const { id, wid } = req.body;
-    const newTouch = await prisma.profileWorkoutTouched.create({
-      data: {
-        workoutId: Number (wid),
+    const alreadyExists = await prisma.profileWorkoutTouched.findMany({
+      where: {
+        workoutId: Number(wid),
         profileId: Number(id),
       },
     });
-    res.json(newTouch);
+
+    if (!alreadyExists[0]) {
+      const newTouch = await prisma.profileWorkoutTouched.create({
+        data: {
+          workoutId: Number(wid),
+          profileId: Number(id),
+        },
+      });
+      res.json(newTouch);
+    }
   } catch (error) {
     console.log("Error:", error.message);
   }
@@ -111,13 +128,23 @@ app.post("/touchworkout", async (req, res) => {
 app.post("/touchmeal", async (req, res) => {
   try {
     const { id, mid } = req.body;
-    const newTouch = await prisma.profileMealTouched.create({
-      data: {
-        mealId: Number (mid),
+
+    const alreadyExists = await prisma.profileMealTouched.findMany({
+      where: {
+        mealId: Number(mid),
         profileId: Number(id),
       },
     });
-    res.json(newTouch);
+
+    if (!alreadyExists[0]) {
+      const newTouch = await prisma.profileMealTouched.create({
+        data: {
+          mealId: Number(mid),
+          profileId: Number(id),
+        },
+      });
+      res.json(newTouch);
+    }
   } catch (error) {
     console.log("Error:", error.message);
   }
@@ -126,13 +153,23 @@ app.post("/touchmeal", async (req, res) => {
 app.post("/likeworkout", async (req, res) => {
   try {
     const { id, wid } = req.body;
-    const newTouch = await prisma.profileWorkoutLikes.create({
-      data: {
-        workoutId: Number (wid),
+
+    const alreadyExists = await prisma.profileWorkoutLikes.findMany({
+      where: {
+        workoutId: Number(wid),
         profileId: Number(id),
       },
     });
-    res.json(newTouch);
+
+    if (!alreadyExists[0]) {
+      const newTouch = await prisma.profileWorkoutLikes.create({
+        data: {
+          workoutId: Number(wid),
+          profileId: Number(id),
+        },
+      });
+      res.json(newTouch);
+    }
   } catch (error) {
     console.log("Error:", error.message);
   }
@@ -141,13 +178,23 @@ app.post("/likeworkout", async (req, res) => {
 app.post("/likemeal", async (req, res) => {
   try {
     const { id, mid } = req.body;
-    const newTouch = await prisma.profileMealLikes.create({
-      data: {
-        mealId: Number (mid),
+
+    const alreadyExists = await prisma.profileMealLikes.findMany({
+      where: {
+        mealId: Number(mid),
         profileId: Number(id),
       },
     });
-    res.json(newTouch);
+
+    if (!alreadyExists[0]) {
+      const newTouch = await prisma.profileMealLikes.create({
+        data: {
+          mealId: Number(mid),
+          profileId: Number(id),
+        },
+      });
+      res.json(newTouch);
+    }
   } catch (error) {
     console.log("Error:", error.message);
   }
@@ -262,6 +309,21 @@ app.delete("/meals/:id", async (req, res) => {
   res.json(deletedMeal);
 });
 
+app.delete("/likemeal", async (req, res) => {
+  const { id, mid } = req.body;
+  const deletedLike = await prisma.profileMealLikes.deleteMany({
+    where: { profileId: Number(id), mealId: Number(mid) },
+  });
+  res.json(deletedLike);
+});
+app.delete("/likeworkout", async (req, res) => {
+  const { id, wid } = req.body;
+  const deletedLike = await prisma.profileWorkoutLikes.deleteMany({
+    where: { profileId: Number(id), workoutId: Number(wid) },
+  });
+  res.json(deletedLike);
+});
+
 app.put("/profiles/:id", async (req, res) => {
   const { id } = req.params;
   const { email, uid, name, age, sex, bio } = req.body;
@@ -285,9 +347,9 @@ app.put("/workouts/:id", async (req, res) => {
 
   await prisma.exercise.deleteMany({
     where: {
-      workoutId: Number(id)
-    }
-  })
+      workoutId: Number(id),
+    },
+  });
 
   const updatedWorkout = await prisma.workout.update({
     where: { id: parseInt(id) },
@@ -298,12 +360,12 @@ app.put("/workouts/:id", async (req, res) => {
           sets: {
             create: exercise.sets.map((set) => ({
               weight: Number(set.weight),
-              reps: Number(set.reps)
+              reps: Number(set.reps),
             })),
           },
         })),
       },
-      notes: ""
+      notes: "",
     },
   });
   res.json(updatedWorkout);

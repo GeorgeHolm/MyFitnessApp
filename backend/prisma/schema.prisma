@@ -85,32 +85,32 @@ model Food {
 
 model ProfileWorkoutLikes {
   id         Int @id @default(autoincrement())
-  profile    Profile? @relation(fields: [profileId], references: [id])
-  workout    Workout? @relation(fields: [workoutId], references: [id])
+  profile    Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  workout    Workout? @relation(fields: [workoutId], references: [id], onDelete: Cascade)
   profileId  Int?
   workoutId  Int?
 }
 
 model ProfileWorkoutTouched {
   id         Int @id @default(autoincrement())
-  profile    Profile? @relation(fields: [profileId], references: [id])
-  workout    Workout? @relation(fields: [workoutId], references: [id])
+  profile    Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  workout    Workout? @relation(fields: [workoutId], references: [id], onDelete: Cascade)
   profileId  Int?
   workoutId  Int?
 }
 
 model ProfileMealLikes {
   id         Int @id @default(autoincrement())
-  profile    Profile? @relation(fields: [profileId], references: [id])
-  meal       Meal? @relation(fields: [mealId], references: [id])
+  profile    Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  meal       Meal? @relation(fields: [mealId], references: [id], onDelete: Cascade)
   profileId  Int?
   mealId     Int?
 }
 
 model ProfileMealTouched {
   id         Int @id @default(autoincrement())
-  profile    Profile? @relation(fields: [profileId], references: [id])
-  meal       Meal? @relation(fields: [mealId], references: [id])
+  profile    Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  meal       Meal? @relation(fields: [mealId], references: [id], onDelete: Cascade)
   profileId  Int?
   mealId     Int?
 }
