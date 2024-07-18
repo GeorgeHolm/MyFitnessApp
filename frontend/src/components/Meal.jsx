@@ -19,7 +19,9 @@ const Meal = (props) => {
     props.setRefresh(props.refresh + 1);
   };
 
-  const onClick = () => {
+  const onClick = (e) => {
+    e.stopPropagation();
+
     props.onClick(props.content);
   }
 

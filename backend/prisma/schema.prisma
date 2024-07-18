@@ -14,15 +14,19 @@ datasource db {
 }
 
 model Profile {
-  id        Int @id @default(autoincrement())
-  uid       String
-  email     String
-  workouts  Workout[]
-  meals     Meal[]
-  name      String @default("")
-  sex       String @default("")
-  age       Int @default(0)
-  bio       String @default("")
+  id            Int @id @default(autoincrement())
+  uid           String
+  email         String
+  workouts      Workout[]
+  meals         Meal[]
+  name          String @default("")
+  sex           String @default("")
+  age           Int @default(0)
+  bio           String @default("")
+  likedWorkouts ProfileWorkoutLikes[]
+  touchWorkouts ProfileWorkoutTouched[]
+  likedMeals    ProfileMealLikes[]
+  touchMeals    ProfileMealTouched[]
 }
 
 model Workout {
@@ -31,6 +35,8 @@ model Workout {
   profileId     Int
   notes         String
   exercises     Exercise[]
+  profileLikes  ProfileWorkoutLikes[]
+  profileTouch  ProfileWorkoutTouched[]
 }
 
 model Exercise {
@@ -60,6 +66,8 @@ model Meal {
   totalFats     Float
   totalProteins Float
   totalGrams    Float
+  profileLikes  ProfileMealLikes[]
+  profileTouch  ProfileMealTouched[]
 }
 
 model Food {
@@ -72,4 +80,37 @@ model Food {
   fats          Float
   proteins      Float
   grams         Float
+}
+
+
+model ProfileWorkoutLikes {
+  id         Int @id @default(autoincrement())
+  profile    Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  workout    Workout? @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  profileId  Int?
+  workoutId  Int?
+}
+
+model ProfileWorkoutTouched {
+  id         Int @id @default(autoincrement())
+  profile    Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  workout    Workout? @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  profileId  Int?
+  workoutId  Int?
+}
+
+model ProfileMealLikes {
+  id         Int @id @default(autoincrement())
+  profile    Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  meal       Meal? @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  profileId  Int?
+  mealId     Int?
+}
+
+model ProfileMealTouched {
+  id         Int @id @default(autoincrement())
+  profile    Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  meal       Meal? @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  profileId  Int?
+  mealId     Int?
 }

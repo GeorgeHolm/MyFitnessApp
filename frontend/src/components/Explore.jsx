@@ -77,7 +77,7 @@ function Explore() {
         console.log("user is logged out");
       }
     });
-  }, [modal]);
+  }, [modal, refresh]);
 
   useEffect(() => {
     if (user) {
@@ -127,11 +127,57 @@ function Explore() {
 
   const handleCurrentWorkout = (e) => {
     setCurrentWorkout(e);
+    //User touched workout
+    setRefresh(refresh + 1);
+
+    if (!user.touchWorkouts.some((workout) => workout.workoutId === e.id)) {
+      const asyncTouch = async () => {
+        const touchworkout = await fetch(
+          `${import.meta.env.VITE_BACKEND_LINK}/touchworkout`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              wid: e.id,
+              id: user.id,
+            }),
+          }
+        )
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      };
+      asyncTouch();
+    }
   };
 
   const handleCurrentMeal = (e) => {
-    console.log(e);
     setCurrentMeal(e);
+
+    //user touched meal
+    setRefresh(refresh + 1);
+
+    if (!user.touchMeals.some((meal) => meal.mealId === e.id)) {
+      const asyncTouch = async () => {
+        const touchmeal = await fetch(
+          `${import.meta.env.VITE_BACKEND_LINK}/touchmeal`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              mid: e.id,
+              id: user.id,
+            }),
+          }
+        )
+          .then((response) => response.json())
+          .catch((error) => console.error(error));
+      };
+      asyncTouch();
+    }
   };
 
   return (
@@ -141,34 +187,37 @@ function Explore() {
       <div className="flexbox">
         <section id="workouts">
           {workoutMeal
-            ? workouts.sort((a, b) => (b.id - a.id)).map((res) => (
-                <Workout
-                  onClick={handleCurrentWorkout}
-                  refresh={refresh}
-                  setRefresh={setRefresh}
-                  key={res.id}
-                  content={res}
-                  edit={false}
-
-                />
-              ))
-            : meals.sort((a, b) => (b.id - a.id)).map((res) => (
-                <Meal
-                  onClick={handleCurrentMeal}
-                  refresh={refresh}
-                  setRefresh={setRefresh}
-                  key={res.id}
-                  content={res}
-                  edit={false}
-
-                />
-              ))}
+            ? workouts
+                .sort((a, b) => b.id - a.id)
+                .map((res) => (
+                  <Workout
+                    onClick={handleCurrentWorkout}
+                    refresh={refresh}
+                    setRefresh={setRefresh}
+                    key={res.id}
+                    content={res}
+                    edit={false}
+                  />
+                ))
+            : meals
+                .sort((a, b) => b.id - a.id)
+                .map((res) => (
+                  <Meal
+                    onClick={handleCurrentMeal}
+                    refresh={refresh}
+                    setRefresh={setRefresh}
+                    key={res.id}
+                    content={res}
+                    edit={false}
+                  />
+                ))}
         </section>
         <section id="chat">
           {chatting && <Trainer />}
 
           {workoutMeal ? (
             <DisplayWorkout
+              user={user}
               workout={currentWorkout}
               refresh={refresh}
               setRefresh={setRefresh}
@@ -176,6 +225,7 @@ function Explore() {
             />
           ) : (
             <DisplayMeal
+              user={user}
               edit={false}
               meal={currentMeal}
               refresh={refresh}

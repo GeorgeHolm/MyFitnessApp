@@ -4,6 +4,8 @@ import "./DisplayWorkout.css";
 import PiChart from "./PiChart";
 import ExerciseInformation from "../../../webscraping/exercises.json";
 import Exercise from "./Exercise";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, generateContent } from "../firebase";
 
 function DisplayWorkout(props) {
   const [chartData, setChartData] = useState([]);
@@ -13,6 +15,83 @@ function DisplayWorkout(props) {
 
   const [workout, setWorkout] = useState([]);
   const [exerciseInfo, setExerciseInfo] = useState([]);
+
+  const [user, setUser] = useState([]);
+  const [isLiked, setIsLiked] = useState(false);
+  useEffect(() => {
+    onAuthStateChanged(auth, (prof) => {
+      if (prof) {
+        fetch(`http://localhost:3000/profiles/${prof.uid}`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json(); // Parse JSON data from the response
+          })
+          .then((data) => {
+            // Handle successful response
+            setUser(data[0]);
+            setIsLiked(
+              data[0].likedWorkouts.some((workout) => workout.workoutId === props.workout.id)
+            );
+          })
+          .catch((error) => {
+            console.error("Error fetching boards:", error);
+          });
+      } else {
+        // User is signed out
+        // ...
+        console.log("user is logged out");
+      }
+    });
+  }, [isLiked, props.workout]);
+
+  const likeButton = () => {
+    if (user) {
+      //cannot say why I need the user here but it is necessary!
+      if (isLiked) {
+        const asyncTouch = async () => {
+          const unlikeWorkout = await fetch(
+            `${import.meta.env.VITE_BACKEND_LINK}/likeworkout`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                wid: props.workout.id,
+                id: props.user.id,
+              }),
+            }
+          )
+            .then((res) => setIsLiked(false))
+            .catch((error) => console.error(error));
+        };
+        asyncTouch();
+      } else {
+        //User like workout
+
+        const asyncTouch = async () => {
+          const likeWorkout = await fetch(
+            `${import.meta.env.VITE_BACKEND_LINK}/likeworkout`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                wid: props.workout.id,
+                id: props.user.id,
+              }),
+            }
+          )
+            .then((res) => setIsLiked(true))
+            .catch((error) => console.error(error));
+        };
+        asyncTouch();
+      }
+    }
+  };
 
   useEffect(() => {
     let dummyArrayVolume = Array(props.workout?.length).fill(["", 0]);
@@ -80,6 +159,9 @@ function DisplayWorkout(props) {
 
   return (
     <div className="workoutDisplay">
+      {props.user && (
+        <button onClick={likeButton}>{isLiked ? "Unlike" : "Like"}</button>
+      )}
       <PiChart
         chartData={chartData}
         chartTotal={["lbs", volume]}
