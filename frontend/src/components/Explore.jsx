@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "./Home.css";
+import "./Explore.css";
 import SearchBar from "./SearchBar";
 import Workout from "./Workout";
 import Meal from "./Meal";
@@ -10,7 +10,7 @@ import { auth, generateContent } from "../firebase";
 import DisplayWorkout from "./DisplayWorkout";
 import DisplayMeal from "./DisplayMeal";
 
-function Home() {
+function Explore() {
   const [user, setUser] = useState();
   const [workouts, setWorkouts] = useState([]);
   const [meals, setMeals] = useState([]);
@@ -27,7 +27,7 @@ function Home() {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
 
-        fetch(`http://localhost:3000/profiles/${prof.uid}/workouts`)
+        fetch(`http://localhost:3000/workouts`)
           .then((response) => {
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
@@ -42,7 +42,7 @@ function Home() {
             console.error("Error fetching boards:", error);
           });
 
-        fetch(`http://localhost:3000/profiles/${prof.uid}/meals`)
+        fetch(`http://localhost:3000/meals`)
           .then((response) => {
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
@@ -81,7 +81,7 @@ function Home() {
 
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:3000/profiles/${user.uid}/workouts`)
+      fetch(`http://localhost:3000/workouts`)
         .then((response) => {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -96,7 +96,7 @@ function Home() {
           console.error("Error fetching boards:", error);
         });
 
-      fetch(`http://localhost:3000/profiles/${user.uid}/meals`)
+      fetch(`http://localhost:3000/meals`)
         .then((response) => {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -148,7 +148,8 @@ function Home() {
                   setRefresh={setRefresh}
                   key={res.id}
                   content={res}
-                  edit={true}
+                  edit={false}
+
                 />
               ))
             : meals.sort((a, b) => (b.id - a.id)).map((res) => (
@@ -158,7 +159,8 @@ function Home() {
                   setRefresh={setRefresh}
                   key={res.id}
                   content={res}
-                  edit={true}
+                  edit={false}
+
                 />
               ))}
         </section>
@@ -169,15 +171,15 @@ function Home() {
             <DisplayWorkout
               workout={currentWorkout}
               refresh={refresh}
-              edit={true}
               setRefresh={setRefresh}
+              edit={false}
             />
           ) : (
             <DisplayMeal
+              edit={false}
               meal={currentMeal}
               refresh={refresh}
               setRefresh={setRefresh}
-              edit={true}
             />
           )}
         </section>
@@ -199,4 +201,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Explore;

@@ -25,9 +25,9 @@ const Meal = (props) => {
 
   return (
     <div onClick={onClick} className="meal">
-      <button onClick={deleteMeal} className="delete">
+      {props.edit && (<button onClick={deleteMeal} className="delete">
         -
-      </button>
+      </button>)}
       <h2>Meal placeholder</h2>
       <p>{props.content.notes}</p>
       <p>calories: {props.content.totalCalories} cal</p>
