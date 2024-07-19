@@ -9,6 +9,8 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, generateContent } from "../firebase";
 import DisplayWorkout from "./DisplayWorkout";
 import DisplayMeal from "./DisplayMeal";
+import Knn from "./Knn";
+import useEffectAfter from "./useEffectAfter";
 
 function Explore() {
   const [user, setUser] = useState();
@@ -20,6 +22,20 @@ function Explore() {
   const [chatting, setChatting] = useState(false);
   const [currentWorkout, setCurrentWorkout] = useState([]);
   const [currentMeal, setCurrentMeal] = useState([]);
+  const [profiles, setProfiles] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
+  const [recentOrRecommended, setRecentOrRecommended] = useState(false);
+
+  useEffectAfter(() => {
+    if (
+      user &&
+      profiles.length !== 0 &&
+      workouts.length !== 0 &&
+      meals.length !== 0
+    ) {
+      setRecommendations(Knn(user, workouts, meals, profiles));
+    }
+  }, [user]);
 
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
@@ -52,6 +68,21 @@ function Explore() {
           .then((data) => {
             // Handle successful response
             setMeals(data);
+          })
+          .catch((error) => {
+            console.error("Error fetching boards:", error);
+          });
+
+        fetch(`http://localhost:3000/profiles`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json(); // Parse JSON data from the response
+          })
+          .then((data) => {
+            // Handle successful response
+            setProfiles(data);
           })
           .catch((error) => {
             console.error("Error fetching boards:", error);
@@ -125,6 +156,10 @@ function Explore() {
     setChatting(!chatting);
   };
 
+  const recsOrNot = () => {
+    setRecentOrRecommended(!recentOrRecommended);
+  };
+
   const handleCurrentWorkout = (e) => {
     setCurrentWorkout(e);
     //User touched workout
@@ -185,33 +220,61 @@ function Explore() {
       {modal && <Modal type={workoutMeal} setModal={setModal} user={user} />}
       <SearchBar user={user} />
       <div className="flexbox">
-        <section id="workouts">
+        {recentOrRecommended ? (
+          <section id="workouts">
           {workoutMeal
-            ? workouts
-                .sort((a, b) => b.id - a.id)
+            ? recommendations.workoutRecsIndex
                 .map((res) => (
                   <Workout
                     onClick={handleCurrentWorkout}
                     refresh={refresh}
                     setRefresh={setRefresh}
-                    key={res.id}
-                    content={res}
+                    key={workouts[res[1]].id}
+                    content={workouts[res[1]]}
                     edit={false}
                   />
                 ))
-            : meals
-                .sort((a, b) => b.id - a.id)
+            : recommendations.mealRecsId
                 .map((res) => (
                   <Meal
                     onClick={handleCurrentMeal}
                     refresh={refresh}
                     setRefresh={setRefresh}
-                    key={res.id}
-                    content={res}
+                    key={meals[res].id}
+                    content={meals[res]}
                     edit={false}
                   />
                 ))}
         </section>
+        ) : (
+          <section id="workouts">
+            {workoutMeal
+              ? workouts
+                  .sort((a, b) => b.id - a.id)
+                  .map((res) => (
+                    <Workout
+                      onClick={handleCurrentWorkout}
+                      refresh={refresh}
+                      setRefresh={setRefresh}
+                      key={res.id}
+                      content={res}
+                      edit={false}
+                    />
+                  ))
+              : meals
+                  .sort((a, b) => b.id - a.id)
+                  .map((res) => (
+                    <Meal
+                      onClick={handleCurrentMeal}
+                      refresh={refresh}
+                      setRefresh={setRefresh}
+                      key={res.id}
+                      content={res}
+                      edit={false}
+                    />
+                  ))}
+          </section>
+        ) }
         <section id="chat">
           {chatting && <Trainer />}
 
@@ -245,6 +308,9 @@ function Explore() {
         </button>
         <button onClick={handleChatting} className="round" id="chatButton">
           {chatting ? "Chat" : "None"}
+        </button>
+        <button onClick={recsOrNot} className="round" id="recs">
+          {recentOrRecommended ? "New" : "For You"}
         </button>
       </div>
     </>
