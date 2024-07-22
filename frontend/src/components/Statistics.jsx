@@ -33,9 +33,6 @@ function Statistics() {
           .then((data) => {
             // Handle successful response
             setUser(data[0]);
-          })
-          .catch((error) => {
-            console.error("Error fetching boards:", error);
           });
       }
     });
@@ -53,9 +50,6 @@ function Statistics() {
         .then((data) => {
           // Handle successful response
           setWorkouts(data);
-        })
-        .catch((error) => {
-          console.error("Error fetching boards:", error);
         });
 
       fetch(`http://localhost:3000/profiles/${user.uid}/meals`)
@@ -68,9 +62,6 @@ function Statistics() {
         .then((data) => {
           // Handle successful response
           setMeals(data);
-        })
-        .catch((error) => {
-          console.error("Error fetching boards:", error);
         });
     }
   }, [user]);

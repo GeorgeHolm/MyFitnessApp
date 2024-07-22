@@ -28,9 +28,8 @@ export function ProfileEdit(props) {
         bio: bio,
       }),
     })
-      .then((response) => response.json())
-      .catch((error) => console.error(error));
-
+      .then((response) => response.json());
+      
     props.setUser({
       id: props.user.id,
       email: props.user.email,

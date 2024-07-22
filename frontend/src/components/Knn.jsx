@@ -116,14 +116,16 @@ const Knn = (user, workouts, meals, profiles) => {
 
   //Find recommendation for user based off of 3 closest neighbors
 
-  let profIndex = profiles.map((prof, idx) => {
+  let profIndex = 0;
+
+  profiles.forEach((prof, idx) => {
     if (prof.id === user.id) {
-      return idx;
+      profIndex = idx;
     }
   });
 
-  let recsWithValuesWorkouts = nRecommendations(workoutMatrix, profIndex[0], 3);
-  let recsWithValuesMeals = nRecommendations(mealMatrix, profIndex[0], 3);
+  let recsWithValuesWorkouts = nRecommendations(workoutMatrix, profIndex, 3);
+  let recsWithValuesMeals = nRecommendations(mealMatrix, profIndex, 3);
 
   let recsIndexesWorkouts = [];
   let recsIndexesMeals = [];

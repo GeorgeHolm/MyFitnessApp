@@ -24,9 +24,6 @@ function DisplayMeal(props) {
             setIsLiked(
               data[0].likedMeals.some((meal) => meal.mealId === props.meal.id)
             );
-          })
-          .catch((error) => {
-            console.error("Error fetching boards:", error);
           });
       }
     });
@@ -50,7 +47,6 @@ function DisplayMeal(props) {
             }
           )
             .then((res) => setIsLiked(false))
-            .catch((error) => console.error(error));
         };
         asyncTouch();
       } else {
@@ -71,7 +67,6 @@ function DisplayMeal(props) {
             }
           )
             .then((res) => setIsLiked(true))
-            .catch((error) => console.error(error));
         };
         asyncTouch();
       }

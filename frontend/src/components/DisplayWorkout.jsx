@@ -37,9 +37,6 @@ function DisplayWorkout(props) {
               )
             );
           })
-          .catch((error) => {
-            console.error("Error fetching boards:", error);
-          });
       } 
     });
   }, [isLiked, props.workout]);
@@ -63,7 +60,6 @@ function DisplayWorkout(props) {
             }
           )
             .then((res) => setIsLiked(false))
-            .catch((error) => console.error(error));
         };
         asyncTouch();
       } else {
@@ -84,7 +80,6 @@ function DisplayWorkout(props) {
             }
           )
             .then((res) => setIsLiked(true))
-            .catch((error) => console.error(error));
         };
         asyncTouch();
       }
@@ -143,7 +138,6 @@ function DisplayWorkout(props) {
         .then((data) => {
           props.setRefresh(props.refresh + 1);
         })
-        .catch((error) => console.error(error));
     };
     asyncEditWorkout();
   };

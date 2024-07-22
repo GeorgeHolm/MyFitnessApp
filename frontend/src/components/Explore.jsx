@@ -54,9 +54,7 @@ function Explore() {
             // Handle successful response
             setWorkouts(data);
           })
-          .catch((error) => {
-            console.error("Error fetching boards:", error);
-          });
+
 
         fetch(`http://localhost:3000/meals`)
           .then((response) => {
@@ -69,9 +67,7 @@ function Explore() {
             // Handle successful response
             setMeals(data);
           })
-          .catch((error) => {
-            console.error("Error fetching boards:", error);
-          });
+
 
         fetch(`http://localhost:3000/profiles`)
           .then((response) => {
@@ -83,9 +79,6 @@ function Explore() {
           .then((data) => {
             // Handle successful response
             setProfiles(data);
-          })
-          .catch((error) => {
-            console.error("Error fetching boards:", error);
           });
 
         fetch(`http://localhost:3000/profiles/${prof.uid}`)
@@ -98,9 +91,6 @@ function Explore() {
           .then((data) => {
             // Handle successful response
             setUser(data[0]);
-          })
-          .catch((error) => {
-            console.error("Error fetching boards:", error);
           });
       }
     });
@@ -119,9 +109,6 @@ function Explore() {
           // Handle successful response
           setWorkouts(data);
         })
-        .catch((error) => {
-          console.error("Error fetching boards:", error);
-        });
 
       fetch(`http://localhost:3000/meals`)
         .then((response) => {
@@ -133,9 +120,6 @@ function Explore() {
         .then((data) => {
           // Handle successful response
           setMeals(data);
-        })
-        .catch((error) => {
-          console.error("Error fetching boards:", error);
         });
     }
   }, [modal, refresh, workoutMeal]);
@@ -177,7 +161,6 @@ function Explore() {
           }
         )
           .then((response) => response.json())
-          .catch((error) => console.error(error));
       };
       asyncTouch();
     }
@@ -205,7 +188,6 @@ function Explore() {
           }
         )
           .then((response) => response.json())
-          .catch((error) => console.error(error));
       };
       asyncTouch();
     }

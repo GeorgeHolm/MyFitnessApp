@@ -8,14 +8,11 @@ const Meal = (props) => {
         method: "DELETE",
       })
         .then((response) => response.json())
-        .catch((error) => console.error(error));
     };
 
     asyncDelete();
 
-    Promise.all([asyncDelete]).catch((error) => {
-      console.error(error);
-    });
+    Promise.all([asyncDelete]);
     props.setRefresh(props.refresh + 1);
   };
 
