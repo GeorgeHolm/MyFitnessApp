@@ -19,7 +19,7 @@ const Login = () => {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.log(errorCode, errorMessage)
+            console.error(errorCode, errorMessage)
         });
        
     }

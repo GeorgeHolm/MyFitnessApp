@@ -32,17 +32,15 @@ function DisplayWorkout(props) {
             // Handle successful response
             setUser(data[0]);
             setIsLiked(
-              data[0].likedWorkouts.some((workout) => workout.workoutId === props.workout.id)
+              data[0].likedWorkouts.some(
+                (workout) => workout.workoutId === props.workout.id
+              )
             );
           })
           .catch((error) => {
             console.error("Error fetching boards:", error);
           });
-      } else {
-        // User is signed out
-        // ...
-        console.log("user is logged out");
-      }
+      } 
     });
   }, [isLiked, props.workout]);
 

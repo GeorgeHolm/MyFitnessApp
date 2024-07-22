@@ -28,10 +28,6 @@ function DisplayMeal(props) {
           .catch((error) => {
             console.error("Error fetching boards:", error);
           });
-      } else {
-        // User is signed out
-        // ...
-        console.log("user is logged out");
       }
     });
   }, [isLiked, props.meal]);

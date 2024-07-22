@@ -23,13 +23,15 @@ const Meal = (props) => {
     e.stopPropagation();
 
     props.onClick(props.content);
-  }
+  };
 
   return (
     <div onClick={onClick} className="meal">
-      {props.edit && (<button onClick={deleteMeal} className="delete">
-        -
-      </button>)}
+      {props.edit && (
+        <button onClick={deleteMeal} className="delete">
+          -
+        </button>
+      )}
       <h2>Meal placeholder</h2>
       <p>{props.content.notes}</p>
       <p>calories: {props.content.totalCalories} cal</p>

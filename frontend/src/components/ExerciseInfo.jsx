@@ -4,7 +4,7 @@ import "./ExerciseInfo.css";
 const ExerciseInfo = (props) => {
   const checkToggleOff = (e) => {
     props.toggleInfo();
-  }
+  };
   return (
     <>
       {props.exercise ? (
@@ -20,7 +20,9 @@ const ExerciseInfo = (props) => {
           ))}
         </div>
       ) : (
-        <div onClick={checkToggleOff} className="exerciseInfo">No information on this exercise</div>
+        <div onClick={checkToggleOff} className="exerciseInfo">
+          No information on this exercise
+        </div>
       )}
     </>
   );

@@ -17,6 +17,7 @@ function Profile(props) {
       })
       .catch((error) => {
         // An error happened.
+        console.error(error);
       });
   };
 

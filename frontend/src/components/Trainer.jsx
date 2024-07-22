@@ -4,7 +4,7 @@ import { auth, generateContent } from "../firebase";
 import AIVisualization from "./AIVisualization";
 import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
-import  'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 import Accordion from "react-bootstrap/Accordion";
 

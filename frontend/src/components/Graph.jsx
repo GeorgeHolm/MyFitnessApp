@@ -42,22 +42,19 @@ const Graph = (props) => {
 
     yText.fillText(props.xAxis, props.width / 2, props.height * 0.95);
 
-    if(props.title) {
+    if (props.title) {
+      const title = canvas.getContext("2d");
+      title.textAlign = "center";
 
-        const title = canvas.getContext("2d");
-        title.textAlign = "center";
-
-        title.font = "30px Arial";
-        title.fillStyle = "black";
-        title.fillText(props.title, props.width / 2, props.height * 0.1);
+      title.font = "30px Arial";
+      title.fillStyle = "black";
+      title.fillText(props.title, props.width / 2, props.height * 0.1);
     }
-
 
     //workout data tracker
     let maxData = 0;
     let interval = 0;
     props.dataPoints.map((dataPoints) => {
-
       if (dataPoints.length > 0) {
         interval = (graphRatio * props.width) / dataPoints.length;
         dataPoints.map((point) => {
@@ -72,14 +69,14 @@ const Graph = (props) => {
       if (dataPoints.length > 0) {
         let vertTicFactor = 10;
         let color = "black";
-        if(colorIdx === 1) {
-            color = "blue";
+        if (colorIdx === 1) {
+          color = "blue";
         }
-        if(colorIdx === 2) {
-            color = "red";
+        if (colorIdx === 2) {
+          color = "red";
         }
-        if(colorIdx === 3) {
-            color = "purple";
+        if (colorIdx === 3) {
+          color = "purple";
         }
         for (let i = 0; i <= vertTicFactor; i++) {
           let tic = canvas.getContext("2d");
@@ -108,8 +105,6 @@ const Graph = (props) => {
         }
 
         dataPoints.map((dataPoint, idx) => {
-
-
           let coords = [
             idx * interval,
             (dataPoint / maxData) * graphRatio * props.height,
@@ -172,53 +167,56 @@ const Graph = (props) => {
             let i = j + 1;
             xSum += i;
             ySum += dataPoints[j];
-            xxSum += (i * i);
-            xySum += (i * dataPoints[j]);
+            xxSum += i * i;
+            xySum += i * dataPoints[j];
           }
           let slope =
             (count * xySum - xSum * ySum) / (count * xxSum - xSum * xSum);
           let intercept = ySum / count - (slope * xSum) / count;
 
           const findIntercept = (height) => {
-            return(height - intercept)/slope;
-          } 
+            return (height - intercept) / slope;
+          };
 
           const findPointSlope = (x, slo, inter) => {
-            return (slo * x +  inter);
+            return slo * x + inter;
           };
 
           const drawLine = (start, end, lineSlope, lineIntercept) => {
             let line = canvas.getContext("2d");
             line.beginPath();
             line.moveTo(
-              ((1 - graphRatio) / 2) * props.width + (start - 1)/(count) * graphRatio * props.width,
+              ((1 - graphRatio) / 2) * props.width +
+                ((start - 1) / count) * graphRatio * props.width,
               props.height -
-                ((findPointSlope(start, lineSlope, lineIntercept) / maxData) * graphRatio * props.height +
+                ((findPointSlope(start, lineSlope, lineIntercept) / maxData) *
+                  graphRatio *
+                  props.height +
                   ((1 - graphRatio) / 2) * props.height)
             );
-  
-  
+
             line.lineTo(
-              ((1 - graphRatio) / 2) * props.width +   (end - 1)/(count) * graphRatio  * props.width,
-                props.height -
-                ((findPointSlope(end, lineSlope, lineIntercept)  / maxData) * graphRatio * props.height +
+              ((1 - graphRatio) / 2) * props.width +
+                ((end - 1) / count) * graphRatio * props.width,
+              props.height -
+                ((findPointSlope(end, lineSlope, lineIntercept) / maxData) *
+                  graphRatio *
+                  props.height +
                   ((1 - graphRatio) / 2) * props.height)
             );
             line.strokeStyle = color;
-  
+
             line.stroke();
-          }
+          };
           let lineRatio = 1;
           //cannot cross borders of graph
-          if(slope > 0) {
-            lineRatio = Math.min(count + 1, findIntercept(maxData))/(count  + 1);
-          }
-          else {
-            lineRatio = Math.min(count + 1, findIntercept(0))/(count + 1);
+          if (slope > 0) {
+            lineRatio =
+              Math.min(count + 1, findIntercept(maxData)) / (count + 1);
+          } else {
+            lineRatio = Math.min(count + 1, findIntercept(0)) / (count + 1);
           }
           drawLine(1, lineRatio * (count + 1), slope, intercept);
-
-
         }
       }
     });

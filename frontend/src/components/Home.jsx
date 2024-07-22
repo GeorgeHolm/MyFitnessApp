@@ -71,10 +71,6 @@ function Home() {
           .catch((error) => {
             console.error("Error fetching boards:", error);
           });
-      } else {
-        // User is signed out
-        // ...
-        console.log("user is logged out");
       }
     });
   }, [modal]);
@@ -130,7 +126,6 @@ function Home() {
   };
 
   const handleCurrentMeal = (e) => {
-    console.log(e);
     setCurrentMeal(e);
   };
 
@@ -141,26 +136,30 @@ function Home() {
       <div className="flexbox">
         <section id="workouts">
           {workoutMeal
-            ? workouts.sort((a, b) => (b.id - a.id)).map((res) => (
-                <Workout
-                  onClick={handleCurrentWorkout}
-                  refresh={refresh}
-                  setRefresh={setRefresh}
-                  key={res.id}
-                  content={res}
-                  edit={true}
-                />
-              ))
-            : meals.sort((a, b) => (b.id - a.id)).map((res) => (
-                <Meal
-                  onClick={handleCurrentMeal}
-                  refresh={refresh}
-                  setRefresh={setRefresh}
-                  key={res.id}
-                  content={res}
-                  edit={true}
-                />
-              ))}
+            ? workouts
+                .sort((a, b) => b.id - a.id)
+                .map((res) => (
+                  <Workout
+                    onClick={handleCurrentWorkout}
+                    refresh={refresh}
+                    setRefresh={setRefresh}
+                    key={res.id}
+                    content={res}
+                    edit={true}
+                  />
+                ))
+            : meals
+                .sort((a, b) => b.id - a.id)
+                .map((res) => (
+                  <Meal
+                    onClick={handleCurrentMeal}
+                    refresh={refresh}
+                    setRefresh={setRefresh}
+                    key={res.id}
+                    content={res}
+                    edit={true}
+                  />
+                ))}
         </section>
         <section id="chat">
           {chatting && <Trainer />}

@@ -24,7 +24,7 @@ const Signup = () => {
           },
           body: JSON.stringify({
             email: user.email,
-            uid: user.uid
+            uid: user.uid,
           }),
         })
           .then((response) => response.json())

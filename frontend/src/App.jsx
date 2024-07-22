@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
@@ -7,9 +6,7 @@ import Login from "./components/Login";
 import Explore from "./components/Explore";
 import "./App.css";
 import Statistics from "./components/Statistics";
-import  'bootstrap/dist/css/bootstrap.min.css';
-
-
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (

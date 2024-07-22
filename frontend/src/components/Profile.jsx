@@ -11,9 +11,6 @@ function Profile() {
   useEffect(()=>{
     onAuthStateChanged(auth, (prof) => {
         if (prof) {
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/firebase.User
-        //   const uid = user.uid;
 
         fetch(`http://localhost:3000/profiles/${prof.uid}`)
         .then((response) => {
@@ -30,19 +27,12 @@ function Profile() {
           console.error("Error fetching boards:", error);
         });
 
-        } else {
-          // User is signed out
-          // ...
-          console.log("user is logged out")
         }
       });
      
 }, [])
 
-useEffect(() => {
-  console.log(user);
 
-}, [user]);
 
 const editProf = () => {
   setCurrentEdit(true);

@@ -102,10 +102,6 @@ function Explore() {
           .catch((error) => {
             console.error("Error fetching boards:", error);
           });
-      } else {
-        // User is signed out
-        // ...
-        console.log("user is logged out");
       }
     });
   }, [modal, refresh]);
@@ -222,9 +218,8 @@ function Explore() {
       <div className="flexbox">
         {recentOrRecommended ? (
           <section id="workouts">
-          {workoutMeal
-            ? recommendations.workoutRecsIndex
-                .map((res) => (
+            {workoutMeal
+              ? recommendations.workoutRecsIndex.map((res) => (
                   <Workout
                     onClick={handleCurrentWorkout}
                     refresh={refresh}
@@ -234,8 +229,7 @@ function Explore() {
                     edit={false}
                   />
                 ))
-            : recommendations.mealRecsId
-                .map((res) => (
+              : recommendations.mealRecsId.map((res) => (
                   <Meal
                     onClick={handleCurrentMeal}
                     refresh={refresh}
@@ -245,7 +239,7 @@ function Explore() {
                     edit={false}
                   />
                 ))}
-        </section>
+          </section>
         ) : (
           <section id="workouts">
             {workoutMeal
@@ -274,7 +268,7 @@ function Explore() {
                     />
                   ))}
           </section>
-        ) }
+        )}
         <section id="chat">
           {chatting && <Trainer />}
 

@@ -86,10 +86,7 @@ const PiChart = (props) => {
       context.fillStyle = "black";
       if (props.units) {
         context.fillText(
-          part[0] +
-            ": " +
-            (part[1]).toString() +
-            props.units,
+          part[0] + ": " + part[1].toString() + props.units,
           textAlignStart,
           (props.height * idx) / (1 + props.chartData.length) +
             (props.height * 0.5) / (1 + props.chartData.length)
