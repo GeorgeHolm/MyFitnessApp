@@ -75,13 +75,22 @@ app.get("/profiles/:uid", async (req, res) => {
 });
 
 app.get("/profiles", async (req, res) => {
-  const profiles = await prisma.profile.findMany();
+  const profiles = await prisma.profile.findMany({
+    include: {
+      likedWorkouts: true,
+      touchWorkouts: true,
+      likedMeals: true,
+      touchMeals: true,
+    },
+  });
   res.json(profiles);
 });
 
 app.get("/workouts", async (req, res) => {
   const workouts = await prisma.workout.findMany({
     include: {
+      profileLikes: true,
+      profileTouch: true,
       exercises: {
         include: {
           sets: true,
@@ -96,6 +105,8 @@ app.get("/meals", async (req, res) => {
   const meals = await prisma.meal.findMany({
     include: {
       foods: true,
+      profileLikes: true,
+      profileTouch: true,
     },
   });
   res.json(meals);
