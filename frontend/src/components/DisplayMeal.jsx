@@ -11,7 +11,7 @@ function DisplayMeal(props) {
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
-        fetch(`http://localhost:3000/profiles/${prof.uid}`)
+        fetch(`${import.meta.env.VITE_BACKEND_LINK}/profiles/${prof.uid}`)
           .then((response) => {
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
