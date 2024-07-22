@@ -4,9 +4,10 @@
 const Knn = (user, workouts, meals, profiles) => {
   const magnitude = (vect) => {
     let magVal = 0;
-    vect.map((num) => {
-      magVal += num * num;
+    vect.forEach(num => {
+        magVal += num * num;
     });
+
     return Math.sqrt(magVal);
   };
   const distance = (r1, r2) => {
@@ -19,10 +20,10 @@ const Knn = (user, workouts, meals, profiles) => {
     return cosinSimilarity;
   };
 
-  const getNeighbors = (train, testRow, numNeighbors) => {
+  const getNeighbors = (train, userRow, numNeighbors) => {
     let distances = [];
     train.map((trainRow) => {
-      let dist = distance(testRow, trainRow);
+      let dist = distance(userRow, trainRow);
       distances.push([trainRow, dist]);
     });
 
@@ -35,11 +36,11 @@ const Knn = (user, workouts, meals, profiles) => {
     return neighbors;
   };
 
-  const predictClassifications = (train, testRow, numNeighbors) => {
-    let neighbors = getNeighbors(train, testRow, numNeighbors);
+  const predictClassifications = (train, userRow, numNeighbors) => {
+    let neighbors = getNeighbors(train, userRow, numNeighbors);
     //Average out the nearest Neighbors
 
-    let rating = testRow.map((x) => 0.0);
+    let rating = userRow.map((x) => 0.0);
 
     neighbors.map((neighbor) => {
       neighbor.map((rate, idx) => {
