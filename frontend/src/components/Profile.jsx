@@ -4,6 +4,7 @@ import SearchBar from "./SearchBar";
 import ProfileEdit from "./ProfileEdit";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
+import getInfo from "./Requests";
 function Profile() {
   const [user, setUser] = useState();
   const [currentEdit, setCurrentEdit] = useState(false);
@@ -11,17 +12,7 @@ function Profile() {
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
-        fetch(`http://localhost:3000/profiles/${prof.uid}`)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json(); // Parse JSON data from the response
-          })
-          .then((data) => {
-            // Handle successful response
-            setUser(data[0]);
-          });
+        getInfo(`/profiles/${prof.uid}`, setUser, 0);
       }
     });
   }, []);

@@ -9,6 +9,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, generateContent } from "../firebase";
 import DisplayWorkout from "./DisplayWorkout";
 import DisplayMeal from "./DisplayMeal";
+import getInfo from "./Requests";
 
 function Home() {
   const [user, setUser] = useState();
@@ -27,70 +28,18 @@ function Home() {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
 
-        fetch(`http://localhost:3000/profiles/${prof.uid}/workouts`)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json(); // Parse JSON data from the response
-          })
-          .then((data) => {
-            // Handle successful response
-            setWorkouts(data);
-          })
-
-        fetch(`http://localhost:3000/profiles/${prof.uid}/meals`)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json(); // Parse JSON data from the response
-          })
-          .then((data) => {
-            // Handle successful response
-            setMeals(data);
-          })
-
-        fetch(`http://localhost:3000/profiles/${prof.uid}`)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json(); // Parse JSON data from the response
-          })
-          .then((data) => {
-            // Handle successful response
-            setUser(data[0]);
-          })
+        getInfo(`/profiles/${prof.uid}/workouts`, setWorkouts);
+        getInfo(`/profiles/${prof.uid}/meals`, setMeals);
+        getInfo(`/profiles/${prof.uid}`, setUser, 0);
+        
       }
     });
   }, [modal]);
 
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:3000/profiles/${user.uid}/workouts`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json(); // Parse JSON data from the response
-        })
-        .then((data) => {
-          // Handle successful response
-          setWorkouts(data);
-        });
-
-      fetch(`http://localhost:3000/profiles/${user.uid}/meals`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json(); // Parse JSON data from the response
-        })
-        .then((data) => {
-          // Handle successful response
-          setMeals(data);
-        })
+      getInfo(`/profiles/${user.uid}/workouts`, setWorkouts);
+      getInfo(`/profiles/${user.uid}/meals`, setMeals);
     }
   }, [modal, refresh, workoutMeal]);
 

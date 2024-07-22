@@ -5,6 +5,8 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import Graph from "./Graph";
 import PiChart from "./PiChart";
+import getInfo from "./Requests";
+
 function Statistics() {
   const [user, setUser] = useState();
   const [workouts, setWorkouts] = useState([]);
@@ -23,46 +25,15 @@ function Statistics() {
         // https://firebase.google.com/docs/reference/js/firebase.User
         //   const uid = user.uid;
 
-        fetch(`http://localhost:3000/profiles/${prof.uid}`)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json(); // Parse JSON data from the response
-          })
-          .then((data) => {
-            // Handle successful response
-            setUser(data[0]);
-          });
+        getInfo(`/profiles/${prof.uid}`, setUser, 0);
       }
     });
   }, []);
 
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:3000/profiles/${user.uid}/workouts`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json(); // Parse JSON data from the response
-        })
-        .then((data) => {
-          // Handle successful response
-          setWorkouts(data);
-        });
-
-      fetch(`http://localhost:3000/profiles/${user.uid}/meals`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json(); // Parse JSON data from the response
-        })
-        .then((data) => {
-          // Handle successful response
-          setMeals(data);
-        });
+      getInfo(`/profiles/${user.uid}/workouts`, setWorkouts);
+      getInfo(`/profiles/${user.uid}/meals`, setMeals);
     }
   }, [user]);
 
@@ -136,7 +107,11 @@ function Statistics() {
         <section id="half">
           {meals[0] && (
             <PiChart
-              chartData={[["protien", meals[0].totalProteins], ["carbs", meals[0].totalCarbs], ["fats", meals[0].totalFats]]}
+              chartData={[
+                ["protien", meals[0].totalProteins],
+                ["carbs", meals[0].totalCarbs],
+                ["fats", meals[0].totalFats],
+              ]}
               chartTotal={["grams", meals[0].totalGrams]}
               user={user}
               width={600}
@@ -147,7 +122,11 @@ function Statistics() {
           )}
           {meals[0] && (
             <PiChart
-              chartData={[["protien", meals[0].totalProteins], ["carbs", meals[0].totalCarbs], ["fats", meals[0].totalFats]]}
+              chartData={[
+                ["protien", meals[0].totalProteins],
+                ["carbs", meals[0].totalCarbs],
+                ["fats", meals[0].totalFats],
+              ]}
               chartTotal={["grams", meals[0].totalGrams]}
               user={user}
               width={600}

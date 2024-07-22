@@ -1,5 +1,4 @@
-//Custom hook that mimics useEffect but only runs after the initial load.
-//Use case: When you do not want to run a function on the initial load but only after dependancies have changed
+
 const Knn = (user, workouts, meals, profiles) => {
   const magnitude = (vect) => {
     let magVal = 0;
