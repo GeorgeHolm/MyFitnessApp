@@ -54,7 +54,6 @@ export function Modal(props) {
 
       workout.map((exercise) => {
         const asyncExercises = async () => {
-          //may need loading here
 
           let eid = 0;
 
