@@ -18,6 +18,7 @@
 
   .flexbox {
     display: flex;
+    flex-wrap: wrap;
   }
   #left {
     width: 20%;
@@ -27,12 +28,17 @@
 
   }
 
+  #right::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+
   #right {
     
     flex:1;
     height: 100vh;
     margin: 0;
     border: 1px black solid;
+    overflow-y: scroll;
   }
 
 body {
@@ -40,4 +46,8 @@ body {
     width: 100%;
     background-color: rgb(142, 201, 203);
 
+}
+
+.col {
+  flex: 1;
 }

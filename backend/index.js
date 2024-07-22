@@ -66,6 +66,18 @@ app.get("/profiles/:uid", async (req, res) => {
       touchWorkouts: true,
       likedMeals: true,
       touchMeals: true,
+      workouts: {
+        include: {
+          profileLikes: true,
+          profileTouch: true,
+          exercises: {
+            include: {
+              sets: true,
+            },
+          },
+        },
+      },
+      meals: true,
     },
   });
   if (!profile[0]) {
