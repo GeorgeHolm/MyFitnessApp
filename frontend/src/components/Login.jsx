@@ -15,13 +15,7 @@ const Login = () => {
             // Signed in
             const user = userCredential.user;
             navigate("/home")
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode, errorMessage)
         });
-       
     }
  
     return(

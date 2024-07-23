@@ -42,13 +42,11 @@ const Exercise = (props) => {
     setInfoPopup(!infoPopup);
   };
 
-
   useEffect(() => {
     if (props.data.id) {
       setExerciseName(props.data.name);
     }
   }, [props.data]);
-
 
   useEffectAfter(() => {
     if (props.data.id) {
@@ -65,10 +63,9 @@ const Exercise = (props) => {
     }
   }, [exerciseName]);
 
-
   const deleteExercise = () => {
     props.deleteExercise(props.index);
-  }
+  };
 
   const deleteSet = (index) => {
     const updatedWorkout = props.workout.map((c, i) => {
@@ -84,7 +81,7 @@ const Exercise = (props) => {
       }
     });
     props.setWorkout(updatedWorkout);
-  }
+  };
 
   return (
     <div className="exercise">
@@ -125,7 +122,9 @@ const Exercise = (props) => {
               <option key={exerciseIdx} value={exercise.name} />
             ))}
           </datalist>
-          <button onClick={deleteExercise} className="info deleteButton">x</button>
+          <button onClick={deleteExercise} className="info deleteButton">
+            x
+          </button>
         </span>
       </div>
 

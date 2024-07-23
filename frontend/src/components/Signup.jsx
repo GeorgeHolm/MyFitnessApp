@@ -24,20 +24,12 @@ const Signup = () => {
           },
           body: JSON.stringify({
             email: user.email,
-            uid: user.uid
+            uid: user.uid,
           }),
         })
-          .then((response) => response.json())
-          .catch((error) => console.error(error));
-
+          .then((response) => response.json());
+          
         navigate("/login");
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error(errorCode, errorMessage);
-        // ..
       });
   };
 

@@ -15,32 +15,30 @@ export function ProfileEdit(props) {
     e.preventDefault();
 
     fetch(`${import.meta.env.VITE_BACKEND_LINK}/profiles/${props.user.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: props.user.email,
-          uid: props.user.uid,
-          name: name,
-          sex: sex,
-          age: Number(age),
-          bio: bio
-        }),
-      })
-        .then((response) => response.json())
-        .catch((error) => console.error(error));
-
-
-        props.setUser({
-            id: props.user.id,
-            email: props.user.email,
-            uid: props.user.uid,
-            name: name,
-            sex: sex,
-            age: Number(age),
-            bio: bio
-          });
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: props.user.email,
+        uid: props.user.uid,
+        name: name,
+        sex: sex,
+        age: Number(age),
+        bio: bio,
+      }),
+    })
+      .then((response) => response.json());
+      
+    props.setUser({
+      id: props.user.id,
+      email: props.user.email,
+      uid: props.user.uid,
+      name: name,
+      sex: sex,
+      age: Number(age),
+      bio: bio,
+    });
   };
 
   return (
@@ -65,7 +63,7 @@ export function ProfileEdit(props) {
           <label>
             Sex:
             <select required onChange={(e) => setSex(e.target.value)}>
-            <option>Choose Sex</option>
+              <option>Choose Sex</option>
 
               <option value={"Male"}>Male</option>
               <option value={"Female"}>Female</option>

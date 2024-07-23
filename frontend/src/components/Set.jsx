@@ -3,8 +3,8 @@ import "./Set.css";
 import { useState, useEffect } from "react";
 
 const Set = (props) => {
-  const [weight, setWeight] = useState();
-  const [reps, setReps] = useState();
+  const [weight, setWeight] = useState(0);
+  const [reps, setReps] = useState(0);
 
   const handleWeight = (e) => {
     if (!Number(e.target.value)) {
@@ -21,7 +21,7 @@ const Set = (props) => {
   };
 
   useEffect(() => {
-    if(props.data.id) {
+    if (props.data.id) {
       setWeight(props.data.weight);
       setReps(props.data.reps);
     }
@@ -46,12 +46,9 @@ const Set = (props) => {
     props.setWorkout(updatedWorkout);
   }, [weight, reps]);
 
-
   const deleteSet = () => {
     props.deleteSet(props.setIndex);
   };
-
-
 
   return (
     <div className="exercise">
@@ -67,8 +64,9 @@ const Set = (props) => {
       <span>Reps:</span>
       <span>
         <input placeholder="0" type="text" onChange={handleReps} value={reps} />
-        <button onClick={deleteSet} className="info deleteButton">x</button>
-
+        <button onClick={deleteSet} className="info deleteButton">
+          x
+        </button>
       </span>
     </div>
   );

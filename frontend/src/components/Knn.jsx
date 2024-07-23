@@ -1,11 +1,9 @@
 
-//Custom hook that mimics useEffect but only runs after the initial load.
-//Use case: When you do not want to run a function on the initial load but only after dependancies have changed
 const Knn = (user, workouts, meals, profiles) => {
   const magnitude = (vect) => {
     let magVal = 0;
-    vect.forEach(num => {
-        magVal += num * num;
+    vect.forEach((num) => {
+      magVal += num * num;
     });
 
     return Math.sqrt(magVal);
@@ -100,7 +98,6 @@ const Knn = (user, workouts, meals, profiles) => {
     });
   });
 
-
   mealMatrix = mealMatrix.map((row, profileIndex) => {
     let profile = profiles[profileIndex];
     return row.map((element, mealIndex) => {
@@ -118,14 +115,16 @@ const Knn = (user, workouts, meals, profiles) => {
 
   //Find recommendation for user based off of 3 closest neighbors
 
-  let profIndex = profiles.map((prof, idx) => {
+  let profIndex = 0;
+
+  profiles.forEach((prof, idx) => {
     if (prof.id === user.id) {
-      return idx;
+      profIndex = idx;
     }
   });
 
-  let recsWithValuesWorkouts = nRecommendations(workoutMatrix, profIndex[0], 3);
-  let recsWithValuesMeals = nRecommendations(mealMatrix, profIndex[0], 3);
+  let recsWithValuesWorkouts = nRecommendations(workoutMatrix, profIndex, 3);
+  let recsWithValuesMeals = nRecommendations(mealMatrix, profIndex, 3);
 
   let recsIndexesWorkouts = [];
   let recsIndexesMeals = [];
@@ -138,10 +137,10 @@ const Knn = (user, workouts, meals, profiles) => {
   });
 
   let returnValue = {
-    "workoutRecsId" : recsIndexesWorkouts,
-    "workoutRecsIndex" : recsWithValuesWorkouts,
-    "mealRecsId" : recsIndexesMeals,
-    "mealRecsId" : recsWithValuesMeals
+    workoutRecsId: recsIndexesWorkouts,
+    workoutRecsIndex: recsWithValuesWorkouts,
+    mealRecsId: recsIndexesMeals,
+    mealRecsId: recsWithValuesMeals,
   };
 
   return returnValue;

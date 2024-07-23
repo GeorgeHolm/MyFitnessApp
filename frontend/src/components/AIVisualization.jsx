@@ -161,7 +161,7 @@ function AIVisualization(props) {
         //render circle given it is in the border of the image
         let newX = coord[0] + dummyForceArray[j][0];
         let newY = coord[1] - dummyForceArray[j][1];
-        let centerDist = Math.sqrt((newX  - 50) ** 2 + (newY - 50) ** 2);
+        let centerDist = Math.sqrt((newX - 50) ** 2 + (newY - 50) ** 2);
         if (centerDist <= 25) {
           circle(
             newX,
@@ -174,20 +174,19 @@ function AIVisualization(props) {
             color,
             1
           );
-        }
-        else if(centerDist <= 30){
-            //Further way from the  center you are the less visible it is
-            circle(
-                newX,
-                newY,
-                (10 *
-                  Math.abs(
-                    Math.cos(((j / 8 + 1) * i) / 6 + offset) + Math.sin(i + offset)
-                  )) /
-                  2,
-                color,
-                1 + (25 - centerDist)/5
-              );
+        } else if (centerDist <= 30) {
+          //Further way from the  center you are the less visible it is
+          circle(
+            newX,
+            newY,
+            (10 *
+              Math.abs(
+                Math.cos(((j / 8 + 1) * i) / 6 + offset) + Math.sin(i + offset)
+              )) /
+              2,
+            color,
+            1 + (25 - centerDist) / 5
+          );
         }
       }
       setForceArray(dummyForceArray);

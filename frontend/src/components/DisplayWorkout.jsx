@@ -21,7 +21,7 @@ function DisplayWorkout(props) {
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
-        fetch(`http://localhost:3000/profiles/${prof.uid}`)
+        fetch(`${import.meta.env.VITE_BACKEND_LINK}/profiles/${prof.uid}`)
           .then((response) => {
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
@@ -32,17 +32,12 @@ function DisplayWorkout(props) {
             // Handle successful response
             setUser(data[0]);
             setIsLiked(
-              data[0].likedWorkouts.some((workout) => workout.workoutId === props.workout.id)
+              data[0].likedWorkouts.some(
+                (workout) => workout.workoutId === props.workout.id
+              )
             );
           })
-          .catch((error) => {
-            console.error("Error fetching boards:", error);
-          });
-      } else {
-        // User is signed out
-        // ...
-        console.log("user is logged out");
-      }
+      } 
     });
   }, [isLiked, props.workout]);
 
@@ -65,7 +60,6 @@ function DisplayWorkout(props) {
             }
           )
             .then((res) => setIsLiked(false))
-            .catch((error) => console.error(error));
         };
         asyncTouch();
       } else {
@@ -86,7 +80,6 @@ function DisplayWorkout(props) {
             }
           )
             .then((res) => setIsLiked(true))
-            .catch((error) => console.error(error));
         };
         asyncTouch();
       }
@@ -145,7 +138,6 @@ function DisplayWorkout(props) {
         .then((data) => {
           props.setRefresh(props.refresh + 1);
         })
-        .catch((error) => console.error(error));
     };
     asyncEditWorkout();
   };

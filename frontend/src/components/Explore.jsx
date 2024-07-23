@@ -11,6 +11,7 @@ import DisplayWorkout from "./DisplayWorkout";
 import DisplayMeal from "./DisplayMeal";
 import Knn from "./Knn";
 import useEffectAfter from "./useEffectAfter";
+import getInfo from "./Requests";
 
 function Explore() {
   const [user, setUser] = useState();
@@ -40,107 +41,19 @@ function Explore() {
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-
-        fetch(`http://localhost:3000/workouts`)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json(); // Parse JSON data from the response
-          })
-          .then((data) => {
-            // Handle successful response
-            setWorkouts(data);
-          })
-          .catch((error) => {
-            console.error("Error fetching boards:", error);
-          });
-
-        fetch(`http://localhost:3000/meals`)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json(); // Parse JSON data from the response
-          })
-          .then((data) => {
-            // Handle successful response
-            setMeals(data);
-          })
-          .catch((error) => {
-            console.error("Error fetching boards:", error);
-          });
-
-        fetch(`http://localhost:3000/profiles`)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json(); // Parse JSON data from the response
-          })
-          .then((data) => {
-            // Handle successful response
-            setProfiles(data);
-          })
-          .catch((error) => {
-            console.error("Error fetching boards:", error);
-          });
-
-        fetch(`http://localhost:3000/profiles/${prof.uid}`)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json(); // Parse JSON data from the response
-          })
-          .then((data) => {
-            // Handle successful response
-            setUser(data[0]);
-          })
-          .catch((error) => {
-            console.error("Error fetching boards:", error);
-          });
-      } else {
-        // User is signed out
-        // ...
-        console.log("user is logged out");
+          getInfo(`/workouts`, setWorkouts);
+          getInfo(`/meals`, setMeals);
+          getInfo(`/profiles`,setProfiles);
+          getInfo(`/profiles/${prof.uid}`, setUser, 0);
       }
     });
   }, [modal, refresh]);
 
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:3000/workouts`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json(); // Parse JSON data from the response
-        })
-        .then((data) => {
-          // Handle successful response
-          setWorkouts(data);
-        })
-        .catch((error) => {
-          console.error("Error fetching boards:", error);
-        });
+      getInfo(`/workouts`, setWorkouts);
+      getInfo(`/meals`, setMeals);
 
-      fetch(`http://localhost:3000/meals`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json(); // Parse JSON data from the response
-        })
-        .then((data) => {
-          // Handle successful response
-          setMeals(data);
-        })
-        .catch((error) => {
-          console.error("Error fetching boards:", error);
-        });
     }
   }, [modal, refresh, workoutMeal]);
 
@@ -181,7 +94,6 @@ function Explore() {
           }
         )
           .then((response) => response.json())
-          .catch((error) => console.error(error));
       };
       asyncTouch();
     }
@@ -209,7 +121,6 @@ function Explore() {
           }
         )
           .then((response) => response.json())
-          .catch((error) => console.error(error));
       };
       asyncTouch();
     }
@@ -222,9 +133,8 @@ function Explore() {
       <div className="flexbox">
         {recentOrRecommended ? (
           <section id="workouts">
-          {workoutMeal
-            ? recommendations.workoutRecsIndex
-                .map((res) => (
+            {workoutMeal
+              ? recommendations.workoutRecsIndex.map((res) => (
                   <Workout
                     onClick={handleCurrentWorkout}
                     refresh={refresh}
@@ -234,18 +144,17 @@ function Explore() {
                     edit={false}
                   />
                 ))
-            : recommendations.mealRecsId
-                .map((res) => (
+              : recommendations.mealRecsId.map((res) => (
                   <Meal
                     onClick={handleCurrentMeal}
                     refresh={refresh}
                     setRefresh={setRefresh}
-                    key={meals[res].id}
-                    content={meals[res]}
+                    key={meals[res[1]].id}
+                    content={meals[res[1]]}
                     edit={false}
                   />
                 ))}
-        </section>
+          </section>
         ) : (
           <section id="workouts">
             {workoutMeal
@@ -274,7 +183,7 @@ function Explore() {
                     />
                   ))}
           </section>
-        ) }
+        )}
         <section id="chat">
           {chatting && <Trainer />}
 

@@ -9,16 +9,12 @@ const Workout = (props) => {
         {
           method: "DELETE",
         }
-      )
-        .then((response) => response.json())
-        .catch((error) => console.error(error));
+      ).then((response) => response.json());
     };
 
     asyncDelete();
 
-    Promise.all([asyncDelete]).catch((error) => {
-      console.error(error);
-    });
+    Promise.all([asyncDelete]);
 
     props.setRefresh(props.refresh + 1);
   };

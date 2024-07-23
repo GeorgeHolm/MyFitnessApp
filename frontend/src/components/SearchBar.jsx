@@ -14,9 +14,6 @@ function Profile(props) {
       .then(() => {
         // Sign-out successful.
         navigate("/");
-      })
-      .catch((error) => {
-        // An error happened.
       });
   };
 

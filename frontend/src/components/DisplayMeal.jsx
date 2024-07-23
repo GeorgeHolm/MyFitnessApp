@@ -11,7 +11,7 @@ function DisplayMeal(props) {
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
-        fetch(`http://localhost:3000/profiles/${prof.uid}`)
+        fetch(`${import.meta.env.VITE_BACKEND_LINK}/profiles/${prof.uid}`)
           .then((response) => {
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
@@ -24,14 +24,7 @@ function DisplayMeal(props) {
             setIsLiked(
               data[0].likedMeals.some((meal) => meal.mealId === props.meal.id)
             );
-          })
-          .catch((error) => {
-            console.error("Error fetching boards:", error);
           });
-      } else {
-        // User is signed out
-        // ...
-        console.log("user is logged out");
       }
     });
   }, [isLiked, props.meal]);
@@ -54,7 +47,6 @@ function DisplayMeal(props) {
             }
           )
             .then((res) => setIsLiked(false))
-            .catch((error) => console.error(error));
         };
         asyncTouch();
       } else {
@@ -75,7 +67,6 @@ function DisplayMeal(props) {
             }
           )
             .then((res) => setIsLiked(true))
-            .catch((error) => console.error(error));
         };
         asyncTouch();
       }

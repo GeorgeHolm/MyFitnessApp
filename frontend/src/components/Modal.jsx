@@ -49,14 +49,11 @@ export function Modal(props) {
         .then((data) => {
           wid = data.id;
         })
-        .catch((error) => console.error(error));
 
-      Promise.all([workoutCreation]).catch((error) => {
-        console.error(error);
-      });
+      Promise.all([workoutCreation]);
+
       workout.map((exercise) => {
         const asyncExercises = async () => {
-          //may need loading here
 
           let eid = 0;
 
@@ -76,11 +73,8 @@ export function Modal(props) {
             .then((data) => {
               eid = data.id;
             })
-            .catch((error) => console.error(error));
 
-          Promise.all([exerciseCreation]).catch((error) => {
-            console.error(error);
-          });
+          Promise.all([exerciseCreation]);
 
           exercise.sets.map((set) => {
             const asyncSets = async () => {
@@ -98,12 +92,8 @@ export function Modal(props) {
                   }),
                 }
               )
-                .then((response) => response.json())
-                .catch((error) => console.error(error));
-
-              Promise.all([setCreation]).catch((error) => {
-                console.error(error);
-              });
+                .then((response) => response.json());
+              Promise.all([setCreation]);
             };
             asyncSets();
           });
@@ -157,9 +147,6 @@ export function Modal(props) {
         dummy.foods = limitedFoods;
 
         setMealSearchResults(dummy);
-      })
-      .catch((error) => {
-        console.error("Error fetching boards:", error);
       });
   };
 
@@ -206,9 +193,7 @@ export function Modal(props) {
         .then((response) => response.json())
         .then((data) => {
           mid = data.id;
-        })
-        .catch((error) => console.error(error));
-
+        });
       {
         meal.map((foodItem) => {
           async function addFoodAsync() {
@@ -241,7 +226,6 @@ export function Modal(props) {
               }
             )
               .then((response) => response.json())
-              .catch((error) => console.error(error));
           }
           addFoodAsync();
         });
