@@ -30,6 +30,8 @@ app.get("/profiles/:uid/workouts", async (req, res) => {
   const workouts = await prisma.workout.findMany({
     where: { profileId: profile[0].id },
     include: {
+      profileLikes: true,
+      profileTouch: true,
       exercises: {
         include: {
           sets: true,
@@ -50,6 +52,8 @@ app.get("/profiles/:uid/meals", async (req, res) => {
   const meals = await prisma.meal.findMany({
     where: { profileId: profile[0].id },
     include: {
+      profileLikes: true,
+      profileTouch: true,
       foods: true,
     },
   });

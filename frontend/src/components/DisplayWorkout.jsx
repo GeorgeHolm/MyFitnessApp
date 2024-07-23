@@ -18,6 +18,7 @@ function DisplayWorkout(props) {
 
   const [user, setUser] = useState([]);
   const [isLiked, setIsLiked] = useState(false);
+  const [numLikes, setNumLikes] = useState(0);
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
@@ -36,8 +37,8 @@ function DisplayWorkout(props) {
                 (workout) => workout.workoutId === props.workout.id
               )
             );
-          })
-      } 
+          });
+      }
     });
   }, [isLiked, props.workout]);
 
@@ -45,6 +46,7 @@ function DisplayWorkout(props) {
     if (user) {
       //cannot say why I need the user here but it is necessary!
       if (isLiked) {
+        setNumLikes(numLikes - 1);
         const asyncTouch = async () => {
           const unlikeWorkout = await fetch(
             `${import.meta.env.VITE_BACKEND_LINK}/likeworkout`,
@@ -58,12 +60,12 @@ function DisplayWorkout(props) {
                 id: props.user.id,
               }),
             }
-          )
-            .then((res) => setIsLiked(false))
+          ).then((res) => setIsLiked(false));
         };
         asyncTouch();
       } else {
         //User like workout
+        setNumLikes(numLikes + 1);
 
         const asyncTouch = async () => {
           const likeWorkout = await fetch(
@@ -78,8 +80,7 @@ function DisplayWorkout(props) {
                 id: props.user.id,
               }),
             }
-          )
-            .then((res) => setIsLiked(true))
+          ).then((res) => setIsLiked(true));
         };
         asyncTouch();
       }
@@ -110,6 +111,7 @@ function DisplayWorkout(props) {
     if (props.workout.exercises) {
       setWorkout(props.workout.exercises);
     }
+    setNumLikes(props.workout.profileLikes?.length);
   }, [props.workout]);
 
   useEffect(() => {
@@ -137,7 +139,7 @@ function DisplayWorkout(props) {
         .then((response) => response.json())
         .then((data) => {
           props.setRefresh(props.refresh + 1);
-        })
+        });
     };
     asyncEditWorkout();
   };
@@ -151,8 +153,16 @@ function DisplayWorkout(props) {
 
   return (
     <div className="workoutDisplay">
-      {props.user && (
-        <button onClick={likeButton}>{isLiked ? "Unlike" : "Like"}</button>
+      {props.user ? (
+        <div>
+          <button onClick={likeButton}>
+            {isLiked ? "Unlike" : "Like"}: {numLikes}
+          </button>
+        </div>
+      ) : (
+        <div>
+          <p>Post like count: {numLikes}</p>
+        </div>
       )}
       <PiChart
         chartData={chartData}
