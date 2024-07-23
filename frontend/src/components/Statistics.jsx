@@ -6,6 +6,9 @@ import { auth } from "../firebase";
 import Graph from "./Graph";
 import PiChart from "./PiChart";
 import getInfo from "./Requests";
+import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
+import Dropdown from "react-bootstrap/Dropdown";
+import SplitButton from 'react-bootstrap/SplitButton';
 
 function Statistics() {
   const [user, setUser] = useState();
@@ -17,6 +20,16 @@ function Statistics() {
   const [totalCarbs, setTotalCarbs] = useState([]);
   const [totalProteins, setTotalProteins] = useState([]);
   const [totalFats, setTotalFats] = useState([]);
+  const [volumeRegression, setVolumeRegression] = useState([false]);
+  const [calorieRegression, setCalorieRegression] = useState([false]);
+  const [gramRegression, setGramRegression] = useState([
+    false,
+    false,
+    false,
+    false,
+  ]);
+  const [gramsPercent, setGramsPercent] = useState(false);
+  const [mealIndex, setMealIndex] = useState(0);
 
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
@@ -74,113 +87,150 @@ function Statistics() {
       setTotalFats(fatTemp);
     }
   }, [workouts, meals]);
+
+  const selectedVolume = (selected) => {
+    setVolumeRegression(
+      volumeRegression.map((reg, idx) =>
+        selected.some((select) => select === String(idx))
+      )
+    );
+  };
+
+  const selectedCalories = (selected) => {
+    setCalorieRegression(
+      calorieRegression.map((reg, idx) =>
+        selected.some((select) => select === String(idx))
+      )
+    );
+  };
+
+  const selectedGrams = (selected) => {
+    setGramRegression(
+      gramRegression.map((reg, idx) =>
+        selected.some((select) => select === String(idx))
+      )
+    );
+  };
+
+  const chooseChartFormat = (eventKey) => {
+    if (eventKey === "#/%") {
+      setGramsPercent(false);
+    }
+    if (eventKey === "#/g") {
+      setGramsPercent(true);
+    }
+  };
+
+  const selectMeal = (eventKey) => {
+    setMealIndex(Number(eventKey.substring(2)));
+  };
   return (
     <>
       <SearchBar user={user} />
       <div className="flexbox">
         <section id="half">
           {totalVolumes.length > 0 && (
-            <Graph
-              dataPoints={[totalVolumes]}
-              xAxis={"workout #"}
-              yAxis={"volume (lbs)"}
-              user={user}
-              width={600}
-              height={500}
-              linearRegression={[true]}
-              title={"Graph of Volume"}
-            />
-          )}
-          {totalVolumes.length > 0 && (
-            <Graph
-              dataPoints={[totalVolumes]}
-              xAxis={"workout #"}
-              yAxis={"volume (lbs)"}
-              user={user}
-              width={600}
-              height={500}
-              linearRegression={[false]}
-              title={"Graph of Volume"}
-            />
+            <div className="container">
+              <DropdownMultiselect
+                options={[{ key: 0, label: "Volume" }]}
+                name="Select Volume Regression"
+                handleOnChange={selectedVolume}
+              />
+              <Graph
+                dataPoints={[totalVolumes]}
+                xAxis={"workout #"}
+                yAxis={"volume (lbs)"}
+                user={user}
+                width={650}
+                height={500}
+                linearRegression={volumeRegression}
+                title={"Graph of Volume"}
+              />
+            </div>
           )}
         </section>
         <section id="half">
           {meals[0] && (
-            <PiChart
-              chartData={[
-                ["protien", meals[0].totalProteins],
-                ["carbs", meals[0].totalCarbs],
-                ["fats", meals[0].totalFats],
-              ]}
-              chartTotal={["grams", meals[0].totalGrams]}
-              user={user}
-              width={600}
-              height={500}
-              title={"Meal one macros"}
-              units={"g"}
-            />
-          )}
-          {meals[0] && (
-            <PiChart
-              chartData={[
-                ["protien", meals[0].totalProteins],
-                ["carbs", meals[0].totalCarbs],
-                ["fats", meals[0].totalFats],
-              ]}
-              chartTotal={["grams", meals[0].totalGrams]}
-              user={user}
-              width={600}
-              height={500}
-              title={"Meal one macros"}
-            />
-          )}
-          {totalCalories.length > 0 && (
-            <Graph
-              dataPoints={[totalCalories]}
-              xAxis={"meal #"}
-              yAxis={"calories"}
-              user={user}
-              width={600}
-              height={500}
-              linearRegression={[true]}
-              title={"Graph of Calories"}
-            />
+            <div className="container">
+                <SplitButton
+                  id="dropdown-basic-button"
+                  title="Units"
+                  onSelect={chooseChartFormat}
+                >
+                  <Dropdown.Item href="#/%">%</Dropdown.Item>
+                  <Dropdown.Item href="#/g">g</Dropdown.Item>
+                </SplitButton>
+
+                <SplitButton
+                  id="dropdown-basic-button"
+                  title="Select Meal"
+                  onSelect={selectMeal}
+                >
+                  {meals.map((meal, idx) => (
+                    <Dropdown.Item key={idx} href={`#/${idx}`}>{idx}</Dropdown.Item>
+                  ))}
+                  
+                  
+                </SplitButton>
+
+              <PiChart
+                chartData={[
+                  ["protien", meals[mealIndex].totalProteins],
+                  ["carbs", meals[mealIndex].totalCarbs],
+                  ["fats", meals[mealIndex].totalFats],
+                ]}
+                chartTotal={["grams", meals[mealIndex].totalGrams]}
+                user={user}
+                width={650}
+                height={500}
+                title={"Meal one macros"}
+                units={gramsPercent && "g"}
+              />
+            </div>
           )}
           {totalCalories.length > 0 && (
-            <Graph
-              dataPoints={[totalCalories]}
-              xAxis={"meal #"}
-              yAxis={"calories"}
-              user={user}
-              width={600}
-              height={500}
-              linearRegression={[false]}
-              title={"Graph of Calories"}
-            />
+            <div className="container">
+              <DropdownMultiselect
+                options={[{ key: 0, label: "Calories" }]}
+                name="Select Colorie Regression"
+                handleOnChange={selectedCalories}
+              />
+              <Graph
+                dataPoints={[totalCalories]}
+                xAxis={"meal #"}
+                yAxis={"calories"}
+                user={user}
+                width={650}
+                height={500}
+                linearRegression={calorieRegression}
+                title={"Graph of Calories"}
+              />{" "}
+            </div>
           )}
+
           {totalGrams.length > 0 && (
-            <Graph
-              dataPoints={[totalGrams, totalCarbs, totalFats, totalProteins]}
-              xAxis={"meal #"}
-              yAxis={"grams"}
-              user={user}
-              width={600}
-              height={500}
-              linearRegression={[true, false, false, false]}
-              title={"Grams for Meals"}
-            />
-          )}
-          {totalGrams.length > 0 && (
-            <Graph
-              dataPoints={[totalCarbs, totalFats, totalProteins]}
-              xAxis={"meal #"}
-              yAxis={"grams"}
-              user={user}
-              width={600}
-              height={500}
-              linearRegression={[true, false, true, false]}
-              title={"Grams for Meals"}
-            />
+            <div className="container">
+              <DropdownMultiselect
+                options={[
+                  { key: 0, label: "Total" },
+                  { key: 1, label: "Carbs" },
+                  { key: 2, label: "Fats" },
+                  { key: 3, label: "Proteins" },
+                ]}
+                name="Select Gram Regression"
+                handleOnChange={selectedGrams}
+              />
+              <Graph
+                dataPoints={[totalGrams, totalCarbs, totalFats, totalProteins]}
+                xAxis={"meal #"}
+                yAxis={"grams"}
+                user={user}
+                width={650}
+                height={500}
+                linearRegression={gramRegression}
+                title={"Grams for Meals"}
+              />{" "}
+            </div>
           )}
         </section>
       </div>

@@ -33,7 +33,6 @@ function Profile() {
 
   useEffectAfter(() => {
     if (user) {
-      console.log(user);
 
       let maxBench = 0;
       let maxSquat = 0;
@@ -42,10 +41,9 @@ function Profile() {
       //Find the maxes for the user
       user.workouts?.forEach((workout) => {
         workout.exercises.forEach((exercise) => {
-          console.log(exercise);
           if (
             exercise.name.toLowerCase() === "chest press" ||
-            exercise.name.toLowerCase === "bench press"
+            exercise.name.toLowerCase() === "bench press"
           ) {
             exercise.sets.forEach((set) => {
               if (set.weight > maxBench) {
@@ -56,7 +54,7 @@ function Profile() {
 
           if (
             exercise.name.toLowerCase() === "back squat" ||
-            exercise.name.toLowerCase === "squat"
+            exercise.name.toLowerCase() === "squat"
           ) {
             exercise.sets.forEach((set) => {
               if (set.weight > maxSquat) {
