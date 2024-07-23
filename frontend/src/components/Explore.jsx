@@ -41,10 +41,10 @@ function Explore() {
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
-          getInfo(`/workouts`, setWorkouts);
-          getInfo(`/meals`, setMeals);
-          getInfo(`/profiles`,setProfiles);
-          getInfo(`/profiles/${prof.uid}`, setUser, 0);
+        getInfo(`/workouts`, setWorkouts);
+        getInfo(`/meals`, setMeals);
+        getInfo(`/profiles`, setProfiles);
+        getInfo(`/profiles/${prof.uid}`, setUser, 0);
       }
     });
   }, [modal, refresh]);
@@ -53,7 +53,6 @@ function Explore() {
     if (user) {
       getInfo(`/workouts`, setWorkouts);
       getInfo(`/meals`, setMeals);
-
     }
   }, [modal, refresh, workoutMeal]);
 
@@ -92,8 +91,7 @@ function Explore() {
               id: user.id,
             }),
           }
-        )
-          .then((response) => response.json())
+        ).then((response) => response.json());
       };
       asyncTouch();
     }
@@ -119,8 +117,7 @@ function Explore() {
               id: user.id,
             }),
           }
-        )
-          .then((response) => response.json())
+        ).then((response) => response.json());
       };
       asyncTouch();
     }
@@ -134,32 +131,42 @@ function Explore() {
         {recentOrRecommended ? (
           <section id="workouts">
             {workoutMeal
-              ? recommendations.workoutRecsIndex.map((res) => (
-                  <Workout
-                    onClick={handleCurrentWorkout}
-                    refresh={refresh}
-                    setRefresh={setRefresh}
-                    key={workouts[res[1]].id}
-                    content={workouts[res[1]]}
-                    edit={false}
-                  />
-                ))
-              : recommendations.mealRecsId.map((res) => (
-                  <Meal
-                    onClick={handleCurrentMeal}
-                    refresh={refresh}
-                    setRefresh={setRefresh}
-                    key={meals[res[1]].id}
-                    content={meals[res[1]]}
-                    edit={false}
-                  />
-                ))}
+              ? recommendations.workoutRecsIndex.map((res) => {
+                  if (!workouts[res[1]].private) {
+                    return (
+                      <Workout
+                        onClick={handleCurrentWorkout}
+                        refresh={refresh}
+                        setRefresh={setRefresh}
+                        key={workouts[res[1]].id}
+                        content={workouts[res[1]]}
+                        edit={false}
+                      />
+                    );
+                  }
+                })
+              : recommendations.mealRecsId
+                  .map((res) => {
+                    if (!meals[res[1]].private) {
+                      return (
+                        <Meal
+                          onClick={handleCurrentMeal}
+                          refresh={refresh}
+                          setRefresh={setRefresh}
+                          key={meals[res[1]].id}
+                          content={meals[res[1]]}
+                          edit={false}
+                        />
+                      );
+                    }
+                  })}
           </section>
         ) : (
           <section id="workouts">
             {workoutMeal
               ? workouts
                   .sort((a, b) => b.id - a.id)
+                  .filter((a) => a.private === false)
                   .map((res) => (
                     <Workout
                       onClick={handleCurrentWorkout}
@@ -172,6 +179,7 @@ function Explore() {
                   ))
               : meals
                   .sort((a, b) => b.id - a.id)
+                  .filter((a) => a.private === false)
                   .map((res) => (
                     <Meal
                       onClick={handleCurrentMeal}

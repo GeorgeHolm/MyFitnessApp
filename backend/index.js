@@ -258,11 +258,12 @@ app.post("/workouts/:id/exercises", async (req, res) => {
 
 app.post("/profiles/:id/workouts", async (req, res) => {
   const { id } = req.params;
-  const { notes } = req.body;
+  const { notes, private } = req.body;
   const newWorkout = await prisma.workout.create({
     data: {
       notes,
       profileId: Number(id),
+      private,
     },
   });
   res.json(newWorkout);
@@ -294,6 +295,7 @@ app.post("/profiles/:id/meals", async (req, res) => {
     totalFats,
     totalProteins,
     totalGrams,
+    private,
   } = req.body;
   const newMeal = await prisma.meal.create({
     data: {
@@ -304,6 +306,7 @@ app.post("/profiles/:id/meals", async (req, res) => {
       totalProteins,
       totalGrams,
       profileId: Number(id),
+      private,
     },
   });
   res.json(newMeal);
