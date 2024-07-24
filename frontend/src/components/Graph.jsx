@@ -4,18 +4,18 @@ import { useRef, useState, useEffect } from "react";
 
 const Graph = (props) => {
   const canvasRef = useRef(null);
-
-  useEffect(() => {
+  const render = () => {
     const graphRatio = 0.65;
-
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
+    // Clear the canvas
+    context.clearRect(0, 0, props.width, props.height);
     context.fillStyle = "white";
     context.fillRect(0, 0, props.width, props.height);
 
     // Draw canvas here...
 
-    const border = canvas.getContext("2d");
+    const border = context;
     border.rect(
       ((1 - graphRatio) / 2) * props.width,
       ((1 - graphRatio) / 2) * props.height,
@@ -28,14 +28,14 @@ const Graph = (props) => {
 
     //text setup
 
-    const xText = canvas.getContext("2d");
+    const xText = context;
     xText.font = "11px Arial";
     xText.fillStyle = "black";
     xText.textAlign = "left";
 
     xText.fillText(props.yAxis, 5, props.height / 2);
 
-    const yText = canvas.getContext("2d");
+    const yText = context;
     yText.font = "11px Arial";
     yText.fillStyle = "black";
     yText.textAlign = "left";
@@ -43,7 +43,7 @@ const Graph = (props) => {
     yText.fillText(props.xAxis, props.width / 2, props.height * 0.95);
 
     if (props.title) {
-      const title = canvas.getContext("2d");
+      const title = context;
       title.textAlign = "center";
 
       title.font = "30px Arial";
@@ -79,7 +79,7 @@ const Graph = (props) => {
           color = "purple";
         }
         for (let i = 0; i <= vertTicFactor; i++) {
-          let tic = canvas.getContext("2d");
+          let tic = context;
           tic.beginPath();
           tic.moveTo(
             ((1 - graphRatio) / 2) * props.width - 2,
@@ -93,7 +93,7 @@ const Graph = (props) => {
           );
           tic.stroke();
 
-          const pointText = canvas.getContext("2d");
+          const pointText = context;
           pointText.font = "11px Arial";
           pointText.fillStyle = "black";
           pointText.fillText(
@@ -112,7 +112,7 @@ const Graph = (props) => {
 
           let valsX = coords[0] + ((1 - graphRatio) / 2) * props.width;
 
-          let point = canvas.getContext("2d");
+          let point = context;
           point.beginPath();
           point.arc(
             valsX,
@@ -127,7 +127,7 @@ const Graph = (props) => {
           point.strokeStyle = color;
           point.stroke();
 
-          let tic = canvas.getContext("2d");
+          let tic = context;
           tic.strokeStyle = "black";
 
           tic.beginPath();
@@ -145,7 +145,7 @@ const Graph = (props) => {
           );
           tic.stroke();
 
-          const pointText = canvas.getContext("2d");
+          const pointText = context;
           pointText.font = "11px Arial";
           pointText.fillStyle = "black";
           pointText.fillText(
@@ -156,6 +156,7 @@ const Graph = (props) => {
               12
           );
         });
+        let line = context;
 
         if (props.linearRegression[colorIdx]) {
           let xSum = 0,
@@ -183,7 +184,6 @@ const Graph = (props) => {
           };
 
           const drawLine = (start, end, lineSlope, lineIntercept) => {
-            let line = canvas.getContext("2d");
             line.beginPath();
             line.moveTo(
               ((1 - graphRatio) / 2) * props.width +
@@ -209,18 +209,34 @@ const Graph = (props) => {
             line.stroke();
           };
           let lineRatio = 1;
+          let startingPoint = 1;
+
           //cannot cross borders of graph
           if (slope > 0) {
             lineRatio =
               Math.min(count + 1, findIntercept(maxData)) / (count + 1);
+            startingPoint = Math.max(1, findIntercept(0));
           } else {
             lineRatio = Math.min(count + 1, findIntercept(0)) / (count + 1);
+            startingPoint = Math.max(1, findIntercept(maxData));
           }
-          drawLine(1, lineRatio * (count + 1), slope, intercept);
+          drawLine(startingPoint, lineRatio * (count + 1), slope, intercept);
         }
       }
     });
-  }, [props.dataPoints]);
+  };
+  useEffect(() => {
+
+    //necessary to render, delete, rerender immediately aftter to get linear regression choices to function
+    render();
+
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+    // Clear the canvas
+    context.clearRect(0, 0, props.width, props.height);
+
+    render();
+  }, [props.dataPoints, props.linearRegression]);
   return (
     <div className="graphDiv">
       <canvas
