@@ -7,9 +7,12 @@ import { auth } from "../firebase";
 import getInfo from "./Requests";
 import Badge from "./Badge";
 import useEffectAfter from "./useEffectAfter";
+import LoadingState from "./LoadingState";
+
 function Profile() {
   const [user, setUser] = useState();
   const [currentEdit, setCurrentEdit] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     workoutsPosted: [0, ""],
     mealsPosted: [0, ""],
@@ -22,7 +25,7 @@ function Profile() {
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
-        getInfo(`/profiles/${prof.uid}`, setUser, 0);
+        getInfo(`/profiles/${prof.uid}`, setUser, 0, setLoading);
       }
     });
   }, []);
@@ -33,7 +36,6 @@ function Profile() {
 
   useEffectAfter(() => {
     if (user) {
-
       let maxBench = 0;
       let maxSquat = 0;
       let maxDeadlift = 0;
@@ -134,6 +136,7 @@ function Profile() {
         maxDeadlift: [maxDeadlift, deadliftLevel],
       });
     }
+    setLoading(false);
   }, [user]);
 
   return (
@@ -192,6 +195,7 @@ function Profile() {
             awardSubtitle={`Max Deadlift: ${stats.maxDeadlift[0]} lbs`}
           />
         </div>
+        {loading && <LoadingState />}
       </div>
     </>
   );

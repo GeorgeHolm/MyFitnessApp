@@ -13,7 +13,6 @@ const cors = require("cors");
 app.use(cors());
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 app.get("/", (req, res) => {
@@ -129,7 +128,6 @@ app.get("/meals", async (req, res) => {
 });
 
 app.post("/touchworkout", async (req, res) => {
-  try {
     const { id, wid } = req.body;
     const alreadyExists = await prisma.profileWorkoutTouched.findMany({
       where: {
@@ -147,13 +145,10 @@ app.post("/touchworkout", async (req, res) => {
       });
       res.json(newTouch);
     }
-  } catch (error) {
-    console.log("Error:", error.message);
-  }
+
 });
 
 app.post("/touchmeal", async (req, res) => {
-  try {
     const { id, mid } = req.body;
 
     const alreadyExists = await prisma.profileMealTouched.findMany({
@@ -172,13 +167,10 @@ app.post("/touchmeal", async (req, res) => {
       });
       res.json(newTouch);
     }
-  } catch (error) {
-    console.log("Error:", error.message);
-  }
+
 });
 
 app.post("/likeworkout", async (req, res) => {
-  try {
     const { id, wid } = req.body;
 
     const alreadyExists = await prisma.profileWorkoutLikes.findMany({
@@ -197,13 +189,10 @@ app.post("/likeworkout", async (req, res) => {
       });
       res.json(newTouch);
     }
-  } catch (error) {
-    console.log("Error:", error.message);
-  }
+
 });
 
 app.post("/likemeal", async (req, res) => {
-  try {
     const { id, mid } = req.body;
 
     const alreadyExists = await prisma.profileMealLikes.findMany({
@@ -222,13 +211,10 @@ app.post("/likemeal", async (req, res) => {
       });
       res.json(newTouch);
     }
-  } catch (error) {
-    console.log("Error:", error.message);
-  }
+
 });
 
 app.post("/exercises/:id/sets", async (req, res) => {
-  try {
     const { id } = req.params;
     const { weight, reps } = req.body;
     const newSet = await prisma.set.create({
@@ -238,10 +224,7 @@ app.post("/exercises/:id/sets", async (req, res) => {
         exerciseId: Number(id),
       },
     });
-    res.json(newSet);
-  } catch (error) {
-    console.log("Error:", error.message);
-  }
+
 });
 
 app.post("/workouts/:id/exercises", async (req, res) => {

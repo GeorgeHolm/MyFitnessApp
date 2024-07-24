@@ -27,9 +27,9 @@ export function Modal(props) {
     //post the workout to the users workouts array
 
     //I would rather make an API call that takes in the input
+    props.setLoading(true);
 
     const makeAsync = async () => {
-      //may need loading here, this is the wildest async function of all time O(n^2) complexity
       let wid = 0;
       const workoutCreation = await fetch(
         `${import.meta.env.VITE_BACKEND_LINK}/profiles/${
@@ -52,6 +52,8 @@ export function Modal(props) {
         })
 
       Promise.all([workoutCreation]);
+      props.setLoading(false);
+
 
       workout.map((exercise) => {
         const asyncExercises = async () => {
@@ -101,6 +103,7 @@ export function Modal(props) {
         };
 
         asyncExercises();
+
       });
     };
     makeAsync();
@@ -126,6 +129,8 @@ export function Modal(props) {
   };
 
   const searchForFood = () => {
+    props.setLoading(true);
+
     fetch(
       `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${
         import.meta.env.VITE_FOOD_API_KEY
@@ -148,6 +153,8 @@ export function Modal(props) {
         dummy.foods = limitedFoods;
 
         setMealSearchResults(dummy);
+        props.setLoading(false);
+
       });
   };
 

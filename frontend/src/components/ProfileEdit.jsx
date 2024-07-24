@@ -1,5 +1,4 @@
 import React from "react";
-import "./Modal.css";
 import { useState, useEffect } from "react";
 
 export function ProfileEdit(props) {

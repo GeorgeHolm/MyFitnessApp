@@ -12,6 +12,7 @@ import DisplayMeal from "./DisplayMeal";
 import Knn from "./Knn";
 import useEffectAfter from "./useEffectAfter";
 import getInfo from "./Requests";
+import LoadingState from "./LoadingState";
 
 function Explore() {
   const [user, setUser] = useState();
@@ -26,6 +27,7 @@ function Explore() {
   const [profiles, setProfiles] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
   const [recentOrRecommended, setRecentOrRecommended] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffectAfter(() => {
     if (
@@ -41,18 +43,18 @@ function Explore() {
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
-        getInfo(`/workouts`, setWorkouts);
-        getInfo(`/meals`, setMeals);
-        getInfo(`/profiles`, setProfiles);
-        getInfo(`/profiles/${prof.uid}`, setUser, 0);
+        getInfo(`/workouts`, setWorkouts, null, setLoading);
+        getInfo(`/meals`, setMeals, null, setLoading);
+        getInfo(`/profiles`, setProfiles, null, setLoading);
+        getInfo(`/profiles/${prof.uid}`, setUser, 0, setLoading);
       }
     });
   }, [modal, refresh]);
 
   useEffect(() => {
     if (user) {
-      getInfo(`/workouts`, setWorkouts);
-      getInfo(`/meals`, setMeals);
+      getInfo(`/workouts`, setWorkouts, null, setLoading);
+      getInfo(`/meals`, setMeals, null, setLoading);
     }
   }, [modal, refresh, workoutMeal]);
 
@@ -76,8 +78,9 @@ function Explore() {
     setCurrentWorkout(e);
     //User touched workout
     setRefresh(refresh + 1);
-
     if (!user.touchWorkouts.some((workout) => workout.workoutId === e.id)) {
+      setLoading(true);
+
       const asyncTouch = async () => {
         const touchworkout = await fetch(
           `${import.meta.env.VITE_BACKEND_LINK}/touchworkout`,
@@ -91,7 +94,10 @@ function Explore() {
               id: user.id,
             }),
           }
-        ).then((response) => response.json());
+        ).then((response) => {
+          setLoading(false);
+          return (response.json());
+        });
       };
       asyncTouch();
     }
@@ -99,6 +105,7 @@ function Explore() {
 
   const handleCurrentMeal = (e) => {
     setCurrentMeal(e);
+    setLoading(true);
 
     //user touched meal
     setRefresh(refresh + 1);
@@ -117,7 +124,10 @@ function Explore() {
               id: user.id,
             }),
           }
-        ).then((response) => response.json());
+        ).then((response) => {
+          setLoading(false);
+          return (response.json());
+        });
       };
       asyncTouch();
     }
@@ -229,6 +239,8 @@ function Explore() {
         <button onClick={recsOrNot} className="round" id="recs">
           {recentOrRecommended ? "New" : "For You"}
         </button>
+        {loading && <LoadingState/>}
+
       </div>
     </>
   );
