@@ -9,7 +9,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 export function Modal(props) {
   const [workout, setWorkout] = useState([]);
   const [exerciseInfo, setExerciseInfo] = useState([]);
-
+  const [notPublic, setNotPublic] = useState(false);
   const [notes, setNotes] = useState("");
 
   const handleNotes = (e) => {
@@ -42,6 +42,7 @@ export function Modal(props) {
           },
           body: JSON.stringify({
             notes: notes,
+            private: notPublic,
           }),
         }
       )
@@ -187,6 +188,7 @@ export function Modal(props) {
             totalFats: fats,
             totalProteins: proteins,
             totalGrams: weight,
+            private: notPublic,
           }),
         }
       )
@@ -236,6 +238,10 @@ export function Modal(props) {
 
     setMeal([]);
   };
+
+  const handlePrivate = () => {
+    setNotPublic(!notPublic);
+  }
 
   const foodSelected = (f) => {
     let dummy = f.food;
@@ -288,6 +294,9 @@ export function Modal(props) {
             ))}
             <button onClick={addExercise}>Add Exercise</button>
           </section>
+          <button className="bottomRight" onClick={handlePrivate}>
+            {notPublic ? ("Set Public") : ("Set Private")}
+          </button>
         </div>
       ) : (
         <div className="modal">
@@ -389,6 +398,9 @@ export function Modal(props) {
               ))}
             </section>
           </section>
+          <button className="bottomRight" onClick={handlePrivate}>
+            {notPublic ? ("Set Public") : ("Set Private")}
+          </button>
         </div>
       )}
     </div>

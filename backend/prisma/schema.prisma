@@ -37,6 +37,7 @@ model Workout {
   exercises     Exercise[]
   profileLikes  ProfileWorkoutLikes[]
   profileTouch  ProfileWorkoutTouched[]
+  private       Boolean @default(false)
 }
 
 model Exercise {
@@ -68,6 +69,7 @@ model Meal {
   totalGrams    Float
   profileLikes  ProfileMealLikes[]
   profileTouch  ProfileMealTouched[]
+  private       Boolean @default(false)
 }
 
 model Food {
