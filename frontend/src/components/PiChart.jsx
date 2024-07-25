@@ -6,6 +6,7 @@ const PiChart = (props) => {
   const canvasRef = useRef(null);
   const chartCenter = props.width / 3;
 
+  //Creates an arc part of a circle that is used as a section of a pi chart
   const arcPart = useCallback((x, y, r, color, start, end) => {
     let canvas = canvasRef.current;
     let context = canvas.getContext("2d");
@@ -54,10 +55,14 @@ const PiChart = (props) => {
     let textAlignStart = chartCenter * 2;
     let runningTotal = 0;
     props.chartData.map((part, idx) => {
+
+      //Find the ratio of the datapoint to the total
       let ratio = part[1] / props.chartTotal[1];
       let color = `rgb(${200 * runningTotal + 50}, 0, ${
         200 * runningTotal + 55
       })`;
+
+      //Draw portion of Pi chart
       arcPart(
         chartCenter,
         props.height / 2,
@@ -70,6 +75,7 @@ const PiChart = (props) => {
 
       context.fillStyle = color;
 
+      //Add units for datapoint
       context.fillRect(
         textAlignStart - 30,
         (props.height * idx) / (props.chartData.length + 1) +
@@ -126,6 +132,8 @@ const PiChart = (props) => {
 
       context.font = "20px Arial";
       context.fillStyle = "black";
+
+      //give units for the remainder
       if (props.units) {
         context.fillText(
           "other: " +

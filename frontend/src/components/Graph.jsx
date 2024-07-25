@@ -16,9 +16,12 @@ const Graph = (props) => {
     // Draw canvas here...
 
     const border = context;
+
+    const edgeToGraphFraction = ((1 - graphRatio) / 2);
+
     border.rect(
-      ((1 - graphRatio) / 2) * props.width,
-      ((1 - graphRatio) / 2) * props.height,
+      edgeToGraphFraction * props.width,
+      edgeToGraphFraction * props.height,
       graphRatio * props.width,
       graphRatio * props.height
     );
@@ -88,13 +91,13 @@ const Graph = (props) => {
           let tic = context;
           tic.beginPath();
           tic.moveTo(
-            ((1 - graphRatio) / 2) * props.width - 2,
-            ((1 - graphRatio) / 2) * props.height +
+            edgeToGraphFraction * props.width - 2,
+            edgeToGraphFraction * props.height +
               (1 - i / vertTicFactor) * graphRatio * props.height
           );
           tic.lineTo(
-            ((1 - graphRatio) / 2) * props.width + 2,
-            ((1 - graphRatio) / 2) * props.height +
+            edgeToGraphFraction * props.width + 2,
+            edgeToGraphFraction * props.height +
               (1 - i / vertTicFactor) * graphRatio * props.height
           );
           tic.stroke();
@@ -104,8 +107,8 @@ const Graph = (props) => {
           pointText.fillStyle = "black";
           pointText.fillText(
             Math.floor((i / vertTicFactor) * maxData),
-            ((1 - graphRatio) / 2) * props.width - 35,
-            ((1 - graphRatio) / 2) * props.height +
+            edgeToGraphFraction * props.width - 35,
+            edgeToGraphFraction * props.height +
               (1 - i / vertTicFactor) * graphRatio * props.height
           );
         }
@@ -119,13 +122,13 @@ const Graph = (props) => {
           ];
 
           //translate point coords to canvas coords then draw point
-          let valsX = coords[0] + ((1 - graphRatio) / 2) * props.width;
+          let valsX = coords[0] + edgeToGraphFraction * props.width;
 
           let point = context;
           point.beginPath();
           point.arc(
             valsX,
-            props.height - (coords[1] + ((1 - graphRatio) / 2) * props.height),
+            props.height - (coords[1] + edgeToGraphFraction * props.height),
             2,
             0,
             2 * Math.PI
@@ -167,13 +170,13 @@ const Graph = (props) => {
               12
           );
         });
-        let line = context;
 
+        let line = context;
 
         //If required, create linear regression
         if (props.linearRegression[colorIdx]) {
 
-          //find the sum of every x_i y_i, x_i^2, y_i^2
+          //find the sum for every i of  x_i * y_i, x_i^2, y_i^2
           let xSum = 0,
             ySum = 0,
             xxSum = 0,
@@ -198,8 +201,6 @@ const Graph = (props) => {
             return (height - intercept) / slope;
           };
 
-
-
           //given an equation, return a y value
           const findPointSlope = (x, slo, inter) => {
             return slo * x + inter;
@@ -211,24 +212,24 @@ const Graph = (props) => {
 
             //Line starting position
             line.moveTo(
-              ((1 - graphRatio) / 2) * props.width +
+              edgeToGraphFraction * props.width +
                 ((start - 1) / count) * graphRatio * props.width,
               props.height -
                 ((findPointSlope(start, lineSlope, lineIntercept) / maxData) *
                   graphRatio *
                   props.height +
-                  ((1 - graphRatio) / 2) * props.height)
+                  edgeToGraphFraction * props.height)
             );
 
             //line ending position
             line.lineTo(
-              ((1 - graphRatio) / 2) * props.width +
+              edgeToGraphFraction * props.width +
                 ((end - 1) / count) * graphRatio * props.width,
               props.height -
                 ((findPointSlope(end, lineSlope, lineIntercept) / maxData) *
                   graphRatio *
                   props.height +
-                  ((1 - graphRatio) / 2) * props.height)
+                  edgeToGraphFraction * props.height)
             );
             line.strokeStyle = color;
 

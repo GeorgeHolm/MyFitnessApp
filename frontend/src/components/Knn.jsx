@@ -1,5 +1,8 @@
 
 const Knn = (user, workouts, meals, profiles) => {
+
+  //return the magnitude of a vector
+  //the root of the sum of the squares of the components
   const magnitude = (vect) => {
     let magVal = 0;
     vect.forEach((num) => {
@@ -8,6 +11,8 @@ const Knn = (user, workouts, meals, profiles) => {
 
     return Math.sqrt(magVal);
   };
+
+  //Function finds cosine distance between two vectors using dot poruct and magnitude 
   const distance = (r1, r2) => {
     const dot = (a, b) => a.map((x, i) => a[i] * b[i]).reduce((m, n) => m + n);
     let vectDotProduct = dot(r1, r2);
@@ -18,6 +23,8 @@ const Knn = (user, workouts, meals, profiles) => {
     return cosinSimilarity;
   };
 
+  //Calculate all distances from userRow to the rows in train
+  //return numNeighbors most similar distances rows/info
   const getNeighbors = (train, userRow, numNeighbors) => {
     let distances = [];
     train.map((trainRow) => {
@@ -34,6 +41,7 @@ const Knn = (user, workouts, meals, profiles) => {
     return neighbors;
   };
 
+  //find nearest neighbors then return a vectored average of their scores
   const predictClassifications = (train, userRow, numNeighbors) => {
     let neighbors = getNeighbors(train, userRow, numNeighbors);
     //Average out the nearest Neighbors
@@ -56,17 +64,24 @@ const Knn = (user, workouts, meals, profiles) => {
     let normalizedMatrix = train.map((row, idx) =>
       row.map((element) => element / userMags[idx])
     );
+
+    //prediction is the predicted score for each post for the user targetIndex
     let prediction = predictClassifications(
       normalizedMatrix,
       normalizedMatrix[targetIndex],
       numNeighbors
     );
+
+
+    //Find all posts not already viewed and push to choice array
     let choiceArray = [];
     prediction.map((pred, idx) => {
       if (train[targetIndex][idx] == 0) {
         choiceArray.push([pred, idx]);
       }
     });
+
+    //sort choice array so that the list is in order of greatest to least
     let sortedChoices = choiceArray.sort((a, b) => b[0] - a[0]);
     return sortedChoices;
   };
@@ -83,6 +98,8 @@ const Knn = (user, workouts, meals, profiles) => {
   const likeStrength = 4;
   const touchStrength = 1;
 
+  //for each profile row and workout colomn, at their intersection in the matrix
+  //find if the user has touched or liked that post, and add it to the user score
   workoutMatrix = workoutMatrix.map((row, profileIndex) => {
     let profile = profiles[profileIndex];
     return row.map((element, workoutIndex) => {
@@ -123,6 +140,7 @@ const Knn = (user, workouts, meals, profiles) => {
     }
   });
 
+  //Find and return recommendations
   let recsWithValuesWorkouts = nRecommendations(workoutMatrix, profIndex, 3);
   let recsWithValuesMeals = nRecommendations(mealMatrix, profIndex, 3);
 
