@@ -1,13 +1,35 @@
 import http.client
 import json
 
+def find_index(text, goal, start_idx = 0):
+    goal_length = len(goal)
+    for idx in range(start_idx, len(text)):
+        if text[idx: idx + goal_length] == goal:
+            return idx
+    return -1
+
+
+#Function to replace all of the incorrectly grabbed text (e.g. &ldquo; => ")
+def replace_all(text, find_text, replaced_text):
+    if text == None:
+        return None
+    return_string = ''
+    split_text = text.split(find_text)
+    return_string = split_text[0]
+    for chunk in split_text[1:]:
+        return_string += replaced_text +  chunk
+    
+    return return_string
+        
+        
+    
 
 def find_between(text, start, end):
-    start_idx = text.find(start)
+    start_idx = find_index(text, start)
     if start_idx == -1:
         return None
     start_idx += len(start)
-    end_idx = text.find(end, start_idx)
+    end_idx = find_index(text, end, start_idx)
     if end_idx == -1:
         return None 
     return text[start_idx:end_idx]
@@ -30,8 +52,17 @@ def parse_exercise(idx):
         exerciseHTML = requestHTML(newLink)
         
         exerciseTitle = find_between(exerciseHTML,'exercise-hero__title">', '<' )
+        exerciseTitle = replace_all(exerciseTitle, "&rdquo;", "\"")
+        exerciseTitle = replace_all(exerciseTitle, "&ldquo;", "\"")
+
         exerciseBodyPart = find_between(exerciseHTML, '<dd>', '<')
+        exerciseBodyPart = replace_all(exerciseBodyPart, "&rdquo;", "\"")
+        exerciseBodyPart = replace_all(exerciseBodyPart, "&ldquo;", "\"")
+        
         exerciseEquipment = find_between(exerciseHTML, 'Equipment:</dt>\r\n\t\t<dd>', '</dd>')
+        exerciseEquipment = replace_all(exerciseEquipment, "&rdquo;", "\"")
+        exerciseEquipment = replace_all(exerciseEquipment, "&ldquo;", "\"")
+        
         exerciseImage = find_between(exerciseHTML, "<div class=\"exercise-hero__image\" style=\"background-image: url(\\'", "\\'")
         steps = []
 
@@ -42,6 +73,8 @@ def parse_exercise(idx):
                 currentStep = find_between(exerciseHTML, "<h2>Step " + str(stepNumber) + "</h2>\r\n<p>", "<")
                 if not currentStep:
                     currentStep = find_between(exerciseHTML, "<h2>Step " + str(stepNumber) + "&gt;</h2>\r\n<p>", "<") #alternate step format, has >  character after Step #
+                currentStep = replace_all(currentStep, "&rdquo;", "\"")
+                currentStep = replace_all(currentStep, "&ldquo;", "\"")
                 steps.append(currentStep)
                 stepNumber = stepNumber + 1
 
@@ -56,11 +89,12 @@ def parse_exercise(idx):
 
 def main():
     exercises = []
-    for idx in range(400):
+    for idx in range(25): #max 400
         exercise = parse_exercise(idx)
         if exercise:
             exercises.append(exercise)
     with open("exercises2.json", "w") as outfile:
         json.dump({"exercises": exercises}, outfile, indent=4)
+    
 if __name__ == "__main__":
     main()
