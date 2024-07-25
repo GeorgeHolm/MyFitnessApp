@@ -9,7 +9,6 @@ def find_index(text, goal, start_idx = 0):
     return -1
 
 
-#Function to replace all of the incorrectly grabbed text (e.g. &ldquo; => ")
 def replace_all(text, find_text, replaced_text):
     if text == None:
         return None
@@ -21,8 +20,6 @@ def replace_all(text, find_text, replaced_text):
     
     return return_string
         
-        
-    
 
 def find_between(text, start, end):
     start_idx = find_index(text, start)
@@ -43,6 +40,15 @@ def requestHTML(reqName):
     formatted_output = OUTPUT.replace('\\n', '\n').replace('\\t', '\t').replace('\\r', '\r')
     return formatted_output
 
+def special_character_remove(input_text):
+    ret = replace_all(input_text,  "&rdquo;", "\"")
+    ret = replace_all(ret, "&ldquo;", "\"")
+    ret = replace_all(ret, "&reg;", "")
+    ret = replace_all(ret, "&nbsp;", " ")
+    ret = replace_all(ret, "&ndash;", "-")
+    ret = replace_all(ret, "&frac12;", "1/2")
+    return ret
+
 
 def parse_exercise(idx):
     OUTPUT = requestHTML("/resources/everyone/exercise-library/" + str(idx) + "/")
@@ -52,16 +58,19 @@ def parse_exercise(idx):
         exerciseHTML = requestHTML(newLink)
         
         exerciseTitle = find_between(exerciseHTML,'exercise-hero__title">', '<' )
-        exerciseTitle = replace_all(exerciseTitle, "&rdquo;", "\"")
-        exerciseTitle = replace_all(exerciseTitle, "&ldquo;", "\"")
+        exerciseTitle = special_character_remove(exerciseTitle)
+
+
 
         exerciseBodyPart = find_between(exerciseHTML, '<dd>', '<')
-        exerciseBodyPart = replace_all(exerciseBodyPart, "&rdquo;", "\"")
-        exerciseBodyPart = replace_all(exerciseBodyPart, "&ldquo;", "\"")
+        exerciseBodyPart = special_character_remove(exerciseBodyPart)
+
+
         
         exerciseEquipment = find_between(exerciseHTML, 'Equipment:</dt>\r\n\t\t<dd>', '</dd>')
-        exerciseEquipment = replace_all(exerciseEquipment, "&rdquo;", "\"")
-        exerciseEquipment = replace_all(exerciseEquipment, "&ldquo;", "\"")
+        exerciseEquipment = special_character_remove(exerciseEquipment)
+
+
         
         exerciseImage = find_between(exerciseHTML, "<div class=\"exercise-hero__image\" style=\"background-image: url(\\'", "\\'")
         steps = []
@@ -73,8 +82,8 @@ def parse_exercise(idx):
                 currentStep = find_between(exerciseHTML, "<h2>Step " + str(stepNumber) + "</h2>\r\n<p>", "<")
                 if not currentStep:
                     currentStep = find_between(exerciseHTML, "<h2>Step " + str(stepNumber) + "&gt;</h2>\r\n<p>", "<") #alternate step format, has >  character after Step #
-                currentStep = replace_all(currentStep, "&rdquo;", "\"")
-                currentStep = replace_all(currentStep, "&ldquo;", "\"")
+                currentStep = special_character_remove(currentStep)
+
                 steps.append(currentStep)
                 stepNumber = stepNumber + 1
 
@@ -89,11 +98,11 @@ def parse_exercise(idx):
 
 def main():
     exercises = []
-    for idx in range(25): #max 400
+    for idx in range(400):
         exercise = parse_exercise(idx)
         if exercise:
             exercises.append(exercise)
-    with open("exercises2.json", "w") as outfile:
+    with open("exercises.json", "w") as outfile:
         json.dump({"exercises": exercises}, outfile, indent=4)
     
 if __name__ == "__main__":
