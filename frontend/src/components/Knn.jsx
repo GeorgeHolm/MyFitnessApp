@@ -2,7 +2,7 @@
 const Knn = (user, workouts, meals, profiles) => {
 
   //return the magnitude of a vector
-  //: the root of the sum of the squares of the components
+  //the root of the sum of the squares of the components
   const magnitude = (vect) => {
     let magVal = 0;
     vect.forEach((num) => {
