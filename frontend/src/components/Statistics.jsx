@@ -9,6 +9,7 @@ import getInfo from "./Requests";
 import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import SplitButton from 'react-bootstrap/SplitButton';
+import LoadingState from "./LoadingState";
 
 function Statistics() {
   const [user, setUser] = useState();
@@ -30,6 +31,8 @@ function Statistics() {
   ]);
   const [gramsPercent, setGramsPercent] = useState(false);
   const [mealIndex, setMealIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
@@ -38,15 +41,15 @@ function Statistics() {
         // https://firebase.google.com/docs/reference/js/firebase.User
         //   const uid = user.uid;
 
-        getInfo(`/profiles/${prof.uid}`, setUser, 0);
+        getInfo(`/profiles/${prof.uid}`, setUser, 0, setLoading);
       }
     });
   }, []);
 
   useEffect(() => {
     if (user) {
-      getInfo(`/profiles/${user.uid}/workouts`, setWorkouts);
-      getInfo(`/profiles/${user.uid}/meals`, setMeals);
+      getInfo(`/profiles/${user.uid}/workouts`, setWorkouts, null, setLoading);
+      getInfo(`/profiles/${user.uid}/meals`, setMeals, null, setLoading);
     }
   }, [user]);
 
@@ -233,6 +236,7 @@ function Statistics() {
             </div>
           )}
         </section>
+        {loading && <LoadingState/>}
       </div>
     </>
   );

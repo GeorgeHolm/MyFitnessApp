@@ -10,6 +10,7 @@ import { auth, generateContent } from "../firebase";
 import DisplayWorkout from "./DisplayWorkout";
 import DisplayMeal from "./DisplayMeal";
 import getInfo from "./Requests";
+import LoadingState from "./LoadingState";
 
 function Home() {
   const [user, setUser] = useState();
@@ -21,6 +22,7 @@ function Home() {
   const [chatting, setChatting] = useState(false);
   const [currentWorkout, setCurrentWorkout] = useState([]);
   const [currentMeal, setCurrentMeal] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
@@ -28,9 +30,9 @@ function Home() {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
 
-        getInfo(`/profiles/${prof.uid}/workouts`, setWorkouts);
-        getInfo(`/profiles/${prof.uid}/meals`, setMeals);
-        getInfo(`/profiles/${prof.uid}`, setUser, 0);
+        getInfo(`/profiles/${prof.uid}/workouts`, setWorkouts, null, setLoading);
+        getInfo(`/profiles/${prof.uid}/meals`, setMeals, null, setLoading);
+        getInfo(`/profiles/${prof.uid}`, setUser, 0, setLoading);
         
       }
     });
@@ -65,7 +67,7 @@ function Home() {
 
   return (
     <>
-      {modal && <Modal type={workoutMeal} setModal={setModal} user={user} />}
+      {modal && <Modal type={workoutMeal} setLoading={setLoading} setModal={setModal} user={user} />}
       <SearchBar user={user} />
       <div className="flexbox">
         <section id="workouts">
@@ -127,6 +129,8 @@ function Home() {
         <button onClick={handleChatting} className="round" id="chatButton">
           {chatting ? "Chat" : "None"}
         </button>
+        {loading && <LoadingState/>}
+
       </div>
     </>
   );

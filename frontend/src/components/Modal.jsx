@@ -9,7 +9,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 export function Modal(props) {
   const [workout, setWorkout] = useState([]);
   const [exerciseInfo, setExerciseInfo] = useState([]);
-
+  const [notPublic, setNotPublic] = useState(false);
   const [notes, setNotes] = useState("");
 
   const handleNotes = (e) => {
@@ -27,9 +27,9 @@ export function Modal(props) {
     //post the workout to the users workouts array
 
     //I would rather make an API call that takes in the input
+    props.setLoading(true);
 
     const makeAsync = async () => {
-      //may need loading here, this is the wildest async function of all time O(n^2) complexity
       let wid = 0;
       const workoutCreation = await fetch(
         `${import.meta.env.VITE_BACKEND_LINK}/profiles/${
@@ -42,6 +42,7 @@ export function Modal(props) {
           },
           body: JSON.stringify({
             notes: notes,
+            private: notPublic,
           }),
         }
       )
@@ -51,6 +52,8 @@ export function Modal(props) {
         })
 
       Promise.all([workoutCreation]);
+      props.setLoading(false);
+
 
       workout.map((exercise) => {
         const asyncExercises = async () => {
@@ -100,6 +103,7 @@ export function Modal(props) {
         };
 
         asyncExercises();
+
       });
     };
     makeAsync();
@@ -125,6 +129,8 @@ export function Modal(props) {
   };
 
   const searchForFood = () => {
+    props.setLoading(true);
+
     fetch(
       `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${
         import.meta.env.VITE_FOOD_API_KEY
@@ -147,6 +153,8 @@ export function Modal(props) {
         dummy.foods = limitedFoods;
 
         setMealSearchResults(dummy);
+        props.setLoading(false);
+
       });
   };
 
@@ -187,6 +195,7 @@ export function Modal(props) {
             totalFats: fats,
             totalProteins: proteins,
             totalGrams: weight,
+            private: notPublic,
           }),
         }
       )
@@ -236,6 +245,10 @@ export function Modal(props) {
 
     setMeal([]);
   };
+
+  const handlePrivate = () => {
+    setNotPublic(!notPublic);
+  }
 
   const foodSelected = (f) => {
     let dummy = f.food;
@@ -288,6 +301,9 @@ export function Modal(props) {
             ))}
             <button onClick={addExercise}>Add Exercise</button>
           </section>
+          <button className="bottomRight" onClick={handlePrivate}>
+            {notPublic ? ("Set Public") : ("Set Private")}
+          </button>
         </div>
       ) : (
         <div className="modal">
@@ -389,6 +405,9 @@ export function Modal(props) {
               ))}
             </section>
           </section>
+          <button className="bottomRight" onClick={handlePrivate}>
+            {notPublic ? ("Set Public") : ("Set Private")}
+          </button>
         </div>
       )}
     </div>

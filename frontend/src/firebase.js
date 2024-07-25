@@ -50,6 +50,5 @@ export async function generateContent(message) {
 
   const response = result.response;
   const text = response.text();
-  //console.log(text);
   return text;
 }

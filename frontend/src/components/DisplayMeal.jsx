@@ -4,10 +4,12 @@ import PiChart from "./PiChart";
 import { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, generateContent } from "../firebase";
-
+import useEffectAfter from "./useEffectAfter";
 function DisplayMeal(props) {
   const [user, setUser] = useState([]);
   const [isLiked, setIsLiked] = useState(false);
+  const [numLikes, setNumLikes] = useState(0);
+
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
@@ -16,22 +18,23 @@ function DisplayMeal(props) {
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return response.json(); // Parse JSON data from the response
+            return response.json();
           })
           .then((data) => {
             // Handle successful response
             setUser(data[0]);
             setIsLiked(
-              data[0].likedMeals.some((meal) => meal.mealId === props.meal.id)
+              data[0].likedMeals.some((meal) => meal.mealId === props.meal?.id)
             );
           });
       }
     });
   }, [isLiked, props.meal]);
-
   const likeButton = () => {
-    if (user) { //cannot say why I need the user here but it is necessary!
+    if (user) {
+      //cannot say why I need the user here but it is necessary!
       if (isLiked) {
+        setNumLikes(numLikes - 1);
         const asyncTouch = async () => {
           const unlikeMeal = await fetch(
             `${import.meta.env.VITE_BACKEND_LINK}/likemeal`,
@@ -45,12 +48,12 @@ function DisplayMeal(props) {
                 id: props.user.id,
               }),
             }
-          )
-            .then((res) => setIsLiked(false))
+          ).then((res) => setIsLiked(false));
         };
         asyncTouch();
       } else {
         //User like meal
+        setNumLikes(numLikes + 1);
 
         const asyncTouch = async () => {
           const likeMeal = await fetch(
@@ -65,29 +68,40 @@ function DisplayMeal(props) {
                 id: props.user.id,
               }),
             }
-          )
-            .then((res) => setIsLiked(true))
+          ).then((res) => setIsLiked(true));
         };
         asyncTouch();
       }
     }
   };
-
+  useEffectAfter(() => {
+    if (props.meal) {
+      setNumLikes(props.meal.profileLikes?.length);
+    }
+  }, [props.meal]);
   return (
     <div className="mealDisplay">
-      <p>Meal:</p>
-      <p>{props.meal.notes}</p>
-      <p>calories: {props.meal.totalCalories} cal</p>
-      <p>carbohydrates: {props.meal.totalCarbs} g</p>
-      <p>fats: {props.meal.totalFats} g</p>
-      <p>proteins: {props.meal.totalProteins} g</p>
-      <p>grams: {props.meal.totalGrams} g</p>
-
       {props.meal.id && (
         <div>
-          {props.user && (
-            <button onClick={likeButton}>{isLiked ? "Unlike" : "Like"}</button>
+          {props.user ? (
+            <div>
+              <button onClick={likeButton}>
+                {isLiked ? "Unlike" : "Like"}: {numLikes}
+              </button>
+            </div>
+          ) : (
+            <div>
+              <p>Post like count: {numLikes}</p>
+            </div>
           )}
+          <h2>Meal Information:</h2>
+          <p>{props.meal.notes}</p>
+          <p>calories: {props.meal.totalCalories} cal</p>
+          <p>carbohydrates: {props.meal.totalCarbs} g</p>
+          <p>fats: {props.meal.totalFats} g</p>
+          <p>proteins: {props.meal.totalProteins} g</p>
+          <p>grams: {props.meal.totalGrams} g</p>
+
           <PiChart
             chartData={[
               ["protien", props.meal.totalProteins],

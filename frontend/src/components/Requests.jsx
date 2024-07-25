@@ -1,5 +1,8 @@
-const getInfo = (header, returnState, returnIndex) => {
-    fetch(`${import.meta.env.VITE_BACKEND_LINK}${header}`)
+const getInfo = (header, returnState, returnIndex, setLoading) => {
+  if (setLoading != null) {
+    setLoading(true);
+  }
+  fetch(`${import.meta.env.VITE_BACKEND_LINK}${header}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -8,11 +11,14 @@ const getInfo = (header, returnState, returnIndex) => {
     })
     .then((data) => {
       // Handle successful response
-      if(returnIndex != null) {
+      if (returnIndex != null) {
         returnState(data[returnIndex]);
-      }
-      else {
+      } else {
         returnState(data);
+      }
+
+      if (setLoading != null) {
+        setLoading(false);
       }
     });
 };

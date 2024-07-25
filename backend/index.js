@@ -13,7 +13,6 @@ const cors = require("cors");
 app.use(cors());
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 app.get("/", (req, res) => {
@@ -30,6 +29,8 @@ app.get("/profiles/:uid/workouts", async (req, res) => {
   const workouts = await prisma.workout.findMany({
     where: { profileId: profile[0].id },
     include: {
+      profileLikes: true,
+      profileTouch: true,
       exercises: {
         include: {
           sets: true,
@@ -50,6 +51,8 @@ app.get("/profiles/:uid/meals", async (req, res) => {
   const meals = await prisma.meal.findMany({
     where: { profileId: profile[0].id },
     include: {
+      profileLikes: true,
+      profileTouch: true,
       foods: true,
     },
   });
@@ -125,7 +128,6 @@ app.get("/meals", async (req, res) => {
 });
 
 app.post("/touchworkout", async (req, res) => {
-  try {
     const { id, wid } = req.body;
     const alreadyExists = await prisma.profileWorkoutTouched.findMany({
       where: {
@@ -143,13 +145,10 @@ app.post("/touchworkout", async (req, res) => {
       });
       res.json(newTouch);
     }
-  } catch (error) {
-    console.log("Error:", error.message);
-  }
+
 });
 
 app.post("/touchmeal", async (req, res) => {
-  try {
     const { id, mid } = req.body;
 
     const alreadyExists = await prisma.profileMealTouched.findMany({
@@ -168,13 +167,10 @@ app.post("/touchmeal", async (req, res) => {
       });
       res.json(newTouch);
     }
-  } catch (error) {
-    console.log("Error:", error.message);
-  }
+
 });
 
 app.post("/likeworkout", async (req, res) => {
-  try {
     const { id, wid } = req.body;
 
     const alreadyExists = await prisma.profileWorkoutLikes.findMany({
@@ -193,13 +189,10 @@ app.post("/likeworkout", async (req, res) => {
       });
       res.json(newTouch);
     }
-  } catch (error) {
-    console.log("Error:", error.message);
-  }
+
 });
 
 app.post("/likemeal", async (req, res) => {
-  try {
     const { id, mid } = req.body;
 
     const alreadyExists = await prisma.profileMealLikes.findMany({
@@ -218,13 +211,10 @@ app.post("/likemeal", async (req, res) => {
       });
       res.json(newTouch);
     }
-  } catch (error) {
-    console.log("Error:", error.message);
-  }
+
 });
 
 app.post("/exercises/:id/sets", async (req, res) => {
-  try {
     const { id } = req.params;
     const { weight, reps } = req.body;
     const newSet = await prisma.set.create({
@@ -234,10 +224,7 @@ app.post("/exercises/:id/sets", async (req, res) => {
         exerciseId: Number(id),
       },
     });
-    res.json(newSet);
-  } catch (error) {
-    console.log("Error:", error.message);
-  }
+
 });
 
 app.post("/workouts/:id/exercises", async (req, res) => {
@@ -254,11 +241,12 @@ app.post("/workouts/:id/exercises", async (req, res) => {
 
 app.post("/profiles/:id/workouts", async (req, res) => {
   const { id } = req.params;
-  const { notes } = req.body;
+  const { notes, private } = req.body;
   const newWorkout = await prisma.workout.create({
     data: {
       notes,
       profileId: Number(id),
+      private,
     },
   });
   res.json(newWorkout);
@@ -290,6 +278,7 @@ app.post("/profiles/:id/meals", async (req, res) => {
     totalFats,
     totalProteins,
     totalGrams,
+    private,
   } = req.body;
   const newMeal = await prisma.meal.create({
     data: {
@@ -300,6 +289,7 @@ app.post("/profiles/:id/meals", async (req, res) => {
       totalProteins,
       totalGrams,
       profileId: Number(id),
+      private,
     },
   });
   res.json(newMeal);

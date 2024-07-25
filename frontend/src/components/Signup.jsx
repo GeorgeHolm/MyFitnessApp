@@ -2,18 +2,20 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+import LoadingState from "./LoadingState";
 
 const Signup = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
-    await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+    setLoading(true);
+    await createUserWithEmailAndPassword(auth, email, password).then(
+      (userCredential) => {
         // Signed in
         const user = userCredential.user;
 
@@ -26,11 +28,14 @@ const Signup = () => {
             email: user.email,
             uid: user.uid,
           }),
-        })
-          .then((response) => response.json());
-          
+        }).then((response) => {
+          setLoading(false);
+          return response.json();
+        });
+
         navigate("/login");
-      });
+      }
+    );
   };
 
   return (
@@ -72,6 +77,7 @@ const Signup = () => {
             <p>
               Already have an account? <NavLink to="/login">Sign in</NavLink>
             </p>
+            {loading && <LoadingState />}
           </div>
         </div>
       </section>

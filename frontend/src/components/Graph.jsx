@@ -52,6 +52,8 @@ const Graph = (props) => {
     }
 
     //workout data tracker
+
+    //Search through all datapoints and find the max value as an upper bound for the graph
     let maxData = 0;
     let interval = 0;
     props.dataPoints.map((dataPoints) => {
@@ -65,6 +67,8 @@ const Graph = (props) => {
       }
     });
 
+
+    //Loop through each dataset
     props.dataPoints.map((dataPoints, colorIdx) => {
       if (dataPoints.length > 0) {
         let vertTicFactor = 10;
@@ -78,6 +82,8 @@ const Graph = (props) => {
         if (colorIdx === 3) {
           color = "purple";
         }
+
+        //Setup graph tic marks
         for (let i = 0; i <= vertTicFactor; i++) {
           let tic = context;
           tic.beginPath();
@@ -104,12 +110,15 @@ const Graph = (props) => {
           );
         }
 
+
+        //For a given data set, map the points out
         dataPoints.map((dataPoint, idx) => {
           let coords = [
             idx * interval,
             (dataPoint / maxData) * graphRatio * props.height,
           ];
 
+          //translate point coords to canvas coords then draw point
           let valsX = coords[0] + ((1 - graphRatio) / 2) * props.width;
 
           let point = context;
@@ -127,6 +136,8 @@ const Graph = (props) => {
           point.strokeStyle = color;
           point.stroke();
 
+
+          //draw tic mark along with point
           let tic = context;
           tic.strokeStyle = "black";
 
@@ -158,7 +169,11 @@ const Graph = (props) => {
         });
         let line = context;
 
+
+        //If required, create linear regression
         if (props.linearRegression[colorIdx]) {
+
+          //find the sum of every x_i y_i, x_i^2, y_i^2
           let xSum = 0,
             ySum = 0,
             xxSum = 0,
@@ -171,20 +186,30 @@ const Graph = (props) => {
             xxSum += i * i;
             xySum += i * dataPoints[j];
           }
+
+          //Formula for the slope and intercept of a linear regression
           let slope =
             (count * xySum - xSum * ySum) / (count * xxSum - xSum * xSum);
           let intercept = ySum / count - (slope * xSum) / count;
 
+
+          //returns point where the line for the linear regression intersects height
           const findIntercept = (height) => {
             return (height - intercept) / slope;
           };
 
+
+
+          //given an equation, return a y value
           const findPointSlope = (x, slo, inter) => {
             return slo * x + inter;
           };
 
+          //draw a line from [start, end] with a slope of lineSlope and a y intercept of lineIntercept
           const drawLine = (start, end, lineSlope, lineIntercept) => {
             line.beginPath();
+
+            //Line starting position
             line.moveTo(
               ((1 - graphRatio) / 2) * props.width +
                 ((start - 1) / count) * graphRatio * props.width,
@@ -195,6 +220,7 @@ const Graph = (props) => {
                   ((1 - graphRatio) / 2) * props.height)
             );
 
+            //line ending position
             line.lineTo(
               ((1 - graphRatio) / 2) * props.width +
                 ((end - 1) / count) * graphRatio * props.width,
@@ -211,7 +237,9 @@ const Graph = (props) => {
           let lineRatio = 1;
           let startingPoint = 1;
 
-          //cannot cross borders of graph
+          //cannot cross borders of graph so
+          //findIntercept is used to make sure 
+          //that the regression stays within the graph
           if (slope > 0) {
             lineRatio =
               Math.min(count + 1, findIntercept(maxData)) / (count + 1);
@@ -227,7 +255,7 @@ const Graph = (props) => {
   };
   useEffect(() => {
 
-    //necessary to render, delete, rerender immediately aftter to get linear regression choices to function
+    //necessary to render, delete, rerender immediately after to get linear regression choices to function
     render();
 
     const canvas = canvasRef.current;
