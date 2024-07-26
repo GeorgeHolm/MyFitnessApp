@@ -8,6 +8,7 @@ import getInfo from "./Requests";
 import Badge from "./Badge";
 import useEffectAfter from "./useEffectAfter";
 import LoadingState from "./LoadingState";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const [user, setUser] = useState();
@@ -21,11 +22,16 @@ function Profile() {
     maxSquat: [0, ""],
     maxDeadlift: [0, ""],
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
         getInfo(`/profiles/${prof.uid}`, setUser, 0, setLoading);
+      }
+      else {
+        //user is logged out
+        navigate("/");
       }
     });
   }, []);
@@ -141,62 +147,72 @@ function Profile() {
 
   return (
     <>
-      <SearchBar user={user} />
-      <div className="flexbox">
-        {currentEdit && (
-          <ProfileEdit user={user} setUser={setUser} close={setCurrentEdit} />
-        )}
+      {user ? (
+        <>
+          <SearchBar user={user} />
+          <div className="flexbox">
+            {currentEdit && (
+              <ProfileEdit
+                user={user}
+                setUser={setUser}
+                close={setCurrentEdit}
+              />
+            )}
 
-        <div id="left">
-          <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" />
-          <button onClick={editProf} className="edit">
-            Edit Profile
-          </button>
-          <p>Name: {user?.name}</p>
-          <p>Sex: {user?.sex}</p>
-          <p>Age: {user?.age}</p>
-          <p>Bio: {user?.bio}</p>
-        </div>
-        <div id="right" className="flexbox">
-          <Badge
-            className={"col"}
-            color={stats.workoutsPosted[1]}
-            awardTitle={"Workout Beast"}
-            awardSubtitle={`Workouts Posted: ${stats.workoutsPosted[0]}`}
-          />
-          <Badge
-            className={"col"}
-            color={stats.mealsPosted[1]}
-            awardTitle={"Healthy Eater"}
-            awardSubtitle={`Meals Posted: ${stats.mealsPosted[0]}`}
-          />
-          <Badge
-            className={"col"}
-            color={stats.postsLiked[1]}
-            awardTitle={"Supporter"}
-            awardSubtitle={`Posts Liked: ${stats.postsLiked[0]}`}
-          />
-          <Badge
-            className={"col"}
-            color={stats.maxBench[1]}
-            awardTitle={"Bench Boss"}
-            awardSubtitle={`Max Bench: ${stats.maxBench[0]} lbs`}
-          />
-          <Badge
-            className={"col"}
-            color={stats.maxSquat[1]}
-            awardTitle={"Squat Slayer"}
-            awardSubtitle={`Max Squat: ${stats.maxSquat[0]} lbs`}
-          />
-          <Badge
-            className={"col"}
-            color={stats.maxDeadlift[1]}
-            awardTitle={"Deadlift Demon"}
-            awardSubtitle={`Max Deadlift: ${stats.maxDeadlift[0]} lbs`}
-          />
-        </div>
-        {loading && <LoadingState />}
-      </div>
+            <div id="left">
+              <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" />
+              <button onClick={editProf} className="edit">
+                Edit Profile
+              </button>
+              <p>Name: {user?.name}</p>
+              <p>Sex: {user?.sex}</p>
+              <p>Age: {user?.age}</p>
+              <p>Bio: {user?.bio}</p>
+            </div>
+            <div id="right" className="flexbox">
+              <Badge
+                className={"col"}
+                color={stats.workoutsPosted[1]}
+                awardTitle={"Workout Beast"}
+                awardSubtitle={`Workouts Posted: ${stats.workoutsPosted[0]}`}
+              />
+              <Badge
+                className={"col"}
+                color={stats.mealsPosted[1]}
+                awardTitle={"Healthy Eater"}
+                awardSubtitle={`Meals Posted: ${stats.mealsPosted[0]}`}
+              />
+              <Badge
+                className={"col"}
+                color={stats.postsLiked[1]}
+                awardTitle={"Supporter"}
+                awardSubtitle={`Posts Liked: ${stats.postsLiked[0]}`}
+              />
+              <Badge
+                className={"col"}
+                color={stats.maxBench[1]}
+                awardTitle={"Bench Boss"}
+                awardSubtitle={`Max Bench: ${stats.maxBench[0]} lbs`}
+              />
+              <Badge
+                className={"col"}
+                color={stats.maxSquat[1]}
+                awardTitle={"Squat Slayer"}
+                awardSubtitle={`Max Squat: ${stats.maxSquat[0]} lbs`}
+              />
+              <Badge
+                className={"col"}
+                color={stats.maxDeadlift[1]}
+                awardTitle={"Deadlift Demon"}
+                awardSubtitle={`Max Deadlift: ${stats.maxDeadlift[0]} lbs`}
+              />
+            </div>
+            {loading && <LoadingState />}
+          </div>
+        </>
+      ) : (
+        <>{loading && <LoadingState />}</>
+      )}
     </>
   );
 }

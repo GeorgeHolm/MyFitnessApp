@@ -3,6 +3,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { NavLink, useNavigate } from "react-router-dom";
 import LoadingState from "./LoadingState";
+import "./Signup.css"
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,8 +26,8 @@ const Login = () => {
     <>
       <main>
         <section>
-          <div>
-            <p> FocusApp </p>
+          <div className="signupPage">
+            <h1> MyFitnessTracker </h1>
 
             <form>
               <div>
@@ -58,7 +59,7 @@ const Login = () => {
               </div>
             </form>
 
-            <p className="text-sm text-white text-center">
+            <p className="text-sm text-center">
               No account yet? <NavLink to="/">Sign up</NavLink>
             </p>
             {loading && <LoadingState />}
