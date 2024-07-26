@@ -40,8 +40,7 @@ function Home() {
         );
         getInfo(`/profiles/${prof.uid}/meals`, setMeals, null, setLoading);
         getInfo(`/profiles/${prof.uid}`, setUser, 0, setLoading);
-      }
-      else {
+      } else {
         //user is logged out
         navigate("/");
       }

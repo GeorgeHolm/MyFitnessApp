@@ -152,53 +152,57 @@ function DisplayWorkout(props) {
   };
 
   return (
-    <div className="workoutDisplay">
-      {props.user ? (
-        <div>
-          <button onClick={likeButton}>
-            {isLiked ? "Unlike" : "Like"}: {numLikes}
-          </button>
-        </div>
-      ) : (
-        <div>
-          <p>Post like count: {numLikes}</p>
-        </div>
-      )}
-      <PiChart
-        chartData={chartData}
-        chartTotal={["lbs", volume]}
-        width={800}
-        height={500}
-        title={"Workout Volume Distribution"}
-        units={"lbs"}
-      />
-      <PiChart
-        chartData={setData}
-        chartTotal={["#", totalSets]}
-        width={800}
-        height={500}
-        title={"Workout Set Distribution"}
-        units={" "}
-      />
+    <>
+      {props.workout.id && (
+        <div className="workoutDisplay">
+          {props.user ? (
+            <div>
+              <button onClick={likeButton}>
+                {isLiked ? "Unlike" : "Like"}: {numLikes}
+              </button>
+            </div>
+          ) : (
+            <div>
+              <p>Post like count: {numLikes}</p>
+            </div>
+          )}
+          <PiChart
+            chartData={chartData}
+            chartTotal={["lbs", volume]}
+            width={800}
+            height={500}
+            title={"Workout Volume Distribution"}
+            units={"lbs"}
+          />
+          <PiChart
+            chartData={setData}
+            chartTotal={["#", totalSets]}
+            width={800}
+            height={500}
+            title={"Workout Set Distribution"}
+            units={" "}
+          />
 
-      {props.workout.exercises && props.edit && (
-        <section>
-          {workout.map((exercise, idx) => (
-            <Exercise
-              deleteExercise={deleteExercise}
-              exerciseInfo={exerciseInfo}
-              workout={workout}
-              setWorkout={setWorkout}
-              index={idx}
-              key={idx}
-              data={exercise}
-            />
-          ))}
-          <button onClick={addExercise}>Add Exercise</button>
-          <button onClick={editWorkout}>Edit Workout</button>
-        </section>
+          {props.workout.exercises && props.edit && (
+            <section>
+              {workout.map((exercise, idx) => (
+                <Exercise
+                  deleteExercise={deleteExercise}
+                  exerciseInfo={exerciseInfo}
+                  workout={workout}
+                  setWorkout={setWorkout}
+                  index={idx}
+                  key={idx}
+                  data={exercise}
+                />
+              ))}
+              <button onClick={addExercise}>Add Exercise</button>
+              <button onClick={editWorkout}>Edit Workout</button>
+            </section>
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 }
 
