@@ -30,10 +30,14 @@ function Home() {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
 
-        getInfo(`/profiles/${prof.uid}/workouts`, setWorkouts, null, setLoading);
+        getInfo(
+          `/profiles/${prof.uid}/workouts`,
+          setWorkouts,
+          null,
+          setLoading
+        );
         getInfo(`/profiles/${prof.uid}/meals`, setMeals, null, setLoading);
         getInfo(`/profiles/${prof.uid}`, setUser, 0, setLoading);
-        
       }
     });
   }, [modal]);
@@ -67,71 +71,81 @@ function Home() {
 
   return (
     <>
-      {modal && <Modal type={workoutMeal} setLoading={setLoading} setModal={setModal} user={user} />}
-      <SearchBar user={user} />
-      <div className="flexbox">
-        <section id="workouts">
-          {workoutMeal
-            ? workouts
-                .sort((a, b) => b.id - a.id)
-                .map((res) => (
-                  <Workout
-                    onClick={handleCurrentWorkout}
-                    refresh={refresh}
-                    setRefresh={setRefresh}
-                    key={res.id}
-                    content={res}
-                    edit={true}
-                  />
-                ))
-            : meals
-                .sort((a, b) => b.id - a.id)
-                .map((res) => (
-                  <Meal
-                    onClick={handleCurrentMeal}
-                    refresh={refresh}
-                    setRefresh={setRefresh}
-                    key={res.id}
-                    content={res}
-                    edit={true}
-                  />
-                ))}
-        </section>
-        <section id="chat">
-          {chatting && <Trainer />}
+      {modal && (
+        <Modal
+          type={workoutMeal}
+          setLoading={setLoading}
+          setModal={setModal}
+          user={user}
+        />
+      )}
+      {user && <SearchBar user={user} />}
+      {user ? (
+        <div className="flexbox">
+          <section id="workouts">
+            {workoutMeal
+              ? workouts
+                  .sort((a, b) => b.id - a.id)
+                  .map((res) => (
+                    <Workout
+                      onClick={handleCurrentWorkout}
+                      refresh={refresh}
+                      setRefresh={setRefresh}
+                      key={res.id}
+                      content={res}
+                      edit={true}
+                    />
+                  ))
+              : meals
+                  .sort((a, b) => b.id - a.id)
+                  .map((res) => (
+                    <Meal
+                      onClick={handleCurrentMeal}
+                      refresh={refresh}
+                      setRefresh={setRefresh}
+                      key={res.id}
+                      content={res}
+                      edit={true}
+                    />
+                  ))}
+          </section>
+          <section id="chat">
+            {chatting && <Trainer />}
 
-          {workoutMeal ? (
-            <DisplayWorkout
-              workout={currentWorkout}
-              refresh={refresh}
-              edit={true}
-              setRefresh={setRefresh}
-            />
-          ) : (
-            <DisplayMeal
-              meal={currentMeal}
-              refresh={refresh}
-              setRefresh={setRefresh}
-              edit={true}
-            />
-          )}
-        </section>
-        <button
-          onClick={workoutMealSwitch}
-          className="round"
-          id="workoutMealSwitch"
-        >
-          {workoutMeal ? "W" : "M"}
-        </button>
-        <button onClick={addWorkout} className="round">
-          {modal ? "-" : "+"}
-        </button>
-        <button onClick={handleChatting} className="round" id="chatButton">
-          {chatting ? "Chat" : "None"}
-        </button>
-        {loading && <LoadingState/>}
-
-      </div>
+            {workoutMeal ? (
+              <DisplayWorkout
+                workout={currentWorkout}
+                refresh={refresh}
+                edit={true}
+                setRefresh={setRefresh}
+              />
+            ) : (
+              <DisplayMeal
+                meal={currentMeal}
+                refresh={refresh}
+                setRefresh={setRefresh}
+                edit={true}
+              />
+            )}
+          </section>
+          <button
+            onClick={workoutMealSwitch}
+            className="round"
+            id="workoutMealSwitch"
+          >
+            {workoutMeal ? "W" : "M"}
+          </button>
+          <button onClick={addWorkout} className="round">
+            {modal ? "-" : "+"}
+          </button>
+          <button onClick={handleChatting} className="round" id="chatButton">
+            {chatting ? "Chat" : "None"}
+          </button>
+          {loading && <LoadingState />}
+        </div>
+      ) : (
+        <>{loading && <LoadingState />}</>
+      )}
     </>
   );
 }

@@ -96,7 +96,7 @@ function Explore() {
           }
         ).then((response) => {
           setLoading(false);
-          return (response.json());
+          return response.json();
         });
       };
       asyncTouch();
@@ -126,7 +126,7 @@ function Explore() {
           }
         ).then((response) => {
           setLoading(false);
-          return (response.json());
+          return response.json();
         });
       };
       asyncTouch();
@@ -135,113 +135,119 @@ function Explore() {
 
   return (
     <>
-      {modal && <Modal type={workoutMeal} setModal={setModal} user={user} />}
-      <SearchBar user={user} />
-      <div className="flexbox">
-        {recentOrRecommended ? (
-          <section id="workouts">
-            {workoutMeal
-              ? recommendations.workoutRecsIndex.map((res) => {
-                  if (!workouts[res[1]].private) {
-                    return (
-                      <Workout
-                        onClick={handleCurrentWorkout}
-                        refresh={refresh}
-                        setRefresh={setRefresh}
-                        key={workouts[res[1]].id}
-                        content={workouts[res[1]]}
-                        edit={false}
-                      />
-                    );
-                  }
-                })
-              : recommendations.mealRecsId
-                  .map((res) => {
-                    if (!meals[res[1]].private) {
-                      return (
+      {user ? (
+        <>
+          {modal && (
+            <Modal type={workoutMeal} setModal={setModal} user={user} />
+          )}
+          <SearchBar user={user} />
+          <div className="flexbox">
+            {recentOrRecommended ? (
+              <section id="workouts">
+                {workoutMeal
+                  ? recommendations.workoutRecsIndex.map((res) => {
+                      if (!workouts[res[1]].private) {
+                        return (
+                          <Workout
+                            onClick={handleCurrentWorkout}
+                            refresh={refresh}
+                            setRefresh={setRefresh}
+                            key={workouts[res[1]].id}
+                            content={workouts[res[1]]}
+                            edit={false}
+                          />
+                        );
+                      }
+                    })
+                  : recommendations.mealRecsId.map((res) => {
+                      if (!meals[res[1]].private) {
+                        return (
+                          <Meal
+                            onClick={handleCurrentMeal}
+                            refresh={refresh}
+                            setRefresh={setRefresh}
+                            key={meals[res[1]].id}
+                            content={meals[res[1]]}
+                            edit={false}
+                          />
+                        );
+                      }
+                    })}
+              </section>
+            ) : (
+              <section id="workouts">
+                {workoutMeal
+                  ? workouts
+                      .sort((a, b) => b.id - a.id)
+                      .filter((a) => a.private === false)
+                      .map((res) => (
+                        <Workout
+                          onClick={handleCurrentWorkout}
+                          refresh={refresh}
+                          setRefresh={setRefresh}
+                          key={res.id}
+                          content={res}
+                          edit={false}
+                        />
+                      ))
+                  : meals
+                      .sort((a, b) => b.id - a.id)
+                      .filter((a) => a.private === false)
+                      .map((res) => (
                         <Meal
                           onClick={handleCurrentMeal}
                           refresh={refresh}
                           setRefresh={setRefresh}
-                          key={meals[res[1]].id}
-                          content={meals[res[1]]}
+                          key={res.id}
+                          content={res}
                           edit={false}
                         />
-                      );
-                    }
-                  })}
-          </section>
-        ) : (
-          <section id="workouts">
-            {workoutMeal
-              ? workouts
-                  .sort((a, b) => b.id - a.id)
-                  .filter((a) => a.private === false)
-                  .map((res) => (
-                    <Workout
-                      onClick={handleCurrentWorkout}
-                      refresh={refresh}
-                      setRefresh={setRefresh}
-                      key={res.id}
-                      content={res}
-                      edit={false}
-                    />
-                  ))
-              : meals
-                  .sort((a, b) => b.id - a.id)
-                  .filter((a) => a.private === false)
-                  .map((res) => (
-                    <Meal
-                      onClick={handleCurrentMeal}
-                      refresh={refresh}
-                      setRefresh={setRefresh}
-                      key={res.id}
-                      content={res}
-                      edit={false}
-                    />
-                  ))}
-          </section>
-        )}
-        <section id="chat">
-          {chatting && <Trainer />}
+                      ))}
+              </section>
+            )}
+            <section id="chat">
+              {chatting && <Trainer />}
 
-          {workoutMeal ? (
-            <DisplayWorkout
-              user={user}
-              workout={currentWorkout}
-              refresh={refresh}
-              setRefresh={setRefresh}
-              edit={false}
-            />
-          ) : (
-            <DisplayMeal
-              user={user}
-              edit={false}
-              meal={currentMeal}
-              refresh={refresh}
-              setRefresh={setRefresh}
-            />
-          )}
-        </section>
-        <button
-          onClick={workoutMealSwitch}
-          className="round"
-          id="workoutMealSwitch"
-        >
-          {workoutMeal ? "W" : "M"}
-        </button>
-        <button onClick={addWorkout} className="round">
-          {modal ? "-" : "+"}
-        </button>
-        <button onClick={handleChatting} className="round" id="chatButton">
-          {chatting ? "Chat" : "None"}
-        </button>
-        <button onClick={recsOrNot} className="round" id="recs">
-          {recentOrRecommended ? "New" : "For You"}
-        </button>
-        {loading && <LoadingState/>}
-
-      </div>
+              {workoutMeal ? (
+                <DisplayWorkout
+                  user={user}
+                  workout={currentWorkout}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                  edit={false}
+                />
+              ) : (
+                <DisplayMeal
+                  user={user}
+                  edit={false}
+                  meal={currentMeal}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                />
+              )}
+            </section>
+            <button
+              onClick={workoutMealSwitch}
+              className="round"
+              id="workoutMealSwitch"
+            >
+              {workoutMeal ? "W" : "M"}
+            </button>
+            <button onClick={addWorkout} className="round">
+              {modal ? "-" : "+"}
+            </button>
+            <button onClick={handleChatting} className="round" id="chatButton">
+              {chatting ? "Chat" : "None"}
+            </button>
+            <button onClick={recsOrNot} className="round" id="recs">
+              {recentOrRecommended ? "New" : "For You"}
+            </button>
+            {loading && <LoadingState />}
+          </div>
+        </>
+      ) : (
+        <>{loading && <LoadingState />}</>
+      )}
     </>
   );
 }
