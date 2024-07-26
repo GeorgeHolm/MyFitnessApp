@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+import "./Signup.css";
 import LoadingState from "./LoadingState";
 
 const Signup = () => {
@@ -42,8 +43,8 @@ const Signup = () => {
     <main>
       <section>
         <div>
-          <div>
-            <h1> FocusApp </h1>
+          <div className="signupPage">
+            <h1> MyFitnessTracker </h1>
             <form>
               <div>
                 <label htmlFor="email-address">Email address</label>
