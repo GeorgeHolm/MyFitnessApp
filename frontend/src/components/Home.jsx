@@ -11,6 +11,7 @@ import DisplayWorkout from "./DisplayWorkout";
 import DisplayMeal from "./DisplayMeal";
 import getInfo from "./Requests";
 import LoadingState from "./LoadingState";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [user, setUser] = useState();
@@ -23,6 +24,7 @@ function Home() {
   const [currentWorkout, setCurrentWorkout] = useState([]);
   const [currentMeal, setCurrentMeal] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
@@ -38,6 +40,10 @@ function Home() {
         );
         getInfo(`/profiles/${prof.uid}/meals`, setMeals, null, setLoading);
         getInfo(`/profiles/${prof.uid}`, setUser, 0, setLoading);
+      }
+      else {
+        //user is logged out
+        navigate("/");
       }
     });
   }, [modal]);

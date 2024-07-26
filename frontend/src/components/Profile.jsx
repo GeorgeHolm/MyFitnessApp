@@ -8,6 +8,7 @@ import getInfo from "./Requests";
 import Badge from "./Badge";
 import useEffectAfter from "./useEffectAfter";
 import LoadingState from "./LoadingState";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const [user, setUser] = useState();
@@ -21,11 +22,16 @@ function Profile() {
     maxSquat: [0, ""],
     maxDeadlift: [0, ""],
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
         getInfo(`/profiles/${prof.uid}`, setUser, 0, setLoading);
+      }
+      else {
+        //user is logged out
+        navigate("/");
       }
     });
   }, []);

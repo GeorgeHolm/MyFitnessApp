@@ -10,6 +10,7 @@ import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import SplitButton from "react-bootstrap/SplitButton";
 import LoadingState from "./LoadingState";
+import { useNavigate } from "react-router-dom";
 
 function Statistics() {
   const [user, setUser] = useState();
@@ -32,6 +33,7 @@ function Statistics() {
   const [gramsPercent, setGramsPercent] = useState(false);
   const [mealIndex, setMealIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     onAuthStateChanged(auth, (prof) => {
@@ -41,6 +43,10 @@ function Statistics() {
         //   const uid = user.uid;
 
         getInfo(`/profiles/${prof.uid}`, setUser, 0, setLoading);
+      }
+      else {
+        //user is logged out
+        navigate("/");
       }
     });
   }, []);

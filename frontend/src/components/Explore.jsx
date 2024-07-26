@@ -13,6 +13,7 @@ import Knn from "./Knn";
 import useEffectAfter from "./useEffectAfter";
 import getInfo from "./Requests";
 import LoadingState from "./LoadingState";
+import { useNavigate } from "react-router-dom";
 
 function Explore() {
   const [user, setUser] = useState();
@@ -28,6 +29,7 @@ function Explore() {
   const [recommendations, setRecommendations] = useState([]);
   const [recentOrRecommended, setRecentOrRecommended] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffectAfter(() => {
     if (
@@ -47,6 +49,10 @@ function Explore() {
         getInfo(`/meals`, setMeals, null, setLoading);
         getInfo(`/profiles`, setProfiles, null, setLoading);
         getInfo(`/profiles/${prof.uid}`, setUser, 0, setLoading);
+      }
+      else {
+        //user is logged out
+        navigate("/");
       }
     });
   }, [modal, refresh]);
