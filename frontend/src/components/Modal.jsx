@@ -23,6 +23,10 @@ export function Modal(props) {
     setExerciseInfo(ExerciseInformation);
   }, [workout]);
 
+  const exit = () => {
+    props.setModal(false);
+  };
+
   const confirmWorkout = () => {
     //post the workout to the users workouts array
 
@@ -49,15 +53,13 @@ export function Modal(props) {
         .then((response) => response.json())
         .then((data) => {
           wid = data.id;
-        })
+        });
 
       Promise.all([workoutCreation]);
       props.setLoading(false);
 
-
       workout.map((exercise) => {
         const asyncExercises = async () => {
-
           let eid = 0;
 
           const exerciseCreation = await fetch(
@@ -75,7 +77,7 @@ export function Modal(props) {
             .then((response) => response.json())
             .then((data) => {
               eid = data.id;
-            })
+            });
 
           Promise.all([exerciseCreation]);
 
@@ -94,8 +96,7 @@ export function Modal(props) {
                     reps: Number(set.reps),
                   }),
                 }
-              )
-                .then((response) => response.json());
+              ).then((response) => response.json());
               Promise.all([setCreation]);
             };
             asyncSets();
@@ -103,7 +104,6 @@ export function Modal(props) {
         };
 
         asyncExercises();
-
       });
     };
     makeAsync();
@@ -154,7 +154,6 @@ export function Modal(props) {
 
         setMealSearchResults(dummy);
         props.setLoading(false);
-
       });
   };
 
@@ -233,8 +232,7 @@ export function Modal(props) {
                   grams: Number(foodItem.weight),
                 }),
               }
-            )
-              .then((response) => response.json())
+            ).then((response) => response.json());
           }
           addFoodAsync();
         });
@@ -248,7 +246,7 @@ export function Modal(props) {
 
   const handlePrivate = () => {
     setNotPublic(!notPublic);
-  }
+  };
 
   const foodSelected = (f) => {
     let dummy = f.food;
@@ -271,6 +269,12 @@ export function Modal(props) {
       {props.type ? (
         <div className="modal">
           <section id="top">
+            <button className="topLeft" onClick={exit}>
+              X
+            </button>
+            <button className="bottomLeft" onClick={props.workoutMealSwitch}>
+              Create Meals
+            </button>
             <h1>New Workout</h1>
             <button onClick={confirmWorkout} className="finish">
               Finish
@@ -302,12 +306,18 @@ export function Modal(props) {
             <button onClick={addExercise}>Add Exercise</button>
           </section>
           <button className="bottomRight" onClick={handlePrivate}>
-            {notPublic ? ("Set Public") : ("Set Private")}
+            {notPublic ? "Set Public" : "Set Private"}
           </button>
         </div>
       ) : (
         <div className="modal">
           <section id="top">
+            <button className="topLeft" onClick={exit}>
+              X
+            </button>
+            <button className="bottomLeft" onClick={props.workoutMealSwitch}>
+              Create Workouts
+            </button>
             <h1>New Meal</h1>
             <button onClick={confirmMeal} className="finish">
               Finish
@@ -406,7 +416,7 @@ export function Modal(props) {
             </section>
           </section>
           <button className="bottomRight" onClick={handlePrivate}>
-            {notPublic ? ("Set Public") : ("Set Private")}
+            {notPublic ? "Set Public" : "Set Private"}
           </button>
         </div>
       )}
