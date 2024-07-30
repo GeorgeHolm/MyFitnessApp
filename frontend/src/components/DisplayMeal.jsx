@@ -85,7 +85,7 @@ function DisplayMeal(props) {
         <div>
           {props.user ? (
             <div>
-              <button onClick={likeButton}>
+              <button className="finish" onClick={likeButton}>
                 {isLiked ? "Unlike" : "Like"}: {numLikes}
               </button>
             </div>

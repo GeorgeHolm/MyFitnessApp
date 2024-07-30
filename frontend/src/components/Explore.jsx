@@ -242,10 +242,6 @@ function Explore() {
                 />
               )}
             </section>
-
-            <button onClick={addWorkout} className="round">
-              {modal ? "-" : "+"}
-            </button>
  
             {loading && <LoadingState />}
           </div>

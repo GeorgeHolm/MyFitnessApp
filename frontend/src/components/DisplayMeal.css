@@ -1,3 +1,3 @@
 .mealDisplay {
-  border-bottom: black 1px solid;
+  border-bottom: var(--quadrinary-color) 1px solid;
 }

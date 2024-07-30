@@ -11,6 +11,10 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --primary-color: rgb(236, 206, 242); /*cards and similar items*/
+  --secondary-color: rgb(247, 247, 247); /*Backgrounds*/
+  --tertiary-color: rgb(132, 109, 150); /*Buttons*/
+  --quadrinary-color: rgb(63, 8, 100); /*texts*/
 }
 
 a {
@@ -47,7 +51,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--primary-color);
 }
 button:focus,
 button:focus-visible {

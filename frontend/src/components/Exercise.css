@@ -4,13 +4,13 @@ div.exercise {
 
 button.info {
   font-size: 15px;
-  background-color: rgb(50, 119, 121);
+  background-color: var(--tertiary-color);
   color: white;
   border: none;
   padding: 5px;
   height: 22px;
   width: 22px;
-  box-shadow: 0 2px 4px darkslategray;
+  box-shadow: 0 2px 4px var(--quadrinary-color);
   border-radius: 11px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -18,9 +18,9 @@ button.info {
 }
 
 button.info:hover {
-  background-color: rgb(105, 148, 150);
+  background-color: var(--secondary-color);
   transform: translateY(2px);
-  box-shadow: 0 0 2px darkslategray;
+  box-shadow: 0 0 2px var(--tertiary-color);
 }
 
 .popupWrap {

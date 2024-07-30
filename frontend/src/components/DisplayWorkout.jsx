@@ -157,7 +157,7 @@ function DisplayWorkout(props) {
         <div className="workoutDisplay">
           {props.user ? (
             <div>
-              <button onClick={likeButton}>
+              <button className="finish" onClick={likeButton}>
                 {isLiked ? "Unlike" : "Like"}: {numLikes}
               </button>
             </div>
@@ -196,8 +196,8 @@ function DisplayWorkout(props) {
                   data={exercise}
                 />
               ))}
-              <button onClick={addExercise}>Add Exercise</button>
-              <button onClick={editWorkout}>Edit Workout</button>
+              <button className="finish" onClick={addExercise}>Add Exercise</button>
+              <button className="finish" onClick={editWorkout}>Edit Workout</button>
             </section>
           )}
         </div>

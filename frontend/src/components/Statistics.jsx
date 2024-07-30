@@ -43,8 +43,7 @@ function Statistics() {
         //   const uid = user.uid;
 
         getInfo(`/profiles/${prof.uid}`, setUser, 0, setLoading);
-      }
-      else {
+      } else {
         //user is logged out
         navigate("/");
       }
@@ -144,6 +143,8 @@ function Statistics() {
                   <DropdownMultiselect
                     options={[{ key: 0, label: "Volume" }]}
                     name="Select Volume Regression"
+                    variant="secondary"
+                    className="mt-2"
                     handleOnChange={selectedVolume}
                   />
                   <Graph
@@ -165,6 +166,8 @@ function Statistics() {
                   <SplitButton
                     id="dropdown-basic-button"
                     title="Units"
+                    variant="secondary"
+                    className="mt-2"
                     onSelect={chooseChartFormat}
                   >
                     <Dropdown.Item href="#/%">%</Dropdown.Item>
@@ -174,6 +177,8 @@ function Statistics() {
                   <SplitButton
                     id="dropdown-basic-button"
                     title="Select Meal"
+                    variant="secondary"
+                    className="mt-2"
                     onSelect={selectMeal}
                   >
                     {meals.map((meal, idx) => (

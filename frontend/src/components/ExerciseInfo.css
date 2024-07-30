@@ -2,10 +2,10 @@
     z-index: 10000;
     right: 50px;
     position: absolute;
-    border: black solid 1px;
+    border: var(--quadrinary-color) solid 1px;
     padding: 10px;
-    background-color: white;
-    color: black;
+    background-color: var(--primary-color);
+    color: var(--quadrinary-color);
     max-height: 400px;
     -ms-overflow-style: none; /* for Internet Explorer, Edge */
     scrollbar-width: none; /* for Firefox */

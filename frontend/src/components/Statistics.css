@@ -21,23 +21,24 @@
 
   #half {
     overflow-y: scroll;
-
+    background-color: var(--secondary-color);
     width: 50%;
     height: 100vh;
     margin: 0;
-    border: 1px black solid;
+    border: 1px var(--quadrinary-color) solid;
     flex:1;
 
   }
 
-body {
-    height: 90%;
-    width: 100%;
-    background-color: rgb(142, 201, 203);
-
-}
 
 .container {
   width: 80%;
 }
 
+.custom-btn {
+  background: #fff;
+  color: red;
+  border: 2px solid red;
+  border-radius: 3px;
+  padding: 5px 10px;
+  text-transform: uppercase;}

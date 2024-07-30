@@ -7,7 +7,7 @@
     border: solid 1px grey;
     margin: 5%;
     box-shadow: 10px 5px 5px;
-    background-color: whitesmoke;
+    background-color: var(--secondary-color);
     border-radius: 2px;
     transition: 0.5s;
 }
