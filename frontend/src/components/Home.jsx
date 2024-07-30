@@ -24,6 +24,7 @@ function Home() {
   const [currentWorkout, setCurrentWorkout] = useState([]);
   const [currentMeal, setCurrentMeal] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [userBarExtras, setUserBarExtras] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,11 +49,16 @@ function Home() {
   }, [modal]);
 
   useEffect(() => {
+    setUserBarExtras([
+      [handleChatting, "Toggle Chat"],
+      [workoutMealSwitch, "Toggle Workouts and Meals"],
+      [addWorkout, "Create Post"]
+    ]);
     if (user) {
       getInfo(`/profiles/${user.uid}/workouts`, setWorkouts);
       getInfo(`/profiles/${user.uid}/meals`, setMeals);
     }
-  }, [modal, refresh, workoutMeal]);
+  }, [modal, refresh, workoutMeal, chatting]);
 
   const addWorkout = () => {
     setModal(!modal);
@@ -63,6 +69,7 @@ function Home() {
   };
 
   const handleChatting = () => {
+    console.log(chatting);
     setChatting(!chatting);
   };
 
@@ -74,6 +81,8 @@ function Home() {
     setCurrentMeal(e);
   };
 
+
+
   return (
     <>
       {modal && (
@@ -81,10 +90,11 @@ function Home() {
           type={workoutMeal}
           setLoading={setLoading}
           setModal={setModal}
+          workoutMealSwitch={workoutMealSwitch}
           user={user}
         />
       )}
-      {user && <SearchBar user={user} />}
+      {user && <SearchBar user={user} userBarExtras={userBarExtras} />}
       {user ? (
         <div className="flexbox">
           <section id="workouts">
@@ -133,19 +143,7 @@ function Home() {
               />
             )}
           </section>
-          <button
-            onClick={workoutMealSwitch}
-            className="round"
-            id="workoutMealSwitch"
-          >
-            {workoutMeal ? "W" : "M"}
-          </button>
-          <button onClick={addWorkout} className="round">
-            {modal ? "-" : "+"}
-          </button>
-          <button onClick={handleChatting} className="round" id="chatButton">
-            {chatting ? "Chat" : "None"}
-          </button>
+
           {loading && <LoadingState />}
         </div>
       ) : (

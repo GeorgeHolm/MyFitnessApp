@@ -29,6 +29,8 @@ function Explore() {
   const [recommendations, setRecommendations] = useState([]);
   const [recentOrRecommended, setRecentOrRecommended] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [userBarExtras, setUserBarExtras] = useState([]);
+
   const navigate = useNavigate();
 
   useEffectAfter(() => {
@@ -43,6 +45,8 @@ function Explore() {
   }, [user]);
 
   useEffect(() => {
+
+    
     onAuthStateChanged(auth, (prof) => {
       if (prof) {
         getInfo(`/workouts`, setWorkouts, null, setLoading);
@@ -58,11 +62,17 @@ function Explore() {
   }, [modal, refresh]);
 
   useEffect(() => {
+    setUserBarExtras([
+      [handleChatting, "Toggle Chat"],
+      [workoutMealSwitch, "Toggle Workouts and Meals"],
+      [addWorkout, "Create Post"],
+      [recsOrNot, "Recent/For You"]
+    ]);
     if (user) {
       getInfo(`/workouts`, setWorkouts, null, setLoading);
       getInfo(`/meals`, setMeals, null, setLoading);
     }
-  }, [modal, refresh, workoutMeal]);
+  }, [modal, refresh, workoutMeal, chatting, recentOrRecommended]);
 
   const addWorkout = () => {
     setModal(!modal);
@@ -144,9 +154,9 @@ function Explore() {
       {user ? (
         <>
           {modal && (
-            <Modal type={workoutMeal} setModal={setModal} user={user} />
+            <Modal type={workoutMeal} workoutMealSwitch={workoutMealSwitch} setModal={setModal} user={user} />
           )}
-          <SearchBar user={user} />
+          <SearchBar user={user}  userBarExtras={userBarExtras}/>
           <div className="flexbox">
             {recentOrRecommended ? (
               <section id="workouts">
@@ -232,22 +242,11 @@ function Explore() {
                 />
               )}
             </section>
-            <button
-              onClick={workoutMealSwitch}
-              className="round"
-              id="workoutMealSwitch"
-            >
-              {workoutMeal ? "W" : "M"}
-            </button>
+
             <button onClick={addWorkout} className="round">
               {modal ? "-" : "+"}
             </button>
-            <button onClick={handleChatting} className="round" id="chatButton">
-              {chatting ? "Chat" : "None"}
-            </button>
-            <button onClick={recsOrNot} className="round" id="recs">
-              {recentOrRecommended ? "New" : "For You"}
-            </button>
+ 
             {loading && <LoadingState />}
           </div>
         </>
