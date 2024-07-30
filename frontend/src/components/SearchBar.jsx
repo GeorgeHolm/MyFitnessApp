@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Profile.css";
+import "./SearchBar.css";
 import { Link } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
@@ -26,24 +26,24 @@ function SearchBar(props) {
       <header id="header-bar">
         <p>User Email: {props.user?.email}</p>
         <Link to={"/home"}>
-          <button>Home</button>
+          <button className="finish">Home</button>
         </Link>
         <Link to={"/profile"}>
-          <button>Profile</button>
+          <button className="finish">Profile</button>
         </Link>
         <Link to={"/statistics"}>
-          <button>Statistics</button>
+          <button className="finish">Statistics</button>
         </Link>
 
         <Link to={"/explore"}>
-          <button>Explore</button>
+          <button className="finish">Explore</button>
         </Link>
 
         {props.userBarExtras && props.userBarExtras.map((res, idx) => 
-        <button key={idx} value={idx} onClick={res[0]}>{res[1]}</button>
+        <button className="finish" key={idx} value={idx} onClick={res[0]}>{res[1]}</button>
         )}
 
-        <button onClick={handleLogout}>Logout</button>
+        <button className="finish" onClick={handleLogout}>Logout</button>
       </header>
     </>
   );

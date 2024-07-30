@@ -41,11 +41,10 @@
     overflow-y: scroll;
   }
 
-body {
+.bodyProfiles {
     height: 90%;
     width: 100%;
-    background-color: rgb(142, 201, 203);
-
+    background-color: var(--secondary-color);
 }
 
 .col {

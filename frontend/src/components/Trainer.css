@@ -3,7 +3,7 @@
     scrollbar-width: none; /* for Firefox */
     overflow-y: scroll;
     max-height: 70vh;
-    border-bottom: 1px black solid;
+    border-bottom: 1px var(--quadrinary-color) solid;
     margin-bottom: 5px;
     padding-bottom: 5px;
 }

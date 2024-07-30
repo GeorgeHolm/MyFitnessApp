@@ -4,10 +4,10 @@
     margin: 0 auto;
     padding: 2rem;
     text-align: center;
-    border: solid 1px grey;
+    border: solid 1px var(--tertiary-color);
     margin: 5%;
     box-shadow: 10px 5px 5px;
-    background-color: whitesmoke;
+    background-color: var(--primary-color);
     border-radius: 2px;
     transition: 0.5s;
   }
@@ -18,14 +18,14 @@
 button.delete {
     font-size: 20px;
     z-index:10000;
-    background-color: rgb(50, 119, 121);
-    color: white;
+    background-color: var(--tertiary-color);
+    color: var(--primary-color);
     border: none;
     padding: 0px;
     font-size: 31px;
     height: 40px;
     width: 40px;
-    box-shadow: 0 2px 4px darkslategray;
+    box-shadow: 0 2px 4px var(--quadrinary-color);
     border-radius: 25px;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -33,10 +33,10 @@ button.delete {
 }
 
 button.delete:hover {
-    background-color: rgb(105, 148, 150);
+    background-color: var(--quadrinary-color);
    }
    
    button.finish:active {
-    box-shadow: 0 0 2px darkslategray;
+    box-shadow: 0 0 2px var(--secondary-color);
     transform: translateY(2px);
    }

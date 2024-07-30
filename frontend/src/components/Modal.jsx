@@ -269,14 +269,14 @@ export function Modal(props) {
       {props.type ? (
         <div className="modal">
           <section id="top">
-            <button className="topLeft" onClick={exit}>
+            <button className="finish topLeft" onClick={exit}>
               X
             </button>
-            <button className="bottomLeft" onClick={props.workoutMealSwitch}>
+            <button className="finish bottomLeft" onClick={props.workoutMealSwitch}>
               Create Meals
             </button>
             <h1>New Workout</h1>
-            <button onClick={confirmWorkout} className="finish">
+            <button onClick={confirmWorkout} className="finish topRight">
               Finish
             </button>
           </section>
@@ -303,23 +303,23 @@ export function Modal(props) {
                 data={exercise}
               />
             ))}
-            <button onClick={addExercise}>Add Exercise</button>
+            <button className="finish" onClick={addExercise}>Add Exercise</button>
           </section>
-          <button className="bottomRight" onClick={handlePrivate}>
+          <button className="finish bottomRight" onClick={handlePrivate}>
             {notPublic ? "Set Public" : "Set Private"}
           </button>
         </div>
       ) : (
         <div className="modal">
           <section id="top">
-            <button className="topLeft" onClick={exit}>
+            <button className="finish topLeft" onClick={exit}>
               X
             </button>
-            <button className="bottomLeft" onClick={props.workoutMealSwitch}>
+            <button className="finish bottomLeft" onClick={props.workoutMealSwitch}>
               Create Workouts
             </button>
             <h1>New Meal</h1>
-            <button onClick={confirmMeal} className="finish">
+            <button onClick={confirmMeal} className="finish topRight">
               Finish
             </button>
           </section>
@@ -365,7 +365,7 @@ export function Modal(props) {
                 <div key={idx}>
                   <span>{foodItem.foodData.description}</span>
                   <span>
-                    <button
+                    <button className="finish" 
                       onClick={() => {
                         setMeal([
                           ...meal.slice(0, idx),
@@ -373,7 +373,7 @@ export function Modal(props) {
                         ]);
                       }}
                     >
-                      Delete
+                      x
                     </button>
                   </span>
                   <span>
@@ -415,7 +415,7 @@ export function Modal(props) {
               ))}
             </section>
           </section>
-          <button className="bottomRight" onClick={handlePrivate}>
+          <button className="finish bottomRight" onClick={handlePrivate}>
             {notPublic ? "Set Public" : "Set Private"}
           </button>
         </div>

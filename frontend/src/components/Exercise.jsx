@@ -140,7 +140,7 @@ const Exercise = (props) => {
         />
       ))}
 
-      <button onClick={addSet}>Add Set</button>
+      <button onClick={addSet} className="finish" >Add Set</button>
     </div>
   );
 };

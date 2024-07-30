@@ -150,7 +150,7 @@ function Profile() {
       {user ? (
         <>
           <SearchBar user={user} />
-          <div className="flexbox">
+          <div className="flexbox bodyProfiles">
             {currentEdit && (
               <ProfileEdit
                 user={user}
@@ -161,7 +161,7 @@ function Profile() {
 
             <div id="left">
               <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" />
-              <button onClick={editProf} className="edit">
+              <button onClick={editProf} className="finish edit">
                 Edit Profile
               </button>
               <p>Name: {user?.name}</p>
